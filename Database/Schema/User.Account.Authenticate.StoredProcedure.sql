@@ -1,10 +1,12 @@
+USE [ProfilesRNSTest]
+GO
+/****** Object:  StoredProcedure [User.Account].[Authenticate]    Script Date: 09/10/2013 09:52:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [User.Account].[Authenticate] (
+ALTER PROCEDURE [User.Account].[Authenticate] (
 	@UserName NVARCHAR(50),
-	@Password VARCHAR(128),
 	@UserID INT = NULL OUTPUT,
 	@PersonID INT = NULL OUTPUT
 )
@@ -15,8 +17,7 @@ BEGIN
 	BEGIN TRY	
 		SELECT @UserID = UserID, @PersonID = PersonID
 			FROM [User.Account].[User]
-			WHERE UserName = @UserName
-				AND Password = @Password	  
+			WHERE EmailAddr = @UserName	  
 
 	END TRY
 	BEGIN CATCH	
@@ -29,4 +30,3 @@ BEGIN
 	END CATCH
 
 END
-GO

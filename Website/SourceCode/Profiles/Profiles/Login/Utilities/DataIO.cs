@@ -34,62 +34,82 @@ namespace Profiles.Login.Utilities
         public bool UserLogin(ref User user)
         {
             bool loginsuccess = false;
+                        
+            string adPath = "LDAP://uams0.ad.uams.edu:389/DC=ad,DC=uams,DC=edu";
+            LdapAuthentication ldap = new LdapAuthentication(adPath);
+            bool ldapLoginSuccess = false;
+
+            string username;
 
             try
             {
-                SessionManagement sm = new SessionManagement();
-                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                 ldapLoginSuccess = ldap.IsAuthenticated("UAMS", user.UserName, user.Password); //HMHULL-TODO: Do I need to have Domain be an box in the logon form?
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
+            if (ldapLoginSuccess)
+            {
+                // Get the email from LDAP here and use it as the username
+                username = ldap.getEmail();
 
-                SqlConnection dbconnection = new SqlConnection(connstr);
-
-                SqlParameter[] param = new SqlParameter[4];
-
-                dbconnection.Open();
-
-                param[0] = new SqlParameter("@UserName", user.UserName);
-                param[1] = new SqlParameter("@Password", user.Password);
-
-
-                param[2] = new SqlParameter("@UserID", null);
-                param[2].DbType = DbType.Int32;
-                param[2].Direction = ParameterDirection.Output;
-
-                param[3] = new SqlParameter("@PersonID", null);
-                param[3].DbType = DbType.Int32;
-                param[3].Direction = ParameterDirection.Output;
-
-
-                //For Output Parameters you need to pass a connection object to the framework so you can close it before reading the output params value.
-                ExecuteSQLDataCommand(GetDBCommand(ref dbconnection, "[User.Account].[Authenticate]", CommandType.StoredProcedure, CommandBehavior.CloseConnection, param));
-
-                dbconnection.Close();
                 try
                 {
-                    user.UserID = Convert.ToInt32(param[2].Value.ToString());
+                    SessionManagement sm = new SessionManagement();
+                    string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
 
-                    if (param[3].Value != DBNull.Value)
-                        user.PersonID = Convert.ToInt32(param[3].Value.ToString());
+                    SqlConnection dbconnection = new SqlConnection(connstr);
+
+                    SqlParameter[] param = new SqlParameter[3];
+
+                    dbconnection.Open();
+
+                    param[0] = new SqlParameter("@UserName", username);
+
+                    param[1] = new SqlParameter("@UserID", null);
+                    param[1].DbType = DbType.Int32;
+                    param[1].Direction = ParameterDirection.Output;
+                    
+                    param[2] = new SqlParameter("@PersonID", null);
+                    param[2].DbType = DbType.Int32;
+                    param[2].Direction = ParameterDirection.Output;
+
+
+                    //For Output Parameters you need to pass a connection object to the framework so you can close it before reading the output params value.
+                    ExecuteSQLDataCommand(GetDBCommand(ref dbconnection, "[User.Account].[Authenticate]", CommandType.StoredProcedure, CommandBehavior.CloseConnection, param));
+
+                    dbconnection.Close();
+                    try
+                    {
+                        user.UserID = Convert.ToInt32(param[1].Value.ToString());
+
+                        if (param[2].Value != DBNull.Value)
+                            user.PersonID = Convert.ToInt32(param[2].Value.ToString());
+                    }
+                    catch { }
+                    if (user.UserID != 0)
+                    {
+                        loginsuccess = true;
+                        sm.Session().UserID = user.UserID;
+                        sm.Session().PersonID = user.PersonID;
+                        sm.Session().LoginDate = DateTime.Now;
+                        Session session = sm.Session();
+                        SessionUpdate(ref session);
+
+                    }
+
                 }
-                catch { }
-                if (user.UserID != 0)
+                catch (Exception ex)
                 {
-                    loginsuccess = true;
-                    sm.Session().UserID = user.UserID;
-                    sm.Session().PersonID = user.PersonID;
-                    sm.Session().LoginDate = DateTime.Now;
-                    Session session = sm.Session();
-                    SessionUpdate(ref session);
 
+                    throw ex;
                 }
 
             }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return loginsuccess;
+           
+            return loginsuccess && ldapLoginSuccess;
 
         }
 
