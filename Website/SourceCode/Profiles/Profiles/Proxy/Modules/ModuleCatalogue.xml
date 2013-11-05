@@ -13,5 +13,6 @@ For details, see: LICENSE.txt
 <ModuleList> 
   <Module ModulePath="Modules" NameSpace="ManageProxies" FileName="ManageProxies.ascx" Enabled="true"/>
   <Module ModulePath="Modules" NameSpace="SearchProxies" FileName="SearchProxies.ascx" Enabled="true"/>
+  <Module ModulePath="Modules" NameSpace="SearchSuperProxies" FileName="SearchSuperProxies.ascx" Enabled="true"/>
 </ModuleList>
 

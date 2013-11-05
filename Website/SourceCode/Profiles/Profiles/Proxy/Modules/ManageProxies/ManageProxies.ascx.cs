@@ -69,8 +69,8 @@ namespace Profiles.Proxy.Modules.ManageProxies
             while (reader.Read())
             {
 
-                proxies.Add(new Proxy(reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString()
-                    , "", reader["EmailAddr"].ToString()));
+                proxies.Add(new Proxy(reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString() 
+                    , "", reader["EmailAddr"].ToString(), ""));
             }
             reader.Close();
 
@@ -99,13 +99,33 @@ namespace Profiles.Proxy.Modules.ManageProxies
             gvYouCanEdit.CellPadding = 2;
             reader.Close();
 
+
             if (sm.Session().NodeID > 0)
             {
                 pnlAddProxy.Visible = true;
                 string url = Root.Domain + "/proxy/default.aspx?method=search&subject=" + HttpContext.Current.Request.QueryString["subject"];
                 lnkAddProxyTmp.Text = "<a href='" + url + "'>Add A Proxy</a>";
-            }
 
+                if (proxies.Capacity != 0)
+                {
+                    url = Root.Domain + "/proxy/default.aspx?method=supersearch&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
+                    lnkAddSuperProxy.Text = "<a href='" + url + "'>Add A Super Proxy</a>";
+                    imgsuper.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
+
+                    proxies = null;
+                    proxies = new List<Proxy>();
+                    reader = data.ManageProxies("GetAllDefaultProxies");
+
+                    while (reader.Read())
+                    {
+                        proxies.Add(new Proxy(reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", "true"));
+                    }
+                    superProxyGrid.DataSource = proxies;
+                    superProxyGrid.DataBind();
+                    superProxyGrid.CellPadding = 2;
+                    reader.Close();
+                }
+            }
         }
 
         protected void lnkDelete_OnClick(object sender, EventArgs e)
@@ -187,7 +207,51 @@ namespace Profiles.Proxy.Modules.ManageProxies
                 e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
                 // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
             }
+        
         }
+
+        protected void superProxyGrid_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Proxy proxy = (Proxy)e.Row.DataItem;
+
+                Literal litName = (Literal)e.Row.FindControl("litName");
+                Literal litDeparment = (Literal)e.Row.FindControl("litDepartment");
+                Literal litInstitution = (Literal)e.Row.FindControl("litInstitution");
+
+                if (proxy.PersonURI != null)
+                    litName.Text = "<a href='" + proxy.PersonURI + "'>" + proxy.Name + "</a>";
+                else
+                    litName.Text = proxy.Name;
+
+                if (proxy.Department.Equals(String.Empty))
+                {
+                    litDeparment.Text = "All";
+                }
+                else
+                {
+                    litDeparment.Text = proxy.Department;
+                }                      
+
+                if (proxy.Institution.Equals(String.Empty))
+                {
+                    litInstitution.Text = "All";
+                }
+                else
+                {
+                    litInstitution.Text = proxy.Institution;
+                }
+
+                e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
+                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
+                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
+                // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
+            }
+        }
+
+
+
         public string GetURLDomain()
         {
             return Root.Domain;
@@ -205,13 +269,14 @@ namespace Profiles.Proxy.Modules.ManageProxies
                 this.CanDelete = candelete;
             }
 
-            public Proxy(string name, string personuri, string institution, string department, string email)
+            public Proxy(string name, string personuri, string institution, string department, string email, string visible)
             {
                 this.Name = name;
                 this.Institution = institution;
                 this.Department = department;
                 this.Email = email;
                 this.PersonURI = personuri;
+                this.Visible = visible;
             }
 
             public Proxy(string institution, string department, string visible)
@@ -220,7 +285,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
                 this.Department = department;
                 this.Visible = visible;
             }
-
+            
             public string UserID { get; set; }
             public string Name { get; set; }
             public string Institution { get; set; }

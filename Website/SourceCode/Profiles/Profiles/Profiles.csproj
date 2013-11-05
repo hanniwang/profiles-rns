@@ -26,7 +26,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -103,6 +103,8 @@
     <Content Include="ORNG\Modules\SearchGadgets\SearchGadgets.ascx" />
     <Content Include="ORNG\PresentationXML\GadgetDetailsPresentation.xml" />
     <Content Include="ORNG\PresentationXML\SandboxFormPresentation.xml" />
+    <Content Include="Proxy\Modules\SearchSuperProxies\SearchSuperProxies.ascx" />
+    <Content Include="Proxy\PresentationXML\SearchSuperProxies.xml" />
     <Content Include="RobotsTxt.aspx" />
     <Content Include="SiteMap.aspx" />
     <Content Include="Web.config">
@@ -611,6 +613,13 @@
     <Compile Include="Proxy\Modules\SearchProxies\SearchProxies.ascx.designer.cs">
       <DependentUpon>SearchProxies.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Proxy\Modules\SearchSuperProxies\SearchSuperProxies.ascx.cs">
+      <DependentUpon>SearchSuperProxies.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Proxy\Modules\SearchSuperProxies\SearchSuperProxies.ascx.designer.cs">
+      <DependentUpon>SearchSuperProxies.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Proxy\Utilities\DataIO.cs" />
     <Compile Include="Search\Modules\SearchEverythingFacets\SearchEverythingFacets.ascx.cs">
       <DependentUpon>SearchEverythingFacets.ascx</DependentUpon>
@@ -1073,9 +1082,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>55956</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Profiles</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost/Profiles</IISAppRootUrl>
+          <IISUrl>http://localhost:55956/profiles</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -74,6 +74,9 @@ namespace Profiles.Proxy
                 case "manage":
                     presentationxml = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "\\Proxy\\PresentationXML\\ManageProxies.xml");
                     break;
+                case "supersearch":
+                    presentationxml = System.IO.File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "\\Proxy\\PresentationXML\\SearchSuperProxies.xml");
+                    break;
             }
             this.PresentationXML = new XmlDocument();
             this.PresentationXML.LoadXml(presentationxml);

@@ -1,4 +1,4 @@
-USE [ProfilesRNSTest]
+USE [ProfilesRNS]
 GO
 /****** Object:  StoredProcedure [User.Account].[Authenticate]    Script Date: 09/10/2013 09:52:35 ******/
 SET ANSI_NULLS ON

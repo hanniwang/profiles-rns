@@ -109,5 +109,57 @@ remove that person as your proxy.
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="Visible" HeaderText="Visible" ReadOnly="true" />
             </Columns>
         </asp:GridView>
+
+        <br />
+        <br />
+        <table>
+            <tr>
+                <td valign="middle">
+                    <asp:Image runat="server" ID="imgsuper" OnClick="lnkAddProxy_OnClick" />&nbsp;
+                </td>
+                <td style="padding-bottom: 4px" valign="middle"> 
+                        <asp:Literal runat="server" ID='lnkAddSuperProxy' Text = "Add A Super Proxy"></asp:Literal>
+                </td>
+            </tr>
+        </table>
+                
+        <!-- TODO: Implement way to delete "super proxies" -->
+
+        <!-- Show all super proxies to allow for deletion -->
+        <h3>Delete a Super Proxy</h3>
+        <asp:GridView Width="100%" ID="superProxyGrid" EmptyDataText="None" AutoGenerateColumns="false"
+            CellSpacing="-1" runat="server" OnRowDataBound="superProxyGrid_OnRowDataBound" GridLines="Both">
+            <HeaderStyle CssClass="topRow" BorderStyle="None" />
+            <RowStyle BorderColor="#ccc" Width="1px" VerticalAlign="Middle" />
+            <AlternatingRowStyle CssClass="evenRow" />
+            <Columns>
+                <asp:TemplateField HeaderStyle-HorizontalAlign="Center"  HeaderText="Name">
+                    <ItemTemplate>
+                        <asp:Literal runat="server" ID="litName"></asp:Literal>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                 <asp:TemplateField  HeaderStyle-HorizontalAlign="Center" HeaderText="Institution">
+                    <ItemTemplate>
+                        <asp:Literal runat="server" ID="litInstitution"></asp:Literal>
+                    </ItemTemplate>
+                </asp:TemplateField>
+
+                <asp:TemplateField  HeaderStyle-HorizontalAlign="Center" HeaderText="Department">
+                    <ItemTemplate>
+                        <asp:Literal runat="server" ID="litDepartment"></asp:Literal>
+                    </ItemTemplate>
+                </asp:TemplateField>
+                <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Delete">
+                    <ItemTemplate>
+                        <asp:ImageButton OnClick="lnkDelete_OnClick" ID="lnkDelete" runat="server" ImageUrl="~/Edit/Images/icon_delete.gif"
+                            OnClientClick="Javascript:return confirm('Are you sure you want to delete this entry?');"
+                            Text="X"></asp:ImageButton>
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+        </asp:GridView>
+
+
+
     </ContentTemplate>
 </asp:UpdatePanel>

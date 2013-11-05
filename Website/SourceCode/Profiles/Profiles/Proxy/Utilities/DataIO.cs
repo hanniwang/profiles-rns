@@ -56,6 +56,36 @@ namespace Profiles.Proxy.Utilities
 
         }
 
+        public void InsertDefaultProxy(string userid, string proxyForInstitution, string proxyForDepartment, bool isVisible)
+        {
+            SessionManagement sm = new SessionManagement();
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[Proxy.AddDefaultProxy]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@UserID", userid));
+                dbcommand.Parameters.Add(new SqlParameter("@ProxyForInstitution", proxyForInstitution));
+                dbcommand.Parameters.Add(new SqlParameter("@ProxyForDepartment", proxyForDepartment));
+                dbcommand.Parameters.Add(new SqlParameter("@IsVisible", isVisible));
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();  
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
 
         public void InsertProxy(string userid)
         {
