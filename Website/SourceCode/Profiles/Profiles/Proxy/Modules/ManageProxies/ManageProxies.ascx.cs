@@ -174,7 +174,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
             string otherInstPermission;
             string otherDeptPermission;
 
-            // Get potentially deleted super proxy's permissions
+            // Get other user's permissions
             reader = data.GetUserPermissionsByUserID(otherUserID);
             reader.Read();
             otherInstPermission = reader["Institution"].ToString();
