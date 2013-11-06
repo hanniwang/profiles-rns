@@ -332,9 +332,7 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
                 this.Institution = drpInstitutionPermissions.SelectedItem.Value;
             else
                 this.Institution = string.Empty;
-
-            //TODO: check if the current user has a higher or equal permission level then the one it is trying to add
-
+            
             // Check to make sure that this person is not already in the default proxy table
             SqlDataReader reader = data.ManageProxies("GetAllDefaultProxies");
 
@@ -344,13 +342,26 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
                 {
                     // User is already a super proxy
                     // Display an error
-                    string strScript = " window.alert('I am sorry you cannot add a super user that already exists.');";
+                    string strScript = " window.alert('I am sorry you cannot add a super proxy that already exists.');";
                     if (!Page.ClientScript.IsStartupScriptRegistered("myscript"))
                         Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", strScript, true);    
                     return;
-                }               
+                }
+                
+                //TODO: check if the current user has a higher or equal permission level then the one it is trying to add
+                if (!data.doesCurrentUserHavePermissionsOverInputtedPermissions(this.Institution, this.Department))
+                {
+                    // Currently logged in user does not have permissions high enough to add a super proxy with these permissions
+                    string strScript = " window.alert('I am sorry you cannot add a super proxy with permissions higher than your own.');";
+                    if (!Page.ClientScript.IsStartupScriptRegistered("myscript"))
+                        Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", strScript, true);
+                    return;
+                }
+
             }
             data.InsertDefaultProxy(gridSearchResults.DataKeys[gridSearchResults.SelectedIndex]["UserID"].ToString(), this.Institution, this.Department, true);
+
+            reader.Close();
 
             Response.Redirect(Root.Domain + "/proxy/default.aspx?subject=" + HttpContext.Current.Request.QueryString["subject"]);
         }

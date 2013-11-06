@@ -23,6 +23,34 @@ namespace Profiles.Proxy.Utilities
 {
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
+
+        public Boolean doesCurrentUserHavePermissionsOverInputtedPermissions(string institutionPermission, string departmentPermission)
+        {
+            SqlDataReader reader;
+
+            string userSessionUserID;
+
+            // Get currently logged in user's user id
+            reader = GetUserIDBySessionID();
+            reader.Read();
+            userSessionUserID = reader["UserID"].ToString();
+            reader.Close();
+
+            // Get currently logged in user's permission level
+            string userInstPermission;
+            string userDeptPermission;
+
+            reader = GetUserPermissionsByUserID(userSessionUserID);
+            reader.Read();
+            userInstPermission = reader["Institution"].ToString();
+            userDeptPermission = reader["Department"].ToString();
+            reader.Close();
+
+            return permissionCheck(userInstPermission, userDeptPermission, institutionPermission, departmentPermission);
+        }
+
+
+        // The below function only works when an inputted UserID already has permissions in the DefaultProxy table
         public Boolean doesCurrentUserHavePermissionsOverInputtedUserID(string otherUserID)
         {
             SqlDataReader reader;
@@ -55,6 +83,11 @@ namespace Profiles.Proxy.Utilities
             otherDeptPermission = reader["Department"].ToString();
             reader.Close();
 
+            return permissionCheck(userInstPermission, userDeptPermission, otherInstPermission, otherDeptPermission); 
+        }
+
+        private Boolean permissionCheck(string userInstPermission, string userDeptPermission, string otherInstPermission, string otherDeptPermission)
+        {
             // If current user has "All" permissions on Institution then they have global permissions
             if (userInstPermission != "All")
             {
