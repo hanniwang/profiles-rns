@@ -333,6 +333,8 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
             else
                 this.Institution = string.Empty;
 
+            //TODO: check if the current user has a higher or equal permission level then the one it is trying to add
+
             // Check to make sure that this person is not already in the default proxy table
             SqlDataReader reader = data.ManageProxies("GetAllDefaultProxies");
 

@@ -23,6 +23,68 @@ namespace Profiles.Proxy.Utilities
 {
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
+        public SqlDataReader GetUserPermissionsByUserID(string userID)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[Proxy.GetDefaultProxyPermissionsByUserID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@UserID", userID));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return dbreader;
+        }
+
+        public SqlDataReader GetUserIDBySessionID()
+        {
+            SqlDataReader dbreader = null;
+            SessionManagement sm = new SessionManagement();
+
+            try
+            {
+
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[Proxy.GetUserIDBySessionID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@SessionID", sm.Session().SessionID));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return dbreader;
+        }
 
         public void DeleteSuperProxy(string userid)
         {
