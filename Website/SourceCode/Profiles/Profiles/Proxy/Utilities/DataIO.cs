@@ -23,6 +23,61 @@ namespace Profiles.Proxy.Utilities
 {
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
+        public Boolean doesCurrentUserHavePermissionsOverInputtedUserID(string otherUserID)
+        {
+            SqlDataReader reader;
+
+            string userSessionUserID;
+
+            // Get currently logged in user's user id
+            reader = GetUserIDBySessionID();
+            reader.Read();
+            userSessionUserID = reader["UserID"].ToString();
+            reader.Close();
+
+            // Get currently logged in user's permission level
+            string userInstPermission;
+            string userDeptPermission;
+
+            reader = GetUserPermissionsByUserID(userSessionUserID);
+            reader.Read();
+            userInstPermission = reader["Institution"].ToString();
+            userDeptPermission = reader["Department"].ToString();
+            reader.Close();
+
+            string otherInstPermission;
+            string otherDeptPermission;
+
+            // Get other user's permissions
+            reader = GetUserPermissionsByUserID(otherUserID);
+            reader.Read();
+            otherInstPermission = reader["Institution"].ToString();
+            otherDeptPermission = reader["Department"].ToString();
+            reader.Close();
+
+            // If current user has "All" permissions on Institution then they have global permissions
+            if (userInstPermission != "All")
+            {
+                // if current user does not have permission over the other user user's institution
+                if (userInstPermission != otherInstPermission)
+                {
+                    return false;
+                }
+
+                // if the current user does have permission over other user's insitution
+                // but the current user does not have permission over other user's department
+                if (userDeptPermission != "All")
+                {
+                    if (userDeptPermission != otherDeptPermission)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public SqlDataReader GetUserPermissionsByUserID(string userID)
         {
             SqlDataReader dbreader = null;

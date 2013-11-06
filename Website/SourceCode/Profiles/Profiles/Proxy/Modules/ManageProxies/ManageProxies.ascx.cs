@@ -146,64 +146,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
             data.DeleteSuperProxy(useridToDelete); 
             DrawProfilesModule();
         }
-
-
-        private Boolean doesCurrentUserHavePermissionsOverInputtedUserID(string otherUserID)
-        {
-            SqlDataReader reader;
-            Utilities.DataIO data = new Profiles.Proxy.Utilities.DataIO();
-            
-            string userSessionUserID; 
-
-            // Get currently logged in user's user id
-            reader = data.GetUserIDBySessionID();
-            reader.Read();
-            userSessionUserID = reader["UserID"].ToString();
-            reader.Close();
-
-            // Get currently logged in user's permission level
-            string userInstPermission;
-            string userDeptPermission;
-
-            reader = data.GetUserPermissionsByUserID(userSessionUserID);
-            reader.Read();
-            userInstPermission = reader["Institution"].ToString();
-            userDeptPermission = reader["Department"].ToString();
-            reader.Close();
-
-            string otherInstPermission;
-            string otherDeptPermission;
-
-            // Get other user's permissions
-            reader = data.GetUserPermissionsByUserID(otherUserID);
-            reader.Read();
-            otherInstPermission = reader["Institution"].ToString();
-            otherDeptPermission = reader["Department"].ToString();
-            reader.Close();
-            
-            // If current user has "All" permissions on Institution then they have global permissions
-            if (userInstPermission != "All")
-            {
-                // if current user does not have permission over the other user user's institution
-                if (userInstPermission != otherInstPermission)
-                {
-                    return false;
-                }
-
-                // if the current user does have permission over other user's insitution
-                // but the current user does not have permission over other user's department
-                if (userDeptPermission != "All")
-                {
-                    if (userDeptPermission != otherDeptPermission)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
+      
         protected void gvMyProxies_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
@@ -277,6 +220,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
+                Utilities.DataIO data = new Profiles.Proxy.Utilities.DataIO();
                 Proxy proxy = (Proxy)e.Row.DataItem;
 
                 Literal litName = (Literal)e.Row.FindControl("litName");
@@ -309,7 +253,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
                 ImageButton lnkDelete = (ImageButton)e.Row.FindControl("lnkDeleteSuperProxy");
 
                 // Do not show the link to the trash can if the current user does not have proper permissions
-                if (doesCurrentUserHavePermissionsOverInputtedUserID(proxy.UserID))
+                if (data.doesCurrentUserHavePermissionsOverInputtedUserID(proxy.UserID))
                 {                    
                     lnkDelete.CommandArgument = proxy.UserID;
                     lnkDelete.CommandName = "UserID";
