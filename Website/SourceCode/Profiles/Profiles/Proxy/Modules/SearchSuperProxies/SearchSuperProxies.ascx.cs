@@ -348,7 +348,7 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
                     return;
                 }
                 
-                //TODO: check if the current user has a higher or equal permission level then the one it is trying to add
+                // Check if the current user has a higher or equal permission level then the one it is trying to add
                 if (!data.doesCurrentUserHavePermissionsOverInputtedPermissions(this.Institution, this.Department))
                 {
                     // Currently logged in user does not have permissions high enough to add a super proxy with these permissions
