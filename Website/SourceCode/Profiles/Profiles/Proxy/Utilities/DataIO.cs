@@ -51,6 +51,7 @@ namespace Profiles.Proxy.Utilities
 
 
         // The below function only works when an inputted UserID already has permissions in the DefaultProxy table
+        // Use doesCurrentUserHavePermissionsOverInputtedPermissions( ) if the super proxy does not exist in the system yet
         public Boolean doesCurrentUserHavePermissionsOverInputtedUserID(string otherUserID)
         {
             SqlDataReader reader;
