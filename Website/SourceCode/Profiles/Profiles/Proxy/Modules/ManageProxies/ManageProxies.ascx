@@ -123,10 +123,9 @@ remove that person as your proxy.
             </tr>
         </table>
                 
-        <!-- TODO: Implement way to delete "super proxies" -->
 
-        <!-- Show all super proxies to allow for deletion -->
-        <h3>Delete a Super Proxy</h3>
+        <!-- Show all super proxies to allow for deletion / editing -->
+        <h3>Edit / Delete a Super Proxy</h3>
         <asp:GridView Width="100%" ID="superProxyGrid" EmptyDataText="None" AutoGenerateColumns="false"
             CellSpacing="-1" runat="server" OnRowDataBound="superProxyGrid_OnRowDataBound" GridLines="Both">
             <HeaderStyle CssClass="topRow" BorderStyle="None" />
@@ -151,7 +150,7 @@ remove that person as your proxy.
                 </asp:TemplateField>
                 <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Delete">
                     <ItemTemplate>
-                        <asp:ImageButton OnClick="lnkDelete_OnClick" ID="lnkDelete" runat="server" ImageUrl="~/Edit/Images/icon_delete.gif"
+                        <asp:ImageButton OnClick="lnkDelete_OnClick_SuperProxies" ID="lnkDeleteSuperProxy" runat="server" ImageUrl="~/Edit/Images/icon_delete.gif"
                             OnClientClick="Javascript:return confirm('Are you sure you want to delete this entry?');"
                             Text="X"></asp:ImageButton>
                     </ItemTemplate>

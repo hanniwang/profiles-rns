@@ -24,6 +24,32 @@ namespace Profiles.Proxy.Utilities
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
 
+        public void DeleteSuperProxy(string userid)
+        {
+            SessionManagement sm = new SessionManagement();
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[Proxy.DeleteDefaultProxy]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+                dbcommand.Parameters.Add(new SqlParameter("@UserID", userid));
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public void DeleteProxy(string userid)
         {
             SessionManagement sm = new SessionManagement();

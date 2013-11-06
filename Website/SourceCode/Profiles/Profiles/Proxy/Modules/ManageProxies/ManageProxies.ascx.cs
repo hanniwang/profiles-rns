@@ -118,7 +118,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
 
                     while (reader.Read())
                     {
-                        proxies.Add(new Proxy(reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", "true"));
+                        proxies.Add(new Proxy(reader["UserID"].ToString(), reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", true));
                     }
                     superProxyGrid.DataSource = proxies;
                     superProxyGrid.DataBind();
@@ -133,8 +133,17 @@ namespace Profiles.Proxy.Modules.ManageProxies
             ImageButton lb = (ImageButton)sender;
 
             Utilities.DataIO data = new Profiles.Proxy.Utilities.DataIO();
-            data.DeleteProxy(lb.CommandArgument);
+            data.DeleteProxy(lb.CommandArgument); 
 
+            DrawProfilesModule();
+        }
+
+        protected void lnkDelete_OnClick_SuperProxies(object sender, EventArgs e)
+        {
+            ImageButton lb = (ImageButton)sender;
+
+            Utilities.DataIO data = new Profiles.Proxy.Utilities.DataIO();
+            data.DeleteSuperProxy(lb.CommandArgument); 
 
             DrawProfilesModule();
 
@@ -242,6 +251,11 @@ namespace Profiles.Proxy.Modules.ManageProxies
                 {
                     litInstitution.Text = proxy.Institution;
                 }
+
+
+                ImageButton lnkDelete = (ImageButton)e.Row.FindControl("lnkDeleteSuperProxy");
+                lnkDelete.CommandArgument = proxy.UserID;
+                lnkDelete.CommandName = "UserID";
 
                 e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
                 e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
