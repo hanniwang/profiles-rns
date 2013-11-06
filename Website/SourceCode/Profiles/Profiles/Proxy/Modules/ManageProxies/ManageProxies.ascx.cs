@@ -143,7 +143,12 @@ namespace Profiles.Proxy.Modules.ManageProxies
             ImageButton lb = (ImageButton)sender;
             Utilities.DataIO data = new Profiles.Proxy.Utilities.DataIO();
             string useridToDelete = lb.CommandArgument;
-            data.DeleteSuperProxy(useridToDelete); 
+
+            if (data.doesCurrentUserHavePermissionsOverInputtedUserID(useridToDelete))
+            {
+                data.DeleteSuperProxy(useridToDelete);
+            }
+
             DrawProfilesModule();
         }
       
@@ -205,15 +210,13 @@ namespace Profiles.Proxy.Modules.ManageProxies
         }
         protected void gvYouCanEdit_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            //nothing.
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
                 e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
                 e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
                 // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
-            }
-        
+            }        
         }
 
         protected void superProxyGrid_OnRowDataBound(object sender, GridViewRowEventArgs e)
