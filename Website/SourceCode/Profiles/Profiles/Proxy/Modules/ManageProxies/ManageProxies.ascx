@@ -15,7 +15,7 @@ If one of the people listed below has a icon in the Delete column, then you may
 remove that person as your proxy.
 <br />
 <h3>
-    Users who can edit your profile</h3>
+    Designated proxies who can edit your profile</h3>
 <asp:UpdatePanel ID="upnlEditSection" runat="server" UpdateMode="Conditional">
     <ContentTemplate>
         <asp:HiddenField ID="hiddenSubjectID" runat="server" />
