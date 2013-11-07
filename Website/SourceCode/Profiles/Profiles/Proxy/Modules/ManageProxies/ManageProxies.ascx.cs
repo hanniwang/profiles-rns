@@ -118,7 +118,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
 
                     while (reader.Read())
                     {
-                        proxies.Add(new Proxy(reader["UserID"].ToString(), reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", true));
+                        proxies.Add(new Proxy(reader["UserID"].ToString(), reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", false));
                     }
                     superProxyGrid.DataSource = proxies;
                     superProxyGrid.DataBind();
