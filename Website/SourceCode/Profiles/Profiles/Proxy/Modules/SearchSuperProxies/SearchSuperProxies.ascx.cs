@@ -333,6 +333,17 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
             else
                 this.Institution = string.Empty;
 
+            // Do not allow Super proxies to be made with the following permissions: institution: all, department: <specified>
+            if (this.Institution == string.Empty && this.Department != string.Empty)
+            {
+                // This permission combination does not make much sense
+                // Return an error
+                string strScript = " window.alert('I am sorry you cannot define the following permissions: institution: all, department: <specified> ');";
+                if (!Page.ClientScript.IsStartupScriptRegistered("myscript"))
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", strScript, true);
+                return;
+            }
+
             // Check if the current user has a higher or equal permission level then the one it is trying to add
             if (!data.doesCurrentUserHavePermissionsOverInputtedPermissions(this.Institution, this.Department))
             {
