@@ -122,7 +122,9 @@ remove that person as your proxy.
                 </td>
             </tr>
         </table>
-                
+        
+        Super proxies are people who have permissions over entire departments and institutions. They have the same abilities as proxies but just for all the members of their defined institutions and departments. If 'All' is the name of the institution or department then they have edit rights over all departments or all institutions. 
+
 
         <!-- Show all super proxies to allow for deletion / viewing -->
         <h3>View or Delete a Super Proxy</h3>
