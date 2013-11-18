@@ -85,13 +85,13 @@ namespace Profiles.Proxy.Modules.SearchSuperProxies
             drpInstitutionPermissions.DataTextField = "Text";
             drpInstitutionPermissions.DataValueField = "Value";
             drpInstitutionPermissions.DataBind();
-            drpInstitutionPermissions.Items.Insert(0, new ListItem("--Select--"));
+            drpInstitutionPermissions.Items.Insert(0, new ListItem("All"));
 
             drpDepartmentPermissions.DataSource = data.GetDepartments();
             drpDepartmentPermissions.DataTextField = "Text";
             drpDepartmentPermissions.DataValueField = "Value";
             drpDepartmentPermissions.DataBind();
-            drpDepartmentPermissions.Items.Insert(0, new ListItem("--Select--"));
+            drpDepartmentPermissions.Items.Insert(0, new ListItem("All"));
             
             this.Subject = Convert.ToInt64(Request.QueryString["subject"]);
 
