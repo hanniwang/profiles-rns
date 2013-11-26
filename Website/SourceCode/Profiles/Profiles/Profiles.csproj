@@ -103,7 +103,9 @@
     <Content Include="ORNG\Modules\SearchGadgets\SearchGadgets.ascx" />
     <Content Include="ORNG\PresentationXML\GadgetDetailsPresentation.xml" />
     <Content Include="ORNG\PresentationXML\SandboxFormPresentation.xml" />
+    <Content Include="Proxy\Modules\AddNewProfile\AddNewProfile.ascx" />
     <Content Include="Proxy\Modules\SearchSuperProxies\SearchSuperProxies.ascx" />
+    <Content Include="Proxy\PresentationXML\AddNewProfile.xml" />
     <Content Include="Proxy\PresentationXML\SearchSuperProxies.xml" />
     <Content Include="RobotsTxt.aspx" />
     <Content Include="SiteMap.aspx" />
@@ -600,6 +602,14 @@
     <Compile Include="Proxy\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Proxy\Modules\AddNewProfile\AddNewProfile.ascx.cs">
+      <DependentUpon>AddNewProfile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Proxy\Modules\AddNewProfile\AddNewProfile.ascx.designer.cs">
+      <DependentUpon>AddNewProfile.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy\Modules\AddNewProfile\Profile.cs" />
     <Compile Include="Proxy\Modules\ManageProxies\ManageProxies.ascx.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

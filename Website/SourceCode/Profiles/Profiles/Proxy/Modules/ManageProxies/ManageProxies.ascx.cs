@@ -124,6 +124,13 @@ namespace Profiles.Proxy.Modules.ManageProxies
                     superProxyGrid.DataBind();
                     superProxyGrid.CellPadding = 2;
                     reader.Close();
+
+
+                    // Initialize the stuff for AddProfile Link
+                    url = Root.Domain + "/proxy/default.aspx?method=addprofile&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
+                    lnkAddProfile.Text = "<a href='" + url + "'>Add A New Profile</a>";
+                    imgAddProfile.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
+
                 }
             }
         }

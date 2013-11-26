@@ -14,5 +14,6 @@ For details, see: LICENSE.txt
   <Module ModulePath="Modules" NameSpace="ManageProxies" FileName="ManageProxies.ascx" Enabled="true"/>
   <Module ModulePath="Modules" NameSpace="SearchProxies" FileName="SearchProxies.ascx" Enabled="true"/>
   <Module ModulePath="Modules" NameSpace="SearchSuperProxies" FileName="SearchSuperProxies.ascx" Enabled="true"/>
+  <Module ModulePath="Modules" NameSpace="AddNewProfile" FileName="AddNewProfile.ascx" Enabled="true"/>
 </ModuleList>
 

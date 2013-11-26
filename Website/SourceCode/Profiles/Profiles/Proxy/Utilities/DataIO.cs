@@ -24,6 +24,174 @@ namespace Profiles.Proxy.Utilities
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
 
+        public void updatePublicCache()
+        {
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Search.Cache].[Public.UpdateCache]";
+                //dbcommand.CommandTimeout = base.GetCommandTimeout();
+                dbcommand.CommandTimeout = 0;
+
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void validateProfileImport()
+        {
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Import].[ValidateProfilesImportTables]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void processDataMap()
+        {
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[RDF.Stage].[ProcessDataMap]";
+                //dbcommand.CommandTimeout = base.GetCommandTimeout();
+                dbcommand.CommandTimeout = 0;
+
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void loadProfilesData()
+        {
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Import].[LoadProfilesData]";
+                //dbcommand.CommandTimeout = base.GetCommandTimeout();
+                dbcommand.CommandTimeout = 0;
+
+                //dbcommand.Parameters.Add(new SqlParameter("@use_internalusername_as_pkey", 1));
+
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void loadNewProfileIntoStagingTables(Profiles.Proxy.Modules.AddProfile.Profile profile)
+        {
+            // Create a row in [Profile.Import].[Person]
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Import].[InsertPersonData]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+                
+                dbcommand.Parameters.Add(new SqlParameter("@FirstName", profile.firstName));
+                dbcommand.Parameters.Add(new SqlParameter("@MiddleName", profile.middleName));
+                dbcommand.Parameters.Add(new SqlParameter("@LastName", profile.lastName));
+                dbcommand.Parameters.Add(new SqlParameter("@Gender", profile.gender));
+                dbcommand.Parameters.Add(new SqlParameter("@AddressLineOne", profile.addressLineOne));
+                dbcommand.Parameters.Add(new SqlParameter("@AddressLineTwo", profile.addressLineTwo));
+                dbcommand.Parameters.Add(new SqlParameter("@City", profile.city));
+                dbcommand.Parameters.Add(new SqlParameter("@State", profile.state));
+                dbcommand.Parameters.Add(new SqlParameter("@Zip", profile.zip));
+                dbcommand.Parameters.Add(new SqlParameter("@PhoneNumber", profile.phoneNumber));
+                dbcommand.Parameters.Add(new SqlParameter("@Email", profile.emailAddress));
+                
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            // Create a row in [Profile.Import].[PersonAffiliation]
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Import].[InsertPersonAffiliationData]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+
+                dbcommand.Parameters.Add(new SqlParameter("@Email", profile.emailAddress));
+                dbcommand.Parameters.Add(new SqlParameter("@Title", profile.title));
+                dbcommand.Parameters.Add(new SqlParameter("@InstitutionName", profile.institutionName));
+                dbcommand.Parameters.Add(new SqlParameter("@InstitutionAbbreviation", profile.institutionAbbreviation));
+                dbcommand.Parameters.Add(new SqlParameter("@DepartmentName", profile.departmentName));
+
+                dbcommand.Connection = dbconnection;
+                dbcommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
         public Boolean doesCurrentUserHavePermissionsOverInputtedPermissions(string institutionPermission, string departmentPermission)
         {
             SqlDataReader reader;
