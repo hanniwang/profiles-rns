@@ -161,10 +161,9 @@ remove that person as your proxy.
             </Columns>
         </asp:GridView>
 
-        <!-- TODO: Add a link to creating a profile here -->
         <br /><br />
         <h2>Add a New Profile</h2>
-        <!-- TODO: Add explanatory text --><p>Squid kogi butcher, pariatur sed velit bitters Shoreditch irony. Sed wolf duis delectus Tumblr, Etsy dreamcatcher voluptate Helvetica DIY mollit kitsch deep v 3 wolf moon. 3 wolf moon culpa swag American Apparel wayfarers nisi. Banjo keffiyeh flannel locavore, deep v assumenda DIY Marfa occupy swag cred VHS. Bushwick pickled McSweeney's, keytar fashion axe whatever authentic culpa bitters ennui consequat you probably haven't heard of them Etsy accusamus messenger bag. Ennui synth swag chillwave, shabby chic ethnic American Apparel roof party. Exercitation consequat stumptown consectetur fixie bicycle rights, pickled in Truffaut ad Shoreditch.</p>
+        <p>Add a Profile that doesn't currently exist in the system. This is intended for users that have never worked at UAMS.</p>
         <br />
         <table>
             <tr>

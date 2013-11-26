@@ -298,12 +298,6 @@ namespace Profiles.Proxy.Modules.AddProfile
             set { ViewState["MyDataSet"] = value; }
         }
 
-        
-        // TODO: initialize all of the form fields
-        private string firstName { get; set; } //TODO: I dont think this is needed actually
-        private string lastName { get; set; }      
-
-
     }
 
    
