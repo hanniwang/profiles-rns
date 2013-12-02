@@ -23,7 +23,6 @@ namespace Profiles.Proxy.Modules.AddProfile
         protected void Page_Load(object sender, EventArgs e)
         {
             LoadAssets();
-            DrawProfilesModule();
         }
 
         public AddNewProfile() { }
@@ -31,10 +30,7 @@ namespace Profiles.Proxy.Modules.AddProfile
         {
 
         }
-        private void DrawProfilesModule()
-        {
-            // TODO: Implement (This might not actually be needed)
-        }
+        
         private void LoadAssets()
         {
             HtmlLink Searchcss = new HtmlLink();
@@ -249,6 +245,13 @@ namespace Profiles.Proxy.Modules.AddProfile
             if (departmentName.Length > 500)
             {
                 printErrorMessage("Institution Name must be less than 500 characters", txtDepartmentName);
+                return;
+            }
+
+            // Check that the profile we are trying to add doesn't already exist in the system
+            if (data.emailExists(emailAddress.ToLower()))
+            {
+                printErrorMessage("A profile with this email already exists in the system.", txtEmail);
                 return;
             }
             

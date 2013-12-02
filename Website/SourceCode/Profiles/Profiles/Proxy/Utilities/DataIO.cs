@@ -23,6 +23,42 @@ namespace Profiles.Proxy.Utilities
 {
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
+        public Boolean emailExists(string email)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[GetUserByEmail]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@Email", email));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dbreader.Read();
+                string userID = dbreader["UserID"].ToString();
+                dbreader.Close();
+
+                if (userID != String.Empty)
+                    return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return false;
+        }
+
 
         public void updatePublicCache()
         {
