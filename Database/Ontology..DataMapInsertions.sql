@@ -40,7 +40,7 @@ VALUES
   1,
   1,
   1337,
-  'http://vivoweb.org/ontology/core#ResearcherRole'
+  'http://vivoweb.org/ontology/core#ResearcherRole',
   NULL,
   NULL,
   '[Profile.Data].[Grant.AffiliatedPeople]',
@@ -253,16 +253,16 @@ VALUES
   1,
   1,
   1339,
-  'http://xmlns.com/foaf/0.1/Person,'
+  'http://xmlns.com/foaf/0.1/Person',
   NULL,
-  'http://vivoweb.org/ontology/core#hasResearcherRole,'
-  '(SELECT *  FROM [ProfilesRNS].[Profile.Data].[Grant.AffiliatedPeople] where IsPrincipalInvestigator = 0) t,'
+  'http://vivoweb.org/ontology/core#hasResearcherRole',
+  '(SELECT *  FROM [ProfilesRNS].[Profile.Data].[Grant.AffiliatedPeople] where IsPrincipalInvestigator = 0) t',
   'Person',
   'PersonID',
   NULL,
   NULL,
   NULL,
-  'http://vivoweb.org/ontology/core#ResearcherRole,'
+  'http://vivoweb.org/ontology/core#ResearcherRole',
   'Researcher',
   'PersonID',
   NULL,
