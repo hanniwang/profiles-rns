@@ -7,15 +7,9 @@ SET ANSI_PADDING ON
 GO
 CREATE TABLE [Profile.Data].[Grant.AffiliatedPeople](
   [GrantID] [int] NOT NULL,
-  [PersonID] [int] NOT NULL,
+  [PersonID] [int] NULL,
   [SAPID] [varchar](8) NOT NULL,
-  [IsPrincipalInvestigator] [bit] NULL
-PRIMARY KEY NONCLUSTERED  
-(
-  [GrantID], 
-  [PersonID]
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
+  [IsPrincipalInvestigator] [bit] NULL)
 GO
 SET ANSI_PADDING OFF
 GO

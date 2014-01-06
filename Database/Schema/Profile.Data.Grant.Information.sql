@@ -9,11 +9,11 @@ CREATE TABLE [Profile.Data].[Grant.Information](
   [GrantID] [int] IDENTITY(1,1) NOT NULL,
   [ARIAGrantID] [int] NULL,
   [ARIARecordID] [int] NULL,
-  [StartDate] [date] NULL,
-  [EndDate] [date] NULL,
-  [GrantTitle] [varchar](500) NULL,
+  [StartDate] [datetime] NULL,
+  [EndDate] [datetime] NULL,
+  [GrantTitle] [varchar](1250) NULL,
   [GrantAbstract] [varchar](5000) NULL,
-  [GrantAmount] [float] NULL,  
+  [GrantAmount]  Numeric(18,0) NULL,  
   [SummaryXML] [xml] NULL,
   [IsActive] [bit] NULL
  PRIMARY KEY CLUSTERED 
