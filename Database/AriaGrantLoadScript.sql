@@ -15,6 +15,7 @@ FROM [DevDataRepo].[dbo].[ARIAGrant];
 GO
 
 
+
 -- Insert into Grant.AffiliatedPeople
 INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
   [GrantID],
@@ -22,7 +23,7 @@ INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
   [SAPID],
   [IsPrincipalInvestigator]
 )
-SELECT (SELECT [Profile.Data].[Grant.Information].GrantID FROM [Profile.Data].[Grant.Information] WHERE [Grant.Information].ARIARecordID = [AriaGrantRole].ARIARecordID),  (SELECT [User].PersonID FROM [ProfilesRNS].[User.Account].[User] WHERE [User].InternalUserName =  CAST(CAST([AriaGrantRole].SAPID AS INT) AS VARCHAR(10))) , [AriaGrantRole].SAPID, (SELECT 1 WHERE Role='Principal Investigator')
+SELECT (SELECT [Profile.Data].[Grant.Information].GrantID FROM [Profile.Data].[Grant.Information] WHERE [Grant.Information].ARIARecordID = [AriaGrantRole].ARIARecordID),  (SELECT [User].PersonID FROM [ProfilesRNS].[User.Account].[User] WHERE [User].InternalUserName =  CAST(CAST([AriaGrantRole].SAPID AS INT) AS VARCHAR(10))) , [AriaGrantRole].SAPID, (SELECT CASE WHEN Role='Principal Investigator' THEN 1 ELSE 0 END)
 FROM [DevDataRepo].[dbo].[AriaGrantRole]
 WHERE SAPID <> 'Non-UAMS'
 GO
