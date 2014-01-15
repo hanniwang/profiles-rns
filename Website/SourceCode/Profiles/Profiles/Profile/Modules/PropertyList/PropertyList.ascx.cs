@@ -79,6 +79,24 @@ namespace Profiles.Profile.Modules.PropertyList
 
                     if ((propertygroup.SelectNodes("Property/Network/Connection").Count > 0 && propertygroup.SelectNodes("Property[@CustomDisplay='false']").Count > 0) || propertygroup.SelectNodes("Property/CustomModule").Count > 0)
                     {
+                        // START Hacks to remove auto generated GrantUI
+                        if (propertygroup.SelectSingleNode("@URI").Value == "http://profiles.catalyst.harvard.edu/ontology/prns#PropertyGroupResearch")
+                        {
+                            continue;
+                        }
+
+                        if (propertygroup.SelectSingleNode("@URI").Value == "http://vivoweb.org/ontology/core#hasResearcherRole")
+                        {
+                            continue;
+                        }
+
+                        if (propertygroup.SelectSingleNode("@URI").Value == "http://vivoweb.org/ontology/core#hasPrincipalInvestigatorRole")
+                        {
+                            continue;
+                        }
+                        // END Hacks to remove auto generated GrantUI
+
+
                         // ORNG 
                         if (propertygroup.SelectSingleNode("@URI").Value == "http://profiles.catalyst.harvard.edu/ontology/prns#PropertyGroupBibliographic")
                         {
