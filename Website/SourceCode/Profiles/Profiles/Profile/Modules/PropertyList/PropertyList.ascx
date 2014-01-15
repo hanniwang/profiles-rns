@@ -11,3 +11,9 @@
     For details, see: LICENSE.txt 
  --%>
 <asp:Literal ID="litPropertyList" runat="server"></asp:Literal>
+
+<script type="text/javascript">
+    $('.PropertyGroup:contains("Research")').remove();
+    $('.PropertyItemHeader:contains("principal investigator on")').parent().remove();
+    $('.PropertyItemHeader:contains("research activities")').parent().remove();
+</script>
