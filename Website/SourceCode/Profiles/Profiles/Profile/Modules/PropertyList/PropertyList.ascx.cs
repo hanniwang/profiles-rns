@@ -56,28 +56,10 @@ namespace Profiles.Profile.Modules.PropertyList
 
         protected void piGrants_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            /*
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
-                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
-                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
-                // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
-            }
-             * */
         }
 
         protected void Grants_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
-            /*
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
-                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
-                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
-                // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
-            }
-             * */
         }
 
 
@@ -99,7 +81,7 @@ namespace Profiles.Profile.Modules.PropertyList
 
             while (reader.Read())
             {
-                PIgrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString()));
+                PIgrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
             }
             reader.Close();
 
@@ -111,7 +93,7 @@ namespace Profiles.Profile.Modules.PropertyList
 
             while (reader.Read())
             {
-                nonPIGrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString()));
+                nonPIGrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
             }
             reader.Close();
 
@@ -131,27 +113,23 @@ namespace Profiles.Profile.Modules.PropertyList
                 Grants.DataBind();
                 Grants.CellPadding = 2;
             }
-               
-
-
-
-
-
-
-
 
         }
 
         public class Grant {
-            public Grant(string id, string title, string amount)
+            public Grant(string id, string title, string amount, string startdate, string enddate)
             {
                 this.id = id;
                 this.title = title;
                 this.amount = amount;
+                this.startdate = startdate;
+                this.enddate = enddate;
             }
             public string id { get; set; }
             public string title { get; set; }
-            public string amount { get; set; }            
+            public string amount { get; set; }
+            public string startdate { get; set; }
+            public string enddate { get; set; }
         }
 
         private void DrawProfilesModule()

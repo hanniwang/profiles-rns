@@ -28,6 +28,8 @@
              <Columns>
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center" DataField="Title" HeaderText="Title" ReadOnly="true" />
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="Amount" HeaderText="Amount" ReadOnly="true" />
+                <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="StartDate" HeaderText="StartDate" ReadOnly="true" />
+                <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="EndDate" HeaderText="EndDate" ReadOnly="true" />
             </Columns>
         </asp:GridView>
 
@@ -43,5 +45,7 @@
              <Columns>
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center" DataField="Title" HeaderText="Title" ReadOnly="true" />
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="Amount" HeaderText="Amount" ReadOnly="true" />
+                <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="StartDate" HeaderText="StartDate" ReadOnly="true" />
+                <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="EndDate" HeaderText="EndDate" ReadOnly="true" />
             </Columns>
         </asp:GridView>

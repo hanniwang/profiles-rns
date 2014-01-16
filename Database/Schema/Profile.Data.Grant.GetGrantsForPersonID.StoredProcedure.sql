@@ -15,7 +15,7 @@ BEGIN
   SET nocount  ON;
   
 
-SELECT g.GrantID as ID, g.GrantTitle as Title, g.GrantAmount as Amount
+SELECT g.GrantID as ID, g.GrantTitle as Title, g.GrantAmount as Amount, g.StartDate as StartDate, g.EndDate as EndDate
   FROM (
   SELECT GrantID FROM [ProfilesRNS].[Profile.Data].[Grant.AffiliatedPeople]
   WHERE PersonID = @PersonID AND IsPrincipalInvestigator = @IsPrincipalInvestigator) t 
