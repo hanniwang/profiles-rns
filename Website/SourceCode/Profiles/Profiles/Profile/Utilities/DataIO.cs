@@ -28,6 +28,73 @@ namespace Profiles.Profile.Utilities
 {
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
+
+        public SqlDataReader getGrantsByPersonID(string personID, Boolean isPrincipalInvestiagtor)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Data].[Grant.GetGrantsForPersonID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@PersonID", personID));
+                dbcommand.Parameters.Add(new SqlParameter("@IsPrincipalInvestigator", isPrincipalInvestiagtor));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+            return dbreader;
+        }
+
+
+        public string getPersonIDByProfileID(string profileID)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[GetPersonIDByProfileID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@ProfileID", profileID));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dbreader.Read();
+                string personID = dbreader["InternalID"].ToString();
+                dbreader.Close();
+
+                return personID;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         #region "Profile,Network,Connection and PresentationXML"
         public XmlDocument GetRDFData(RDFTriple request)
         {

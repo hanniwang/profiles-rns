@@ -21,6 +21,8 @@ using System.Xml.Xsl;
 using Profiles.Framework.Utilities;
 using Profiles.Profile.Utilities;
 using Profiles.ORNG.Utilities;
+using System.Data;
+using System.Data.SqlClient;
 
 
 namespace Profiles.Profile.Modules.PropertyList
@@ -31,6 +33,7 @@ namespace Profiles.Profile.Modules.PropertyList
         protected void Page_Load(object sender, EventArgs e)
         {
             DrawProfilesModule();
+            DrawGrantInformation();
         }
 
         public PropertyList() { }
@@ -49,6 +52,106 @@ namespace Profiles.Profile.Modules.PropertyList
 
             mp = new ModulesProcessing();
 
+        }
+
+        protected void piGrants_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            /*
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
+                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
+                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
+                // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
+            }
+             * */
+        }
+
+        protected void Grants_OnRowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            /*
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
+                e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Center;
+                e.Row.Cells[2].HorizontalAlign = HorizontalAlign.Center;
+                // e.Row.Cells[3].HorizontalAlign = HorizontalAlign.Center;
+            }
+             * */
+        }
+
+
+        private void DrawGrantInformation() {            
+            string path = HttpContext.Current.Request.Url.AbsolutePath; //profiles/display/**(maybe more in the future)**/{id} (should be at least)
+
+            string[] partsOfPath = path.Split('/');
+            string profileID = partsOfPath[partsOfPath.Length-1];
+
+            //Get the personID from the ProfileID
+            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            string personid = data.getPersonIDByProfileID(profileID);
+
+            // Get all of the grants this profile is a PI on
+            SqlDataReader reader;
+            List<Grant> PIgrants = new List<Grant>();
+
+            reader = data.getGrantsByPersonID(personid, true);
+
+            while (reader.Read())
+            {
+                PIgrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString()));
+            }
+            reader.Close();
+
+            // Get all of the grants this profile is not a PI on
+            reader = null;
+            List<Grant> nonPIGrants = new List<Grant>();
+
+            reader = data.getGrantsByPersonID(personid, false);
+
+            while (reader.Read())
+            {
+                nonPIGrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString()));
+            }
+            reader.Close();
+
+            if (PIgrants != null)
+            {
+                // Throw the data in the grid table
+                piGrants.DataSource = PIgrants;
+                piGrants.DataBind();
+                piGrants.CellPadding = 2;
+            }
+               
+
+            if (nonPIGrants != null)
+            {
+                // Throw the data in the grid table
+                Grants.DataSource = nonPIGrants;
+                Grants.DataBind();
+                Grants.CellPadding = 2;
+            }
+               
+
+
+
+
+
+
+
+
+        }
+
+        public class Grant {
+            public Grant(string id, string title, string amount)
+            {
+                this.id = id;
+                this.title = title;
+                this.amount = amount;
+            }
+            public string id { get; set; }
+            public string title { get; set; }
+            public string amount { get; set; }            
         }
 
         private void DrawProfilesModule()
