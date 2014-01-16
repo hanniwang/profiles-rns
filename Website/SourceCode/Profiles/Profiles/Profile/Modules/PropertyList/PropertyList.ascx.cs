@@ -134,6 +134,13 @@ namespace Profiles.Profile.Modules.PropertyList
 
         private void DrawProfilesModule()
         {
+            //Remove Physical Neighbors
+            string removePhysicalNeighbor = "$('.panelPassive:contains(\"Neighbors\") > .passiveSectionBody').filter(\":last\").remove();  ";
+            removePhysicalNeighbor += " $('.passiveSectionHead:contains(\"Neighbors\")').remove(); ";
+            removePhysicalNeighbor += " $('.passiveSectionLine').filter(\":last\").remove(); ";
+
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "removeNeighbor", removePhysicalNeighbor, true);
+            //END Remove Physical Neighbors 
 
             string label = string.Empty;
             System.Text.StringBuilder html = new System.Text.StringBuilder();

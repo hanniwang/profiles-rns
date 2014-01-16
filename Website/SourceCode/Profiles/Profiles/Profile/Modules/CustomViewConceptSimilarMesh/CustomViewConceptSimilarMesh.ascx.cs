@@ -54,7 +54,7 @@ namespace Profiles.Profile.Modules
 			{
 				imgQuestion.ImageUrl = Root.Domain + "/Framework/Images/info.png";
 				lineItemLiteral.Text = html.ToString();
-			}			
+			}
 		}
 	}
 }
