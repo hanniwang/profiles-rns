@@ -99,39 +99,35 @@ namespace Profiles.Proxy.Modules.ManageProxies
             gvYouCanEdit.CellPadding = 2;
             reader.Close();
 
+            pnlAddProxy.Visible = true;
+            string url = Root.Domain + "/proxy/default.aspx?method=search&subject=" + HttpContext.Current.Request.QueryString["subject"];
+            lnkAddProxyTmp.Text = "<a href='" + url + "'>Add A Proxy</a>";
 
-            if (sm.Session().NodeID > 0)
+            if (proxies.Capacity != 0)
             {
-                pnlAddProxy.Visible = true;
-                string url = Root.Domain + "/proxy/default.aspx?method=search&subject=" + HttpContext.Current.Request.QueryString["subject"];
-                lnkAddProxyTmp.Text = "<a href='" + url + "'>Add A Proxy</a>";
+                url = Root.Domain + "/proxy/default.aspx?method=supersearch&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
+                lnkAddSuperProxy.Text = "<a href='" + url + "'>Add A Super Proxy</a>";
+                imgsuper.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
 
-                if (proxies.Capacity != 0)
+                proxies = null;
+                proxies = new List<Proxy>();
+                reader = data.ManageProxies("GetAllDefaultProxies");
+
+                while (reader.Read())
                 {
-                    url = Root.Domain + "/proxy/default.aspx?method=supersearch&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
-                    lnkAddSuperProxy.Text = "<a href='" + url + "'>Add A Super Proxy</a>";
-                    imgsuper.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
-
-                    proxies = null;
-                    proxies = new List<Proxy>();
-                    reader = data.ManageProxies("GetAllDefaultProxies");
-
-                    while (reader.Read())
-                    {
-                        proxies.Add(new Proxy(reader["UserID"].ToString(), reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", false));
-                    }
-                    superProxyGrid.DataSource = proxies;
-                    superProxyGrid.DataBind();
-                    superProxyGrid.CellPadding = 2;
-                    reader.Close();
-
-
-                    // Initialize the stuff for AddProfile Link
-                    url = Root.Domain + "/proxy/default.aspx?method=addprofile&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
-                    lnkAddProfile.Text = "<a href='" + url + "'>Add A New Profile</a>";
-                    imgAddProfile.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
-
+                    proxies.Add(new Proxy(reader["UserID"].ToString(), reader["DisplayName"].ToString(), reader["PersonURI"].ToString(), reader["Institution"].ToString(), reader["Department"].ToString(), "", false));
                 }
+                superProxyGrid.DataSource = proxies;
+                superProxyGrid.DataBind();
+                superProxyGrid.CellPadding = 2;
+                reader.Close();
+
+
+                // Initialize the stuff for AddProfile Link
+                url = Root.Domain + "/proxy/default.aspx?method=addprofile&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
+                lnkAddProfile.Text = "<a href='" + url + "'>Add A New Profile</a>";
+                imgAddProfile.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";
+
             }
         }
 
