@@ -110,11 +110,8 @@ namespace Profiles.Search.Modules.SearchPerson
 
             SearchRequest = new XmlDocument();
 
-            ctcFirst.SearchRequest = new XmlDocument();
-
             SearchRequest.LoadXml(data.DecryptRequest(searchrequest));
 
-            ctcFirst.SearchRequest = this.SearchRequest;
             
 
 
@@ -287,18 +284,6 @@ namespace Profiles.Search.Modules.SearchPerson
             Utilities.DataIO data = new Profiles.Search.Utilities.DataIO();
 
             System.Data.DataSet ds = data.GetPersonTypes();
-
-            ctcFirst.DataMasterName = "DataMasterName";
-            ctcFirst.DataDetailName = "DataDetailName";
-
-            ctcFirst.DataMasterIDField = "personTypeGroupId";
-            ctcFirst.DataMasterTextField = "personTypeGroup";
-
-            ctcFirst.DataDetailIDField = "personTypeFlagId";
-            ctcFirst.DataDetailTextField = "personTypeFlag";
-
-            ctcFirst.DataSource = ds;
-            ctcFirst.DataBind();
 
         }
 
