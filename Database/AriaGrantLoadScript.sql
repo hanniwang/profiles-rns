@@ -24,8 +24,13 @@ INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
   [PersonID],
   [SAPID],
   [IsPrincipalInvestigator]
-)
-SELECT (SELECT [Profile.Data].[Grant.Information].GrantID FROM [Profile.Data].[Grant.Information] WHERE [Grant.Information].ARIARecordID = [AriaGrantRole].ARIARecordID),  (SELECT [User].PersonID FROM [ProfilesRNS].[User.Account].[User] WHERE [User].InternalUserName =  CAST(CAST([AriaGrantRole].SAPID AS INT) AS VARCHAR(10))) , [AriaGrantRole].SAPID, (SELECT CASE WHEN Role='Principal Investigator' THEN 1 ELSE 0 END)
-FROM [DevDataRepo].[dbo].[AriaGrantRole]
-WHERE SAPID <> 'Non-UAMS'
+)                                              
+select A.GrantID,C.PersonId, B.SAPID,
+(SELECT CASE WHEN B.Role='Principal Investigator' THEN 1 ELSE 0 END)  from [Profile.Data].[Grant.Information] A
+inner join [DevDataRepo].[dbo].[AriaGrantRole] B on A.ARIARECORDID=B.ARIARecordID
+inner join [DevDataRepo].[dbo].[ARIAGrant] X on B.ARIARecordID=X.ARIARecordID
+inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
+where X.ProjectStatus='Awarded'
+and B.Role='Principal Investigator' 
+and B.SAPID  <> 'Non-UAMS'
 GO
