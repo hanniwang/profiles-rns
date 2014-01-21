@@ -11,7 +11,9 @@ INSERT INTO [Profile.Data].[Grant.Information] (
   [IsActive]
 )
 SELECT [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1
-FROM [DevDataRepo].[dbo].[ARIAGrant];
+FROM [DevDataRepo].[dbo].[ARIAGrant]
+WHERE ProjectStatus = 'Awarded';
+
 GO
 
 

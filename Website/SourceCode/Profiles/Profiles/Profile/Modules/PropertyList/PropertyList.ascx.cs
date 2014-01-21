@@ -73,45 +73,48 @@ namespace Profiles.Profile.Modules.PropertyList
             Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
             string personid = data.getPersonIDByProfileID(profileID);
 
-            // Get all of the grants this profile is a PI on
-            SqlDataReader reader;
-            List<Grant> PIgrants = new List<Grant>();
-
-            reader = data.getGrantsByPersonID(personid, true);
-
-            while (reader.Read())
+            if (personid != null)
             {
-                PIgrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
-            }
-            reader.Close();
+                // Get all of the grants this profile is a PI on
+                SqlDataReader reader;
+                List<Grant> PIgrants = new List<Grant>();
 
-            // Get all of the grants this profile is not a PI on
-            reader = null;
-            List<Grant> nonPIGrants = new List<Grant>();
+                reader = data.getGrantsByPersonID(personid, true);
 
-            reader = data.getGrantsByPersonID(personid, false);
+                while (reader.Read())
+                {
+                    PIgrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
+                }
+                reader.Close();
 
-            while (reader.Read())
-            {
-                nonPIGrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
-            }
-            reader.Close();
+                // Get all of the grants this profile is not a PI on
+                reader = null;
+                List<Grant> nonPIGrants = new List<Grant>();
 
-            if (PIgrants != null)
-            {
-                // Throw the data in the grid table
-                piGrants.DataSource = PIgrants;
-                piGrants.DataBind();
-                piGrants.CellPadding = 2;
-            }
-               
+                reader = data.getGrantsByPersonID(personid, false);
 
-            if (nonPIGrants != null)
-            {
-                // Throw the data in the grid table
-                Grants.DataSource = nonPIGrants;
-                Grants.DataBind();
-                Grants.CellPadding = 2;
+                while (reader.Read())
+                {
+                    nonPIGrants.Add(new Grant(reader["ID"].ToString(), reader["Title"].ToString(), reader["Amount"].ToString(), reader["StartDate"].ToString(), reader["EndDate"].ToString()));
+                }
+                reader.Close();
+
+                if (PIgrants != null)
+                {
+                    // Throw the data in the grid table
+                    piGrants.DataSource = PIgrants;
+                    piGrants.DataBind();
+                    piGrants.CellPadding = 2;
+                }
+
+
+                if (nonPIGrants != null)
+                {
+                    // Throw the data in the grid table
+                    Grants.DataSource = nonPIGrants;
+                    Grants.DataBind();
+                    Grants.CellPadding = 2;
+                }
             }
 
         }

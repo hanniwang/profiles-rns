@@ -49,3 +49,18 @@
                 <asp:BoundField HeaderStyle-HorizontalAlign="Center"  DataField="EndDate" HeaderText="EndDate" ReadOnly="true" />
             </Columns>
         </asp:GridView>
+<br />
+<br />
+
+<table>
+    <tr>
+        <td valign="middle">
+            <asp:Image runat="server" ID="imgAdd" OnClick="lnkAddGrant_OnClick" />&nbsp;
+        </td>
+        <td style="padding-bottom: 4px" valign="middle">                    
+            <asp:Literal runat="server" ID='lnkAddGrantTmp' Text = "Add A Grant"></asp:Literal>
+        </td>
+    </tr>
+</table>
+
+
