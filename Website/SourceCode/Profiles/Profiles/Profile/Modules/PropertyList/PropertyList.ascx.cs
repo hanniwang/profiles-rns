@@ -102,9 +102,7 @@ namespace Profiles.Profile.Modules.PropertyList
             //Get the personID from the ProfileID
             Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
             personid = data.getPersonIDByProfileID(profileID);
-
-            ViewState["personid"] = personid;
-
+            
             if (personid != null)
             {
                 // Get all of the grants this profile is a PI on
