@@ -29,7 +29,9 @@ namespace Profiles.Profile.Modules.PropertyList
 {
     public partial class PropertyList : BaseModule
     {
-        private ModulesProcessing mp;        
+        private ModulesProcessing mp;  
+        private string personid;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             DrawProfilesModule();
@@ -61,6 +63,34 @@ namespace Profiles.Profile.Modules.PropertyList
         protected void Grants_OnRowDataBound(object sender, GridViewRowEventArgs e)
         {
         }
+        protected void btnAddGrant_Click(object sender, EventArgs e)
+        {
+            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            
+            personid = data.getPersonIDByProfileID((string)Request.QueryString["subject"]);
+            
+            // Call Add Grant Stored Procedure
+            // TODO: put some checks testing the ingerity of the data inputs
+            //Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            string newGrantID = data.insertNewGrantAndRetrieveNewGrantID(txtGrantTitle.Text.ToString(), txtStartDate.Text.ToString(), txtEndDate.Text.ToString(), txtGrantAmount.Text.ToString());
+
+            if (personid != null)
+            {
+                data.insertPersonAffiliationByGrantID(newGrantID, PIList.SelectedValue, personid);
+
+                // Call stored proc to generate triples for this personID
+                data.generateGrantTriplesByPersonID(personid);
+
+                // Refresh to the page
+                Response.Redirect(Root.Domain + "/display/"+ (string)Request.QueryString["subject"]);
+            }
+        }
+
+        protected void PIList_selectionChanged(object sender, EventArgs e)
+        {           
+        }
+
+        
 
 
         private void DrawGrantInformation() {            
@@ -71,7 +101,9 @@ namespace Profiles.Profile.Modules.PropertyList
 
             //Get the personID from the ProfileID
             Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
-            string personid = data.getPersonIDByProfileID(profileID);
+            personid = data.getPersonIDByProfileID(profileID);
+
+            ViewState["personid"] = personid;
 
             if (personid != null)
             {
@@ -114,6 +146,29 @@ namespace Profiles.Profile.Modules.PropertyList
                     Grants.DataSource = nonPIGrants;
                     Grants.DataBind();
                     Grants.CellPadding = 2;
+                }
+
+                // Check if current user is not a super proxy then do not show the grant add button
+                SessionManagement sm = new SessionManagement();
+                string subject = sm.Session().SessionID.ToString();
+                addGrantProfile.Visible = false;
+
+
+                if (sm.Session().UserID != 0)
+                {
+                    // TODO: check if currently logged in user is a super proxy
+                    Profiles.Proxy.Utilities.DataIO pData = new Profiles.Proxy.Utilities.DataIO();
+
+                    if (pData.ManageProxies("GetDefaultUsersWhoseNodesICanEdit").Read()) // TODO: this might break on non super proxies (check)
+                    {
+                        // Currently logged in user has super proxy permissions over at least one user
+
+                        // Check if the currently logged in user has permissions over the currently viewed profile
+                        if (pData.doesCurrentUserHavePermissionsOverInputtedUserID(data.getUserIDByPersonID(personid)))
+                        {
+                            addGrantProfile.Visible = true;
+                        }                                                                       
+                    }
                 }
             }
 

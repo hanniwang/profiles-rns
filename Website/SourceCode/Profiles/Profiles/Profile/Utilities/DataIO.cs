@@ -29,6 +29,108 @@ namespace Profiles.Profile.Utilities
     public class DataIO : Profiles.Framework.Utilities.DataIO
     {
 
+        public void generateGrantTriplesByPersonID(string personid)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Data].[Grant.Entity.UpdateEntityOnePerson]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@PersonID", personid));
+
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public void insertPersonAffiliationByGrantID(string grantid, string isPrincipalInvestigator, string personid)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Data].[Grant.InsertPersonAffiliationByGrantID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@GrantID", grantid));
+                dbcommand.Parameters.Add(new SqlParameter("@PersonID", personid));
+                dbcommand.Parameters.Add(new SqlParameter("@IsPrincipalInvestigator", isPrincipalInvestigator));
+
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
+        public string insertNewGrantAndRetrieveNewGrantID(string title, string startDate, string endDate, string amount)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[Profile.Data].[Grant.InsertNewGrant]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@Title", title));
+                //dbcommand.Parameters.Add(new SqlParameter("@StartDate", startDate));
+                //dbcommand.Parameters.Add(new SqlParameter("@EndDate", endDate));
+                
+                dbcommand.Parameters.Add(new SqlParameter("@Amount", amount));
+
+                int return_value = -1;
+                dbcommand.Parameters.Add(new SqlParameter("@return_value", return_value));
+                
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dbreader.Read();
+                string newGrantID = dbreader["id"].ToString();
+                dbreader.Close();
+
+                return newGrantID;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public SqlDataReader getGrantsByPersonID(string personID, Boolean isPrincipalInvestiagtor)
         {
             SqlDataReader dbreader = null;
@@ -61,6 +163,39 @@ namespace Profiles.Profile.Utilities
             return dbreader;
         }
 
+        public string getUserIDByPersonID(string personID)
+        {
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[User.Account].[Proxy.GetUserIDByPersonID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@PersonID", personID));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dbreader.Read();
+                string userID = dbreader["UserID"].ToString();
+                dbreader.Close();
+
+                return userID;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
 
         public string getPersonIDByProfileID(string profileID)
         {
@@ -83,9 +218,13 @@ namespace Profiles.Profile.Utilities
                 dbcommand.Connection = dbconnection;
                 dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
 
-                dbreader.Read();
-                string personID = dbreader["InternalID"].ToString();
-                dbreader.Close();
+                string personID = null;
+
+                if (dbreader.Read())
+                {
+                    personID = dbreader["InternalID"].ToString();
+                    dbreader.Close();
+                }
 
                 return personID;
             }

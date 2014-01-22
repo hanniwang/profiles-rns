@@ -260,33 +260,40 @@ namespace Profiles.Proxy.Utilities
         {
             SqlDataReader reader;
 
-            string userSessionUserID;
+            string userSessionUserID = null;
 
             // Get currently logged in user's user id
             reader = GetUserIDBySessionID();
-            reader.Read();
-            userSessionUserID = reader["UserID"].ToString();
-            reader.Close();
+            if (reader.Read())
+            {
+                userSessionUserID = reader["UserID"].ToString();
+                reader.Close();
+            }
 
             // Get currently logged in user's permission level
-            string userInstPermission;
-            string userDeptPermission;
+            string userInstPermission = null;
+            string userDeptPermission = null;
 
             reader = GetUserPermissionsByUserID(userSessionUserID);
-            reader.Read();
-            userInstPermission = reader["Institution"].ToString();
-            userDeptPermission = reader["Department"].ToString();
-            reader.Close();
 
-            string otherInstPermission;
-            string otherDeptPermission;
+            if (reader.Read())
+            {
+                userInstPermission = reader["Institution"].ToString();
+                userDeptPermission = reader["Department"].ToString();
+                reader.Close();
+            }
+
+            string otherInstPermission = null;
+            string otherDeptPermission = null;
 
             // Get other user's permissions
             reader = GetUserPermissionsByUserID(otherUserID);
-            reader.Read();
-            otherInstPermission = reader["Institution"].ToString();
-            otherDeptPermission = reader["Department"].ToString();
-            reader.Close();
+            if(reader.Read())
+            {
+                otherInstPermission = reader["Institution"].ToString();
+                otherDeptPermission = reader["Department"].ToString();
+                reader.Close();
+            }
 
             return permissionCheck(userInstPermission, userDeptPermission, otherInstPermission, otherDeptPermission); 
         }

@@ -13,7 +13,6 @@
 <asp:Literal ID="litPropertyList" runat="server"></asp:Literal>
 
 
-
 <!-- UI elements here for grants -->
 <h3>Grant Information</h3>
 
@@ -52,15 +51,68 @@
 <br />
 <br />
 
-<table>
-    <tr>
-        <td valign="middle">
-            <asp:Image runat="server" ID="imgAdd" OnClick="lnkAddGrant_OnClick" />&nbsp;
-        </td>
-        <td style="padding-bottom: 4px" valign="middle">                    
-            <asp:Literal runat="server" ID='lnkAddGrantTmp' Text = "Add A Grant"></asp:Literal>
-        </td>
-    </tr>
-</table>
+
+<div style="margin-top: 10px;">
+    <asp:Panel ID="addGrantProfile" runat="server">
+        <h3>Add a Grant:</h3>
+        <div class="content_container">
+            <div class="tabContainer" style="margin-top: 0px;">
+                <div class="searchForm">
+                    <div class="searchSection">
+                        <table border="0" cellspacing="0" cellpadding="0" class="searchForm">
+                            <tr>
+                                <th>Grant Title</th>
+                                <td>                                    
+                                    <asp:TextBox ID="txtGrantTitle" runat="server" Width="250px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Start Date</th>
+                                <td>
+                                    <asp:TextBox ID="txtStartDate" runat="server" Width="250px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>End Date</th>
+                                <td>
+                                    <asp:TextBox ID="txtEndDate" runat="server" Width="250px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Grant Amount</th>
+                                <td>
+                                    <asp:TextBox ID="txtGrantAmount" runat="server" Width="250px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Is Principal Investigator</th>
+                                <td>
+                                      <asp:DropDownList id="PIList"
+                                        AutoPostBack="False"
+                                        OnSelectedIndexChanged="PIList_selectionChanged"
+                                        runat="server">
+                                      <asp:ListItem Selected="True" Value="0"> No </asp:ListItem>
+                                      <asp:ListItem Value="1"> Yes </asp:ListItem>
+                                      </asp:DropDownList>
+                                </td>
+                            </tr>                     
+                                    
+                            <tr>
+                                <th>
+                                </th>
+                                <td>
+                                    <div style="padding: 12px 0px;">
+                                        <asp:Button ID="btnAddGrant" runat="server" Text="Add Grant" OnClick="btnAddGrant_Click" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </asp:Panel>
+</div>
+
 
 
