@@ -14,7 +14,7 @@ BEGIN
   -- interfering with SELECT statements.
   SET nocount  ON;
   
-  INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (GrantID, PersonID, IsPrincipalInvestigator)
-    SELECT @GrantID, @PersonID, @IsPrincipalInvestigator
+  INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (GrantID, PersonID, IsPrincipalInvestigator, SAPID)
+    SELECT @GrantID, @PersonID, @IsPrincipalInvestigator, '000'
     
 END
