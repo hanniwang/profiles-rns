@@ -108,8 +108,8 @@ namespace Profiles.Profile.Utilities
                 dbcommand.CommandTimeout = base.GetCommandTimeout();
 
                 dbcommand.Parameters.Add(new SqlParameter("@Title", title));
-                //dbcommand.Parameters.Add(new SqlParameter("@StartDate", startDate));
-                //dbcommand.Parameters.Add(new SqlParameter("@EndDate", endDate));
+                dbcommand.Parameters.Add(new SqlParameter("@StartDate", startDate));
+                dbcommand.Parameters.Add(new SqlParameter("@EndDate", endDate));
                 
                 dbcommand.Parameters.Add(new SqlParameter("@Amount", amount));
 

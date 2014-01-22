@@ -69,13 +69,13 @@
                             <tr>
                                 <th>Start Date</th>
                                 <td>
-                                    <asp:TextBox ID="txtStartDate" runat="server" Width="250px" />
+                                    <asp:TextBox ID="txtStartDate" value="Enter date in format:dd/mm/yyyy " runat="server" Width="250px" />
                                 </td>
                             </tr>
                             <tr>
                                 <th>End Date</th>
                                 <td>
-                                    <asp:TextBox ID="txtEndDate" runat="server" Width="250px" />
+                                    <asp:TextBox ID="txtEndDate"  value="Enter date in format:dd/mm/yyyy "  runat="server" Width="250px" />                                    
                                 </td>
                             </tr>
                             <tr>

@@ -23,6 +23,7 @@ using Profiles.Profile.Utilities;
 using Profiles.ORNG.Utilities;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 
 namespace Profiles.Profile.Modules.PropertyList
@@ -69,9 +70,43 @@ namespace Profiles.Profile.Modules.PropertyList
             
             personid = data.getPersonIDByProfileID((string)Request.QueryString["subject"]);
             
+            
+            string grantTitle = txtGrantTitle.Text.ToString();
+            string startDate = txtStartDate.Text.ToString();
+            string endDate = txtEndDate.Text.ToString();
+            string amount = txtGrantAmount.Text.ToString();
+            string isPI = PIList.SelectedValue;
+            
+            if (grantTitle == string.Empty)
+            {
+                printErrorMessage("Grant Title is required!", txtGrantTitle);
+                return;
+            }
+
+            Regex isdateRegex = new Regex(@"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$");
+
+            if (!isdateRegex.IsMatch(startDate))
+            {
+                printErrorMessage("StartDate must be in the following format: dd/mm/yyyy", txtStartDate);
+                return;
+            }
+
+            if (!isdateRegex.IsMatch(endDate))
+            {
+                printErrorMessage("EndDate must be in the following format: dd/mm/yyyy", txtEndDate);
+                return;
+            }
+
+            int val = 0;
+            double dval = 0.0;
+
+            if (!Int32.TryParse(amount, out val) && !Double.TryParse(amount, out dval)) 
+            {
+                printErrorMessage("Grant Amount must be a number", txtGrantAmount);
+                return;
+            }
+
             // Call Add Grant Stored Procedure
-            // TODO: put some checks testing the ingerity of the data inputs
-            //Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
             string newGrantID = data.insertNewGrantAndRetrieveNewGrantID(txtGrantTitle.Text.ToString(), txtStartDate.Text.ToString(), txtEndDate.Text.ToString(), txtGrantAmount.Text.ToString());
 
             if (personid != null)
@@ -170,6 +205,15 @@ namespace Profiles.Profile.Modules.PropertyList
                 }
             }
 
+        }
+
+        // TODO: Place this function in Utils so that all of the classes can access this
+        private void printErrorMessage(String message, WebControl errorer)
+        {
+            string strScript = " window.alert('" + message + "');";
+            if (!Page.ClientScript.IsStartupScriptRegistered("myscript"))
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", strScript, true);
+            errorer.Style.Add("background", "#FFAAAA");
         }
 
         public class Grant {
