@@ -35,6 +35,7 @@ namespace Profiles.Proxy.Modules.ManageProxies
         }
         private void DrawProfilesModule()
         {
+            superProxyPanel.Visible = false;
 
             if (sm.Session().UserID == 0)
                 Response.Redirect(Root.Domain + "/search");
@@ -105,6 +106,8 @@ namespace Profiles.Proxy.Modules.ManageProxies
 
             if (proxies.Capacity != 0)
             {
+                superProxyPanel.Visible = true;
+
                 url = Root.Domain + "/proxy/default.aspx?method=supersearch&subject=" + HttpContext.Current.Request.QueryString["subject"]; 
                 lnkAddSuperProxy.Text = "<a href='" + url + "'>Add A Super Proxy</a>";
                 imgsuper.ImageUrl = Root.Domain + "/framework/images/icon_roundArrow.gif";

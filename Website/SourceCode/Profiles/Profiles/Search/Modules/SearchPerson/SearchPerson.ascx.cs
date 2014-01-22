@@ -18,9 +18,12 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using System.Configuration;
+using System.Text;
+
 
 using Profiles.Framework.Utilities;
 using Profiles.Search.Utilities;
+
 
 
 namespace Profiles.Search.Modules.SearchPerson
@@ -236,7 +239,6 @@ namespace Profiles.Search.Modules.SearchPerson
             string lstID = string.Empty;
             string javascript = string.Empty;
 
-
             litFacRankScript.Text = "<script>";
             for (int i = 0; i < rowNo - 1; i++)
             {
@@ -247,8 +249,8 @@ namespace Profiles.Search.Modules.SearchPerson
 
                 if (SearchRequest != null && !lstID.IsNullOrEmpty())
                 {
-                    if (SearchRequest.OuterXml.Contains(lstID))
-                    {                                        
+                   if (SearchRequest.OuterXml.Contains(lstID))
+                   {                                        
                         javascript += " javascript:getSelectedItem('" + lstValue + "','" + i + "','" + lstID + "','anchor');";
                     }
                 }
@@ -259,11 +261,12 @@ namespace Profiles.Search.Modules.SearchPerson
 
             litFacRankScript.Text += javascript + "</script>";
 
-
-
             System.Web.UI.HtmlControls.HtmlGenericControl div = new System.Web.UI.HtmlControls.HtmlGenericControl("div");
             div.ID = "divChkList";
+            
             div.Controls.Add(chkBxLst);
+
+
             div.Style.Add("background-color", "#ffffff");
             div.Style.Add("position", "absolute");
             div.Style.Add("fload", "left");
