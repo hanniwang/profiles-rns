@@ -11,6 +11,7 @@
   
 */
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -265,7 +266,6 @@ namespace Profiles.Search.Modules.SearchPerson
             div.ID = "divChkList";
             
             div.Controls.Add(chkBxLst);
-
 
             div.Style.Add("background-color", "#ffffff");
             div.Style.Add("position", "absolute");

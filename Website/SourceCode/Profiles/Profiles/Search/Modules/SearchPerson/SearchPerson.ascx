@@ -4,10 +4,9 @@
 
 <script type="text/javascript">
 
-
     function runScript(e) {
         if (e.keyCode == 13) {
-            search();            
+            search();
         }
         return false;
     }
@@ -19,29 +18,28 @@
     }
 
     function showdiv() {
-        document.getElementById("divChkList").style.display = "block";
+        $('[id*=divChkList]').css("display", "block");
 
-        document.getElementById('chkLstItem_0').focus()
+        $('[id*=divChkList]').focus();
     }
 
     function showdivonClick() {
-        var objDLL = document.getElementById("divChkList");
-        if (objDLL.style.display == "block")
-            objDLL.style.display = "none";
+        var objDLL = $('[id*=divChkList]');
+        if (objDLL.css("display") == "block")
+            objDLL.css("display", "none");
         else
-            objDLL.style.display = "block";
+            objDLL.css("display", "block");
     }
 
     function getSelectedItem(lstValue, lstNo, lstID, ctrlType) {
-
-
         var noItemChecked = 0;
-        var ddlChkList = document.getElementById("ddlChkList");
+        var ddlChkList = document.querySelectorAll('[id*=ddlChkList]'); //browser support for http://caniuse.com/queryselector (IE 8+ and all modern browsers; Should be good)
         var selectedItems = "";
         var selectedValues = "";
-        var arr = document.getElementById("chkLstItem").getElementsByTagName('input');
-        var arrlbl = document.getElementById("chkLstItem").getElementsByTagName('label');
-        var objLstId = document.getElementById('hidList');
+        var arr = document.querySelectorAll('[id*=_chkLstItem_]');
+        var arrlbl = document.querySelectorAll('[id*=_chkLstItem]')[0].querySelectorAll('tr > td > label');
+        var objLstId = document.querySelectorAll('[id*=hidList]');
+        
 
         for (i = 0; i < arr.length; i++) {
             checkbox = arr[i];
@@ -56,7 +54,7 @@
                 }
             }
 
-            if (checkbox.checked) {                
+            if (checkbox.checked) {
 
                 var buffer;
                 if (arrlbl[i].innerText == undefined)
@@ -77,12 +75,17 @@
 
         ddlChkList.title = selectedItems;
 
+        
         if (noItemChecked != "0")
-            ddlChkList.options[ddlChkList.selectedIndex].text = selectedItems;
+            ddlChkList.item(0).item(0).innerHTML = selectedItems;
         else
-            ddlChkList.options[ddlChkList.selectedIndex].text = "";
+            ddlChkList.item(0).item(0).innerHTML = "";
+        
+            
 
-        document.getElementById('hidList').value = ddlChkList.options[ddlChkList.selectedIndex].text;
+        $('[id*=hidList]').attr("value", ddlChkList.item(0).item(0).innerText);
+
+
 
 
     }
@@ -90,8 +93,8 @@
     document.onclick = check;
     function check(e) {
         var target = (e && e.target) || (event && event.srcElement);
-        var obj = document.getElementById('divChkList');
-        var obj1 = document.getElementById('ddlChkList');
+        var obj = document.querySelectorAll('[id*=divChkList]');
+        var obj1 = document.querySelectorAll('[id*=ddlChkList]');
         if (target.id != "alst" && !target.id.match("chkLstItem")) {
             if (!(target == obj || target == obj1)) {
                 //obj.style.display = 'none'
@@ -102,7 +105,7 @@
                 }
                 else {
                     obj.style.display = 'none';
-                    document.getElementById('ddlChkList').blur();
+                    document.querySelectorAll('[id*=ddlChkList]').blur();
                 }
             }
         }
@@ -210,7 +213,7 @@
                                         All <b>except</b> the one selected
                                     </td>
                                 </tr>
-                                <tr runat="server" id="trFacultyType">
+                                <tr runat="server" id="trFacultyType" >
                                     <th>
                                         Faculty Type
                                     </th>
@@ -228,7 +231,7 @@
                                             </tr>
                                         </table>
                                         <asp:Label ID="lblSelectedItem" runat="server"></asp:Label>
-                                        <asp:HiddenField ID="hidList" runat="server" />
+                                        <asp:HiddenField ID="hidList"  runat="server" />
                                         <asp:HiddenField ID="hidURIs" runat="server" />
                                     </td>
                                 </tr>                              
