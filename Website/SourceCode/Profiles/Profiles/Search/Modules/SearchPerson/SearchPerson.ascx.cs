@@ -88,7 +88,6 @@ namespace Profiles.Search.Modules.SearchPerson
             }
 
             
-            BuildFacultyType();
             BuildFilters();
         }
 
@@ -219,68 +218,7 @@ namespace Profiles.Search.Modules.SearchPerson
             return Root.Domain;
         }
 
-
-        private void BuildFacultyType()
-        {
-            Utilities.DataIO data = new Profiles.Search.Utilities.DataIO();
-
-            DropDownList ddl = new DropDownList();
-            ddl.ID = "ddlChkList";
-            ListItem lstItem = new ListItem();
-            ddl.Items.Insert(0, lstItem);
-            ddl.Width = new Unit(250);
-            ddl.Height = new Unit(20);
-            ddl.Attributes.Add("onmousedown", "showdivonClick()");
-            CheckBoxList chkBxLst = new CheckBoxList();
-            chkBxLst.ID = "chkLstItem";
-            chkBxLst.Attributes.Add("onmouseover", "showdiv()");
-            List<GenericListItem> dtListItem = data.GetFacultyRanks();
-            int rowNo = dtListItem.Count;
-            string lstValue = string.Empty;
-            string lstID = string.Empty;
-            string javascript = string.Empty;
-
-            litFacRankScript.Text = "<script>";
-            for (int i = 0; i < rowNo - 1; i++)
-            {
-                lstValue = dtListItem[i].Text;
-                lstID = dtListItem[i].Value;
-                lstItem = new ListItem("<a href=\"javascript:void(0)\" id=\"alst\" style=\"text-decoration:none;color:Black; \" onclick=\"getSelectedItem(' " + lstValue + "','" + i + "','" + lstID + "','anchor');\">" + lstValue + "</a>", lstID);
-                lstItem.Attributes.Add("onclick", "getSelectedItem('" + lstValue + "','" + i + "','" + lstID + "','listItem');");
-
-                if (SearchRequest != null && !lstID.IsNullOrEmpty())
-                {
-                   if (SearchRequest.OuterXml.Contains(lstID))
-                   {                                        
-                        javascript += " javascript:getSelectedItem('" + lstValue + "','" + i + "','" + lstID + "','anchor');";
-                    }
-                }
-
-                chkBxLst.Items.Add(lstItem);
-            }
-
-
-            litFacRankScript.Text += javascript + "</script>";
-
-            System.Web.UI.HtmlControls.HtmlGenericControl div = new System.Web.UI.HtmlControls.HtmlGenericControl("div");
-            div.ID = "divChkList";
-            
-            div.Controls.Add(chkBxLst);
-
-            div.Style.Add("background-color", "#ffffff");
-            div.Style.Add("position", "absolute");
-            div.Style.Add("fload", "left");
-            div.Style.Add("border", "black 1px solid");
-            div.Style.Add("width", "249px");
-            div.Style.Add("height", "180px");
-            div.Style.Add("overflow", "AUTO");
-            div.Style.Add("display", "none");
-            div.Style.Add("padding-top", "25px");
-            phDDLCHK.Controls.Add(ddl);
-            phDDLList.Controls.Add(div);
-
-        }
-
+               
         private void BuildFilters()
         {
 
@@ -296,7 +234,7 @@ namespace Profiles.Search.Modules.SearchPerson
             string fname = Request.Form[this.txtFname.UniqueID];
             string searchfor = Request.Form[this.txtSearchFor.UniqueID];
             string exactphrase = Request.Form[this.chkExactphrase.UniqueID];
-            string facrank = Request.Form[this.hidList.UniqueID];
+            //string facrank = Request.Form[this.hidList.UniqueID];
 
             if (exactphrase == "on")
                 exactphrase = "true";
@@ -343,7 +281,7 @@ namespace Profiles.Search.Modules.SearchPerson
 
 
             data.SearchRequest(searchfor, exactphrase, fname, lname, institution, institutionallexcept,
-                department, departmentallexcept, division, divisionallexcept, classuri, "15", "0", "", "", otherfilters, facrank, ref searchrequest);
+                department, departmentallexcept, division, divisionallexcept, classuri, "15", "0", "", "", otherfilters, "", ref searchrequest);
 
             Response.Redirect(Root.Domain + "/search/default.aspx?showcolumns=1&searchtype=people&otherfilters=" + otherfilters + "&searchrequest=" + searchrequest, true);
 

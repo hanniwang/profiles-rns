@@ -139,60 +139,6 @@ namespace Profiles.Search.Modules.SearchPerson {
         protected global::System.Web.UI.WebControls.CheckBox divisionallexcept;
         
         /// <summary>
-        /// trFacultyType control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trFacultyType;
-        
-        /// <summary>
-        /// phDDLCHK control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phDDLCHK;
-        
-        /// <summary>
-        /// phDDLList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phDDLList;
-        
-        /// <summary>
-        /// lblSelectedItem control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSelectedItem;
-        
-        /// <summary>
-        /// hidList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidList;
-        
-        /// <summary>
-        /// hidURIs control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hidURIs;
-        
-        /// <summary>
         /// litFacRankScript control.
         /// </summary>
         /// <remarks>
