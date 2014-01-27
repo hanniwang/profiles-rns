@@ -10,20 +10,6 @@
     Code licensed under a BSD License. 
     For details, see: LICENSE.txt 
  --%>
-<br />
-<asp:Panel ID="narrativePanel" runat="server">    
-     <asp:Literal ID="narrativeDiv" runat="server"></asp:Literal>
-     <asp:Literal ID="narrativeCollapseLink" runat="server"></asp:Literal>
-     <asp:Literal ID="narrativeimgon" runat="server"></asp:Literal>
-     <asp:Literal ID="narrativeimgoff" runat="server"></asp:Literal>
-     <asp:Literal ID="narrativeDivClose" runat="server"></asp:Literal>
-
-     <asp:Literal ID="narrativeContentOpen" runat="server"></asp:Literal>
-        <asp:TextBox ID="narrativeBox"  runat="server" style="width:100%" TextMode="MultiLine" Rows="10" />
-        <asp:Button ID="narrativeBoxButton" runat="server" Text="Save Narrative" OnClick="narrativeBoxButton_click" />
-        <br /><br />
-     <asp:Literal ID="narrativeContentClose" runat="server"></asp:Literal>
-</asp:Panel>
 
 <asp:Literal ID="litPropertyList" runat="server"></asp:Literal>
 <br />
