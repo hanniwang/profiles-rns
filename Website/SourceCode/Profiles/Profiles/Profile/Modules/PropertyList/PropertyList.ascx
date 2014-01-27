@@ -11,9 +11,7 @@
     For details, see: LICENSE.txt 
  --%>
 <br />
-<asp:Panel ID="narrativePanel" runat="server">
-
-    
+<asp:Panel ID="narrativePanel" runat="server">    
      <asp:Literal ID="narrativeDiv" runat="server"></asp:Literal>
      <asp:Literal ID="narrativeCollapseLink" runat="server"></asp:Literal>
      <asp:Literal ID="narrativeimgon" runat="server"></asp:Literal>
@@ -30,10 +28,15 @@
 <asp:Literal ID="litPropertyList" runat="server"></asp:Literal>
 
 
-<!-- UI elements here for grants -->
-<h3>Grant Information</h3>
-<h4>TODO: make this collapsable like publications</h4>
+<asp:Literal ID="grantDiv" runat="server"></asp:Literal>
+<asp:Literal ID="grantCollapseLink" runat="server"></asp:Literal>
+<asp:Literal ID="grantimgon" runat="server"></asp:Literal>
+<asp:Literal ID="grantimgoff" runat="server"></asp:Literal>
+<asp:Literal ID="grantDivClose" runat="server"></asp:Literal>
 
+
+<asp:Literal ID="grantContentOpen" runat="server"></asp:Literal>
+<!-- UI elements here for grants -->
 <h4>Principal Investigator On:</h4>
 
 <asp:GridView Width="100%" ID="piGrants" EmptyDataText="None" AutoGenerateColumns="false"
@@ -132,4 +135,4 @@
 </div>
 
 
-
+<asp:Literal ID="grantContentClose" runat="server"></asp:Literal>

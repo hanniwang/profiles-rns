@@ -257,14 +257,43 @@ namespace Profiles.Profile.Modules.PropertyList
         }
 
         private void DrawGrantInformation() 
-        {            
+        {
+
+            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            System.Text.StringBuilder html = new System.Text.StringBuilder();
+
+            html.Append("<div id='PropertyGroup' class='PropertyGroup' style='cursor:pointer;' onclick=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\">");
+            grantDiv.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("<a style='text-decoration:none' onclick=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\" href=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\"> <img id=\"propertygroup" + "grant" + "\" src='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' style='border: none; text-decoration: none !important' border='0' />Grants</a>&nbsp;"); //add image and onclick here.
+            grantCollapseLink.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("<input  type='hidden' id=\"imgon" + "grant" + "\" value='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' />");
+            grantimgon.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+
+            html.Append("<input type='hidden' id=\"imgoff" + "grant" + "\" value='" + Root.Domain + "/Profile/Modules/PropertyList/images/plusSign.gif'/>");
+            grantimgoff.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("&nbsp;<br></div>");
+            grantDivClose.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("<div class='PropertyGroupItem'  id='" + "grant" + "'>");
+            grantContentOpen.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+
             string path = HttpContext.Current.Request.Url.AbsolutePath; //profiles/display/**(maybe more in the future)**/{id} (should be at least)
 
             string[] partsOfPath = path.Split('/');
             string profileID = partsOfPath[partsOfPath.Length-1];
 
             //Get the personID from the ProfileID
-            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
             personid = data.getPersonIDByProfileID(profileID);
             
             if (personid != null)
@@ -333,6 +362,10 @@ namespace Profiles.Profile.Modules.PropertyList
                     }
                 }
             }
+
+
+            html.Append("</div>");
+            grantContentClose.Text = html.ToString();
 
         }
 

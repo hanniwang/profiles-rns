@@ -112,6 +112,60 @@ namespace Profiles.Profile.Modules.PropertyList {
         protected global::System.Web.UI.WebControls.Literal litPropertyList;
         
         /// <summary>
+        /// grantDiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantDiv;
+        
+        /// <summary>
+        /// grantCollapseLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantCollapseLink;
+        
+        /// <summary>
+        /// grantimgon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantimgon;
+        
+        /// <summary>
+        /// grantimgoff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantimgoff;
+        
+        /// <summary>
+        /// grantDivClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantDivClose;
+        
+        /// <summary>
+        /// grantContentOpen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantContentOpen;
+        
+        /// <summary>
         /// piGrants control.
         /// </summary>
         /// <remarks>
@@ -191,5 +245,14 @@ namespace Profiles.Profile.Modules.PropertyList {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAddGrant;
+        
+        /// <summary>
+        /// grantContentClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal grantContentClose;
     }
 }
