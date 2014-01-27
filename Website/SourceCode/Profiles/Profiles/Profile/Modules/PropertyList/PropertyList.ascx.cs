@@ -200,6 +200,16 @@ namespace Profiles.Profile.Modules.PropertyList
 
                         }
                     }
+                    else
+                    {
+                        string personidOfCurrentlyLoggedInUser = sm.Session().PersonID.ToString();
+
+                        if (personidOfCurrentlyLoggedInUser == personid)
+                        {
+                            narrativeBox.Enabled = true;
+                            narrativeBoxButton.Visible = true;
+                        }
+                    }
                 }
 
                 string narrativeText = data.getNarrativeTextByPersonID(personid);
