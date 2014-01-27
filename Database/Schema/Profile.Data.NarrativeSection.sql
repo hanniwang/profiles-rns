@@ -1,0 +1,13 @@
+USE [ProfilesRNS]
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [Profile.Data].[NarrativeSection](
+  [PersonID] [int] NOT NULL,
+  [Text] [varchar](MAX) NULL)
+GO
+SET ANSI_PADDING OFF
+GO

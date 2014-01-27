@@ -13,6 +13,96 @@ namespace Profiles.Profile.Modules.PropertyList {
     public partial class PropertyList {
         
         /// <summary>
+        /// narrativePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel narrativePanel;
+        
+        /// <summary>
+        /// narrativeDiv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeDiv;
+        
+        /// <summary>
+        /// narrativeCollapseLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeCollapseLink;
+        
+        /// <summary>
+        /// narrativeimgon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeimgon;
+        
+        /// <summary>
+        /// narrativeimgoff control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeimgoff;
+        
+        /// <summary>
+        /// narrativeDivClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeDivClose;
+        
+        /// <summary>
+        /// narrativeContentOpen control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeContentOpen;
+        
+        /// <summary>
+        /// narrativeBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox narrativeBox;
+        
+        /// <summary>
+        /// narrativeBoxButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button narrativeBoxButton;
+        
+        /// <summary>
+        /// narrativeContentClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal narrativeContentClose;
+        
+        /// <summary>
         /// litPropertyList control.
         /// </summary>
         /// <remarks>

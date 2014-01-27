@@ -31,10 +31,11 @@ namespace Profiles.Profile.Modules.PropertyList
     public partial class PropertyList : BaseModule
     {
         private ModulesProcessing mp;  
-        private string personid;
+        private string personid; // TODO: remove this global variable it is useless
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            DrawNarrativeSection();
             DrawProfilesModule();
             DrawGrantInformation();
         }
@@ -125,10 +126,138 @@ namespace Profiles.Profile.Modules.PropertyList
         {           
         }
 
+        protected void narrativeBoxButton_click(object sender, EventArgs e)
+        {
+            // Call stored proc to edit narrative panel
+            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            string newText = narrativeBox.Text.ToString();
+            personid = data.getPersonIDByProfileID((string)Request.QueryString["subject"]);            
+            data.editNarrativePanel(personid, newText);
+        }
         
+        private void DrawNarrativeSection()
+        {
+            Profiles.Profile.Utilities.DataIO data = new Profiles.Profile.Utilities.DataIO();
+            
+            System.Text.StringBuilder html = new System.Text.StringBuilder();
+
+            html.Append("<div id='PropertyGroup' class='PropertyGroup' style='cursor:pointer;' onclick=\"javascript:toggleBlock('propertygroup','" + "narrative" + "');\">");
+            narrativeDiv.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("<a style='text-decoration:none' onclick=\"javascript:toggleBlock('propertygroup','" + "narrative" + "');\" href=\"javascript:toggleBlock('propertygroup','" + "narrative" + "');\"> <img id=\"propertygroup" + "narrative" + "\" src='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' style='border: none; text-decoration: none !important' border='0' />Narrative</a>&nbsp;"); //add image and onclick here.
+            narrativeCollapseLink.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("<input  type='hidden' id=\"imgon" + "narrative" + "\" value='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' />");
+            narrativeimgon.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            
+            html.Append("<input type='hidden' id=\"imgoff" + "narrative" + "\" value='" + Root.Domain + "/Profile/Modules/PropertyList/images/plusSign.gif'/>");
+            narrativeimgoff.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            html.Append("&nbsp;<br></div>");
+            narrativeDivClose.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+           
+            html.Append("<div class='PropertyGroupItem'  id='" + "narrative"+ "'>");
+            narrativeContentOpen.Text = html.ToString();
+            html = new System.Text.StringBuilder();
+
+            SessionManagement sm = new SessionManagement();
+            string subject = sm.Session().SessionID.ToString();
+            
+            //Set the narrativeBox to read only until the super proxy permission check passes
+            narrativeBox.Enabled = false;
+            narrativeBoxButton.Visible = false;
+
+            string path = HttpContext.Current.Request.Url.AbsolutePath;
+            string[] partsOfPath = path.Split('/');
+            string profileID = partsOfPath[partsOfPath.Length-1];
+
+            //Get the personID from the ProfileID
+            personid = data.getPersonIDByProfileID(profileID);
+
+            if (personid != null)
+            {
+
+                if (sm.Session().UserID != 0)
+                {
+                    // Check if currently logged in user is a super proxy
+                    Profiles.Proxy.Utilities.DataIO pData = new Profiles.Proxy.Utilities.DataIO();
+
+                    if (pData.ManageProxies("GetDefaultUsersWhoseNodesICanEdit").Read())
+                    {
+                        // Currently logged in user has super proxy permissions over at least one user
+
+                        // Check if the currently logged in user has permissions over the currently viewed profile
+                        if (pData.doesCurrentUserHavePermissionsOverInputtedUserID(data.getUserIDByPersonID(personid)))
+                        {
+                            narrativeBox.Enabled = true;
+                            narrativeBoxButton.Visible = true;
+
+                        }
+                    }
+                }
+
+                string narrativeText = data.getNarrativeTextByPersonID(personid);
+
+                if (narrativeText == null)
+                {
+                    narrativeBox.Text = "Enter some narrative text!";
+                }
+                else
+                {
+                    narrativeBox.Text = narrativeText;
+                }
+            }
+            else
+            {
+                // Check other personid location
+                personid = data.getPersonIDByProfileID((string)Request.QueryString["subject"]);
+                 if (personid != null)
+                 {
+
+                    if (sm.Session().UserID != 0)
+                    {
+                        // Check if currently logged in user is a super proxy
+                        Profiles.Proxy.Utilities.DataIO pData = new Profiles.Proxy.Utilities.DataIO();
+
+                        if (pData.ManageProxies("GetDefaultUsersWhoseNodesICanEdit").Read())
+                        {
+                            // Currently logged in user has super proxy permissions over at least one user
+
+                            // Check if the currently logged in user has permissions over the currently viewed profile
+                            if (pData.doesCurrentUserHavePermissionsOverInputtedUserID(data.getUserIDByPersonID(personid)))
+                            {
+                                narrativeBox.Enabled = true;
+                                narrativeBoxButton.Visible = true;
+
+                            }
+                        }
+                    }
 
 
-        private void DrawGrantInformation() {            
+                    string narrativeText = data.getNarrativeTextByPersonID(personid);
+
+                    if (narrativeText == null)
+                    {
+                        narrativeBox.Text = "Enter some narrative text!";
+                    }
+                    else
+                    {
+                        narrativeBox.Text = narrativeText;
+                    }
+                }                
+            }
+            html.Append("</div>");
+            narrativeContentClose.Text = html.ToString();
+        }
+
+        private void DrawGrantInformation() 
+        {            
             string path = HttpContext.Current.Request.Url.AbsolutePath; //profiles/display/**(maybe more in the future)**/{id} (should be at least)
 
             string[] partsOfPath = path.Split('/');
@@ -189,10 +318,10 @@ namespace Profiles.Profile.Modules.PropertyList
 
                 if (sm.Session().UserID != 0)
                 {
-                    // TODO: check if currently logged in user is a super proxy
+                    // Check if currently logged in user is a super proxy
                     Profiles.Proxy.Utilities.DataIO pData = new Profiles.Proxy.Utilities.DataIO();
 
-                    if (pData.ManageProxies("GetDefaultUsersWhoseNodesICanEdit").Read()) // TODO: this might break on non super proxies (check)
+                    if (pData.ManageProxies("GetDefaultUsersWhoseNodesICanEdit").Read())
                     {
                         // Currently logged in user has super proxy permissions over at least one user
 
