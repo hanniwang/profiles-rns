@@ -135,7 +135,7 @@ namespace Profiles.Profile.Modules.PropertyList
             grantDiv.Text = html.ToString();
             html = new System.Text.StringBuilder();
 
-            html.Append("<a style='text-decoration:none; color: #993333;' onclick=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\" href=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\"> <img id=\"propertygroup" + "grant" + "\" src='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' style='border: none; text-decoration: none !important' border='0' />Grants</a>&nbsp;"); //add image and onclick here.
+            html.Append("<a style='text-decoration:none; color: #993333;' onclick=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\" href=\"javascript:toggleBlock('propertygroup','" + "grant" + "');\"> <img id=\"propertygroup" + "grant" + "\" src='" + Root.Domain + "/Profile/Modules/PropertyList/images/minusSign.gif' style='border: none; text-decoration: none !important' border='0' /> Grants</a>&nbsp;"); //add image and onclick here.
             grantCollapseLink.Text = html.ToString();
             html = new System.Text.StringBuilder();
 
