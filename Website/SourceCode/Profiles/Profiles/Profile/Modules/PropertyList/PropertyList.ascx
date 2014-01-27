@@ -26,7 +26,7 @@
 </asp:Panel>
 
 <asp:Literal ID="litPropertyList" runat="server"></asp:Literal>
-
+<br />
 
 <asp:Literal ID="grantDiv" runat="server"></asp:Literal>
 <asp:Literal ID="grantCollapseLink" runat="server"></asp:Literal>
