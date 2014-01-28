@@ -66,6 +66,8 @@ form
 	padding-bottom: 12px;
 	padding-left: 6px;
 }
+
+/*
 .institutionHeader
 {
 	background-color: #000;
@@ -73,7 +75,7 @@ form
 	padding: 4px 0px 4px 0px;
 	border-bottom: 4px solid #FF0000;
 }
-
+*/
 .activeSectionDetails 
 {
     font-size: 11px;
@@ -153,13 +155,14 @@ form
 	margin-left: -1px;
 	margin-top: -2px;
 }
+/*
 .profiles .profilesPageColumnRightCenter
 {
 	width: 777px;
 	vertical-align: top;
 	background: background-image: url('../Images/passive_back.gif') repeat;
 }
-
+ */
 .profiles .profilesPageColumnRightCenter table
 {
 	border-collapse: collapse;
@@ -277,13 +280,14 @@ form
 /********************************************/
 /* Profiles Content Main                    */
 /********************************************/
-
+/*
 .profiles .profilesContentMain
 {
 	width: 604px;
 	padding: 0px;
 	margin: 10px 10px 0px 10px;
 }
+    */
 /* backLink */
 .profiles .profilesContentMain .backLink
 {
@@ -1040,4 +1044,174 @@ table tbody .height25
 {
 	color: #36C;
 	cursor: pointer;
+}
+
+
+/* TODO: attempting to make the site look like its from 2006 ie: no table bs but not responsive or anything fancy*/
+ul.profilenav  {
+    width: auto;
+	/*float: left;*/
+    position: absolute;
+    right: 15px;
+	margin: 0 0 3px 5px;
+	padding: 0;
+	list-style: none;
+	background-color: #f2f2f2;
+    border-left: 1px solid #ccc; 
+	border-bottom: 1px solid #ccc; 
+	border-top: 1px solid #ccc; 
+
+}
+
+ul.profilenav li {
+    float: left; 
+    font-size:9px;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+ul.profilenav li a{
+    display: block;
+	padding: 8px 15px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #069;
+	border-right: 1px solid #ccc; 
+}
+
+
+ul.profilenav li a img{
+    display: block;
+	padding: 8px 15px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #069;
+	border-right: 1px solid #ccc; 
+}
+
+ul.profilenav li a:hover{
+    color: #c00;
+    background-color: #fff;
+    text-decoration: none;
+}
+div#page-container {
+    max-width: 1200px;
+    margin-left: auto;
+    background-color: white;
+    margin-right: auto;
+}
+
+
+.institutionHeader
+{
+    float:left;
+    margin-left:10px;
+    cursor:pointer;
+}
+
+
+.profiles .profilesContentMain {
+    margin-top: 5px;
+    float: left;
+    width: 82%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    position: relative;
+    min-height: 800px;
+    padding-left: 20px;
+    padding-top: 30px;
+}
+
+div.panelmain {
+    float: left;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+}
+
+div.profilescontentpassive {
+    float:right;
+}
+
+.profiles .profilesContentPassive {
+    padding-top: 30px;
+}
+
+div#minisearch.activeContainer{
+   float:right;
+}
+
+.profiles .profilesContentMain .backLink {
+    /*padding: 0px 8px 0 0;    */
+   /* float: left;
+    position: absolute;
+    bottom:277px;*/
+    display:none;
+}
+
+/* Search Results */
+
+table#tblSearchResults.searchresults {
+    width:95%;
+}
+
+div.listtablepagination {
+    float: left;
+    margin-left: 1px;
+    width: 93.1%;
+}
+
+div.selsortdiv {
+    float: right;
+    margin: 6px;
+}
+
+div.selcolselectdiv {
+    float: right;
+    margin: 6px;
+}
+
+div.listtable {
+    width: 100%;
+}
+
+div.activesectionbody {
+    position: relative;
+
+}
+
+div.activecontainercenter {
+    margin-top: 50px;
+}
+
+div#minisearch.activecontainer {
+    position: relative;
+}
+
+.searchForm .searchSection {
+    background-color: rgba(234, 240, 248, 0.5);
+    border: none;
+
+}
+
+
+
+/* TODO: delete the previous css rules for below once I finalize the layout style
+.profiles .profilesContentMain .pageTabs .tabBack
+{
+	display:none;
+}
+    */
+
+
+/* TODO: delete the previous css rules for below once I finalize the layout style*/
+.profiles .profilesContentMain .pageTitle .pageIcon {
+    display: none;
+}
+
+
+.profiles .profilesContentMain .pageTitle h2 {
+    font-size: 30px;
 }

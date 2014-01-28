@@ -61,10 +61,9 @@
     
 	<div id='page-container'>
     <div class="institutionHeader">
-        <img src="<%=GetURLDomain()%>/Framework/Images/banner.jpg" />
+        <img src="<%=GetURLDomain()%>/Framework/Images/banner.png" onclick="window.location='<%=GetURLDomain()%>';" />
     </div>	    
 		<div class="profiles">
-			<center>
 				<div class="profilesHeader" runat="server" id="divProfilesHeader">
 					<div class="panelHeader">
 						<asp:ContentPlaceHolder ID="ContentHeader" runat="server">
@@ -76,42 +75,24 @@
 						</asp:ContentPlaceHolder>
 					</div>
 				</div>
+                
+                 <!-- trying to move this menu div out of the tables... why is everything in tables...-->
 				<div class="profilesPage" runat="server" id="divProfilesPage">
-					<table>
-						<tr>
-							<td valign="top">
-								<table>
-									<tbody>
-										<tr>
-											<td class="profilesPageColumnLeft">
-												<div class="profilesContentActive">
-													<div class="panelActive">
-														<asp:ContentPlaceHolder ID="ContentActive" runat="server">
-															<asp:Repeater runat="server" ID="rptActive" OnItemDataBound="DrawModule">
-																<ItemTemplate>
-																	<asp:PlaceHolder ID="phActive" runat="server"></asp:PlaceHolder>
-																</ItemTemplate>
-															</asp:Repeater>
-														</asp:ContentPlaceHolder>
-													</div>
-												</div>
-											</td>
-										</tr>
-								</table>
-							</td>
-							<td valign="top">
-								<table>
-									<tr>
-										<td class="profilesPageColumnRight">
-											<div class="profilesPageColumnRightTop">
-												<div class="profilesPageColumnRightTopLine" runat="server" id="divProfilesPageColumnRightTopLine">
-												</div>
-											</div>
-											<div class="profilesPageColumnRightCenter" runat="server" id="divPageColumnRightCenter">
-												<table id="tblTableBody" runat="server" style="border-left: 1px solid #CCC; border-right: 1px solid #CCC;">
-													<tbody>
-														<tr id="trbody">
-															<td class="profilesMainColumnLeft" runat="server" id="divProfilesMainColumnLeft">
+                    <div class="panelActive">
+					    <asp:ContentPlaceHolder ID="ContentActive" runat="server">
+						    <asp:Repeater runat="server" ID="rptActive" OnItemDataBound="DrawModule">
+							    <ItemTemplate>
+								    <asp:PlaceHolder ID="phActive" runat="server"></asp:PlaceHolder>
+							    </ItemTemplate>
+						    </asp:Repeater>
+					    </asp:ContentPlaceHolder>
+				    </div>
+                    <!-- END trying to move this menu div out of the tables... why is everything in tables...-->
+
+
+                    
+                 <!-- trying to move this main content div out of tables... why is everything in tables...-->
+                    <div class="profilesPageColumnRightCenter" runat="server" id="divPageColumnRightCenter">
 																<div class="profilesContentMain" runat="server" id="divProfilesContentMain">
 																	<div class="backLink">
 																		<asp:Literal runat="server" ID="litBackLink"></asp:Literal></div>
@@ -141,8 +122,7 @@
 																		</asp:ContentPlaceHolder>
 																	</div>
 																</div>
-															</td>
-															<td class="profilesMainColumnRight" runat="server" id="tdProfilesMainColumnRight">
+
 																<div class="profilesContentPassive">
 																	<div class="panelPassive">
 																		<asp:ContentPlaceHolder ID="ContentPassive" runat="server">
@@ -154,23 +134,11 @@
 																		</asp:ContentPlaceHolder>
 																	</div>
 																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="2">
-											<div class="profilesPageColumnRightBottom" runat="server" id="divProfilesPageColumnRightBottom">
-											</div>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
+														
+								</div>
+                                            <!-- END trying to move this main content div out of tables... why is everything in tables...-->
+
+					
 				</div>
 				<div class="profilesFooter">
 					<asp:ContentPlaceHolder ID="ContentFooter" runat="server">
@@ -181,7 +149,6 @@
 						</asp:Repeater>
 					</asp:ContentPlaceHolder>
 				</div>
-			</center>
 		</div>
 	    
 		

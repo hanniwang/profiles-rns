@@ -112,15 +112,6 @@ namespace Profiles.Framework {
         protected global::System.Web.UI.WebControls.Repeater rptActive;
         
         /// <summary>
-        /// divProfilesPageColumnRightTopLine control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divProfilesPageColumnRightTopLine;
-        
-        /// <summary>
         /// divPageColumnRightCenter control.
         /// </summary>
         /// <remarks>
@@ -128,33 +119,6 @@ namespace Profiles.Framework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPageColumnRightCenter;
-        
-        /// <summary>
-        /// tblTableBody control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTable tblTableBody;
-        
-        /// <summary>
-        /// trbody control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableRow trbody;
-        
-        /// <summary>
-        /// divProfilesMainColumnLeft control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell divProfilesMainColumnLeft;
         
         /// <summary>
         /// divProfilesContentMain control.
@@ -238,15 +202,6 @@ namespace Profiles.Framework {
         protected global::System.Web.UI.WebControls.Repeater rptMain;
         
         /// <summary>
-        /// tdProfilesMainColumnRight control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell tdProfilesMainColumnRight;
-        
-        /// <summary>
         /// ContentPassive control.
         /// </summary>
         /// <remarks>
@@ -263,15 +218,6 @@ namespace Profiles.Framework {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Repeater rptPassive;
-        
-        /// <summary>
-        /// divProfilesPageColumnRightBottom control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divProfilesPageColumnRightBottom;
         
         /// <summary>
         /// ContentFooter control.

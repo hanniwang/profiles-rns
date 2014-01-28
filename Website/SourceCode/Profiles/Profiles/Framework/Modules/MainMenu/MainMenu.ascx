@@ -17,13 +17,15 @@
     <div class="activeContainerTop"></div>
     <div class="activeContainerCenter">
         <div class="activeSection">
-            <div class="activeSectionHead">Menu</div>
             <div class="activeSectionBody">
                 <div runat="server" id="panelMenu" visible="true"></div>
             </div>
         </div>
-        <RelationshipType:Networks runat="server" ID="ActiveNetworkRelationshipTypes" Visible="false" />        
-        <HistoryItem:History runat="server" ID="ProfileHistory" Visible="false" />        
+               
     </div>
     <div class="activeContainerBottom"></div>
 </div>
+
+
+<RelationshipType:Networks runat="server" ID="ActiveNetworkRelationshipTypes" Visible="false" />        
+<HistoryItem:History runat="server" ID="ProfileHistory" Visible="false" /> 

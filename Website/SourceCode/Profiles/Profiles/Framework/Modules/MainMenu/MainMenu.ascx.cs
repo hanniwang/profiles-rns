@@ -53,10 +53,10 @@ namespace Profiles.Framework.Modules.MainMenu
                 subject = Convert.ToInt64(Request.QueryString["subject"]);
 
             Utilities.DataIO data = new Profiles.Framework.Utilities.DataIO();
-            menulist.Append("<ul>");
+            menulist.Append("<ul class=\"ProfileNav\">");
 
-            menulist.Append("<li><a href='" + Root.Domain + "/search'>Find People</a></li>");
-            menulist.Append("<li><a href='" + Root.Domain + "/search/all'>Find Everything</a></li>");
+            //menulist.Append("<li><a href='" + Root.Domain + "/search'>Find People</a></li>");
+            //menulist.Append("<li><a href='" + Root.Domain + "/search/all'>Find Everything</a></li>");
 
             //-50 is the profiles Admin
             if (data.GetSessionSecurityGroup() == -50)
@@ -101,7 +101,7 @@ namespace Profiles.Framework.Modules.MainMenu
 
                         file = file.Substring(0, file.Length - 1);
 
-                        menulist.Append("<li><a href=\"" + uri + "/" + file + ".rdf\" target=\"_blank\">" + "Export RDF" + "</a>&nbsp;<a style='border: none;' href='" + Root.Domain + "/about/default.aspx?tab=data'><img style='border-style: none' src='" + Root.Domain + "/Framework/Images/info.png'  border='0'></a></li>");
+                        menulist.Append("<li><a href=\"" + uri + "/" + file + ".rdf\" target=\"_blank\">" + "Export RDF" + "</a></li>");
 
                         if (base.MasterPage != null)
                         {

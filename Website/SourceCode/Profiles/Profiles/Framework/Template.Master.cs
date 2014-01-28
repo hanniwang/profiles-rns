@@ -85,13 +85,13 @@ namespace Profiles.Framework
 
                 if (this.GetStringFromPresentationXML("Presentation/PageOptions/@Columns") == "2")
                 {
-                    tdProfilesMainColumnRight.Visible = false;
-                    divProfilesPageColumnRightTopLine.Visible = false;
+                    //tdProfilesMainColumnRight.Visible = false;
+                    //divProfilesPageColumnRightTopLine.Visible = false;
                     divProfilesPage.Style.Remove("background-image");
-                    divProfilesPageColumnRightBottom.Style.Remove("background-image");
-                    divProfilesPageColumnRightBottom.Style.Add("background-image", Root.Domain + "/Framework/images/passive_bottom_alt.gif");
-                    divProfilesMainColumnLeft.Style.Remove("width");
-                    divProfilesMainColumnLeft.Style.Add("width", "777px");
+                   //divProfilesPageColumnRightBottom.Style.Remove("background-image");
+                    //divProfilesPageColumnRightBottom.Style.Add("background-image", Root.Domain + "/Framework/images/passive_bottom_alt.gif");
+                    //divProfilesMainColumnLeft.Style.Remove("width");
+                    //divProfilesMainColumnLeft.Style.Add("width", "777px");
                     divProfilesContentMain.Style.Remove("width");
                     divProfilesContentMain.Style.Add("width", "756px");
                 }
