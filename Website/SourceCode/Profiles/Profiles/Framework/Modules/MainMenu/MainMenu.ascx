@@ -14,7 +14,8 @@
  --%>
 
 <div class="activeContainer" id="defaultmenu">
-    <div class="activeContainerTop"></div>
+    <div class="activeContainerTop">
+    </div>
     <div class="activeContainerCenter">
         <div class="activeSection">
             <div class="activeSectionBody">
@@ -23,9 +24,14 @@
         </div>
                
     </div>
-    <div class="activeContainerBottom"></div>
+    <div class="activeContainerBottom">
+
+        <!--<RelationshipType:Networks runat="server" ID="ActiveNetworkRelationshipTypes" Visible="false" /> -->        
+        <!--<HistoryItem:History runat="server" ID="ProfileHistory" Visible="false" /> -->
+        
+
+    </div>
 </div>
 
 
-<RelationshipType:Networks runat="server" ID="ActiveNetworkRelationshipTypes" Visible="false" />        
-<HistoryItem:History runat="server" ID="ProfileHistory" Visible="false" /> 
+

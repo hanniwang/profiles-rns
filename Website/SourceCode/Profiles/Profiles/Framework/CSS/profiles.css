@@ -1048,7 +1048,7 @@ table tbody .height25
 
 
 /* TODO: attempting to make the site look like its from 2006 ie: no table bs but not responsive or anything fancy*/
-ul.profilenav  {
+ul.ProfileNav  {
     width: auto;
 	/*float: left;*/
     position: absolute;
@@ -1063,14 +1063,24 @@ ul.profilenav  {
 
 }
 
-ul.profilenav li {
+ul.ProfileNav li {
     float: left; 
     font-size:9px;
     word-wrap: break-word;
     text-align: center;
 }
 
-ul.profilenav li a{
+ul.ProfileNav li a{
+    display: block;
+	padding: 8px 15px;
+	text-decoration: none;
+	font-weight: normal;
+	color: #069;
+	border-right: 1px solid #ccc; 
+}
+
+
+ul.ProfileNav li a img{
     display: block;
 	padding: 8px 15px;
 	text-decoration: none;
@@ -1079,17 +1089,7 @@ ul.profilenav li a{
 	border-right: 1px solid #ccc; 
 }
 
-
-ul.profilenav li a img{
-    display: block;
-	padding: 8px 15px;
-	text-decoration: none;
-	font-weight: bold;
-	color: #069;
-	border-right: 1px solid #ccc; 
-}
-
-ul.profilenav li a:hover{
+ul.ProfileNav li a:hover{
     color: #c00;
     background-color: #fff;
     text-decoration: none;
@@ -1113,7 +1113,7 @@ div#page-container {
 .profiles .profilesContentMain {
     margin-top: 5px;
     float: left;
-    width: 82%;
+    width: 79%;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
@@ -1123,7 +1123,7 @@ div#page-container {
     padding-top: 30px;
 }
 
-div.panelmain {
+div.panelMain {
     float: left;
     width: 100%;
     margin-left: auto;
@@ -1131,7 +1131,7 @@ div.panelmain {
     background-color: white;
 }
 
-div.profilescontentpassive {
+div.profilesContentPassive {
     float:right;
 }
 
@@ -1153,17 +1153,17 @@ div#minisearch.activeContainer{
 
 /* Search Results */
 
-table#tblSearchResults.searchresults {
+table#tblSearchResults.SearchResults {
     width:95%;
 }
 
-div.listtablepagination {
+div.listTablePagination {
     float: left;
     margin-left: 1px;
     width: 93.1%;
 }
 
-div.selsortdiv {
+div.selSortdiv {
     float: right;
     margin: 6px;
 }
@@ -1177,16 +1177,16 @@ div.listtable {
     width: 100%;
 }
 
-div.activesectionbody {
+div.activeSectionBody {
     position: relative;
 
 }
 
-div.activecontainercenter {
+div.activeContainerCenter {
     margin-top: 50px;
 }
 
-div#minisearch.activecontainer {
+div#minisearch.activeContainer {
     position: relative;
 }
 
@@ -1203,7 +1203,7 @@ div#minisearch.activecontainer {
 {
 	display:none;
 }
-    */
+*/
 
 
 /* TODO: delete the previous css rules for below once I finalize the layout style*/
@@ -1215,3 +1215,4 @@ div#minisearch.activecontainer {
 .profiles .profilesContentMain .pageTitle h2 {
     font-size: 30px;
 }
+

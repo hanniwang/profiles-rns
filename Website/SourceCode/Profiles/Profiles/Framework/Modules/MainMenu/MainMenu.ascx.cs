@@ -55,14 +55,14 @@ namespace Profiles.Framework.Modules.MainMenu
             Utilities.DataIO data = new Profiles.Framework.Utilities.DataIO();
             menulist.Append("<ul class=\"ProfileNav\">");
 
-            //menulist.Append("<li><a href='" + Root.Domain + "/search'>Find People</a></li>");
+            menulist.Append("<li><a href='" + Root.Domain + "/search'>Search</a></li>");
             //menulist.Append("<li><a href='" + Root.Domain + "/search/all'>Find Everything</a></li>");
 
             //-50 is the profiles Admin
             if (data.GetSessionSecurityGroup() == -50)
                 menulist.Append("<li><a href='" + Root.Domain + "/SPARQL/default.aspx'>SPARQL Query</a></li>");
 
-            menulist.Append("<li><a href='" + Root.Domain + "/about/default.aspx'>About This Site</a></li>");
+            menulist.Append("<li><a href='" + Root.Domain + "/about/default.aspx'>About</a></li>");
 
             if (sm.Session().NodeID > 0)
                 menulist.Append("<li><a href='" + sm.Session().PersonURI + "'>View My Profile</a></li>");

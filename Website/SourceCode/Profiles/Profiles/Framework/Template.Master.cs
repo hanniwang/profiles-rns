@@ -150,6 +150,7 @@ namespace Profiles.Framework
 
 
             // IE Only css files
+            /*
             Literal ieCss = new Literal();
             ieCss.Text = String.Format(@"
 				<!--[if IE]>
@@ -158,7 +159,7 @@ namespace Profiles.Framework
 			",
             Root.Domain);
             Page.Header.Controls.Add(ieCss);
-
+            */
 
         }
         /// <summary>
