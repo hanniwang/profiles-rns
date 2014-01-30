@@ -15,6 +15,12 @@ body
 {
 	padding: 0px;
 	margin: 0px;
+
+    background-image: -webkit-linear-gradient(top, #ffffff, #999999);
+    background-image: -moz-linear-gradient(top, #ffffff, #999999);
+    background-image: -o-linear-gradient(top, #ffffff, rgba(246, 228, 228, 1));
+    background-image: linear-gradient(to top, #ffffff, #999999);
+    min-height: 1000px;
 }
 form
 {
@@ -506,6 +512,10 @@ form
 	padding-left: 1em;
 	text-indent: -1em;
 	line-height: 14px;
+    background-color: #f2f2f2;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 .profiles .profilesContentPassive .passiveSectionBodyDetails
 {
@@ -1050,24 +1060,32 @@ table tbody .height25
 /* TODO: attempting to make the site look like its from 2006 ie: no table bs but not responsive or anything fancy*/
 ul.ProfileNav  {
     width: auto;
-	/*float: left;*/
     position: absolute;
-    right: 15px;
-	margin: 0 0 3px 5px;
-	padding: 0;
-	list-style: none;
-	background-color: #f2f2f2;
-    border-left: 1px solid #ccc; 
-	border-bottom: 1px solid #ccc; 
-	border-top: 1px solid #ccc; 
+    left: -5px;
+    margin: 0 0 3px 5px;
+    padding: 0;
+    list-style: none;  
+  
+    
+    top: 90px;
+    z-index: 1;
+
+    width: 83%;
+    background: rgba(168, 168, 168, 1);
+    border: none;
 
 }
 
 ul.ProfileNav li {
     float: left; 
-    font-size:9px;
+    font-size:12px;
     word-wrap: break-word;
     text-align: center;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
 }
 
 ul.ProfileNav li a{
@@ -1076,7 +1094,7 @@ ul.ProfileNav li a{
 	text-decoration: none;
 	font-weight: normal;
 	color: #069;
-	border-right: 1px solid #ccc; 
+	border-right: 2px solid #A8A8A8;
 }
 
 
@@ -1093,6 +1111,9 @@ ul.ProfileNav li a:hover{
     color: #c00;
     background-color: #fff;
     text-decoration: none;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
 }
 div#page-container {
     max-width: 1200px;
@@ -1105,10 +1126,15 @@ div#page-container {
 .institutionHeader
 {
     float:left;
-    margin-left:10px;
+    margin-left: -9px;
     cursor:pointer;
 }
 
+
+.institutionHeader img
+{
+    width: 380px;
+}
 
 .profiles .profilesContentMain {
     margin-top: 5px;
@@ -1116,11 +1142,13 @@ div#page-container {
     width: 79%;
     margin-left: auto;
     margin-right: auto;
-    background-color: white;
+
+    background-color: rgba(243, 243, 243, 1);
+
     position: relative;
-    min-height: 800px;
+   /* min-height: 800px;*/
     padding-left: 20px;
-    padding-top: 30px;
+    padding-top: 75px;
 }
 
 div.panelMain {
@@ -1191,7 +1219,8 @@ div#minisearch.activeContainer {
 }
 
 .searchForm .searchSection {
-    background-color: rgba(234, 240, 248, 0.5);
+   /*background-color: rgba(234, 240, 248, 0.5);*/
+    background-color: #F8F8F8;
     border: none;
 
 }

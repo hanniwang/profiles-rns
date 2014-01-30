@@ -62,7 +62,7 @@
     
 	<div id='page-container'>
     <div class="institutionHeader">
-        <img src="<%=GetURLDomain()%>/Framework/Images/banner.png" onclick="window.location='<%=GetURLDomain()%>';" />
+        <img src="<%=GetURLDomain()%>/Framework/Images/banner-2.png" onclick="window.location='<%=GetURLDomain()%>';" />
     </div>	    
 		<div class="profiles">
 				<div class="profilesHeader" runat="server" id="divProfilesHeader">

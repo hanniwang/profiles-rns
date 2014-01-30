@@ -83,6 +83,7 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Framework\Images\banner-2.png" />
     <Content Include="Framework\Images\banner.png" />
     <Content Include="Global.asax" />
     <Content Include="ORNG\Images\waiting.gif" />
