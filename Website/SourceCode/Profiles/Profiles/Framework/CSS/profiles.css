@@ -548,7 +548,7 @@ form
 }
 .searchForm .searchSection
 {
-	background-color: #EAF0F8;
+	/*ackground-color: #EAF0F8;*/
 	border: 1px solid #CCC;
 	padding: 8px 0;
 	margin-bottom: 12px;
@@ -1232,7 +1232,7 @@ div#minisearch.activeContainer {
 
 .searchForm .searchSection {
    /*background-color: rgba(234, 240, 248, 0.5);*/
-    background-color: #F8F8F8;
+    /*background-color: #F8F8F8;*/
     border: none;
 
 }
