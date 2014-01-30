@@ -15,6 +15,7 @@ body
 {
 	padding: 0px;
 	margin: 0px;
+    background: #999999;
 
     background-image: -webkit-linear-gradient(top, #ffffff, #999999);
     background-image: -moz-linear-gradient(top, #ffffff, #999999);
@@ -463,7 +464,6 @@ form
 .profiles .profilesContentPassive
 {
 	width: 136px;
-	padding: 0px;
 	margin: 0px 8px 0px 8px;
 	height: 100%;
 }
@@ -512,7 +512,7 @@ form
 	padding-left: 1em;
 	text-indent: -1em;
 	line-height: 14px;
-    background-color: #f2f2f2;
+    background-color: rgba(242, 242, 242, 0.45);
     border-left: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
@@ -1067,11 +1067,10 @@ ul.ProfileNav  {
     list-style: none;  
   
     
-    top: 90px;
+    top: 61px;
     z-index: 1;
 
-    width: 83%;
-    background: rgba(168, 168, 168, 1);
+    width: 84%;
     border: none;
 
 }
@@ -1120,6 +1119,7 @@ div#page-container {
     margin-left: auto;
     background-color: white;
     margin-right: auto;
+    position: relative;
 }
 
 
@@ -1128,6 +1128,9 @@ div#page-container {
     float:left;
     margin-left: -9px;
     cursor:pointer;
+
+    position: absolute;
+    top: -40px;
 }
 
 
@@ -1137,9 +1140,9 @@ div#page-container {
 }
 
 .profiles .profilesContentMain {
-    margin-top: 5px;
+    margin-top: 94px;
     float: left;
-    width: 79%;
+    width: 77%;
     margin-left: auto;
     margin-right: auto;
 
@@ -1147,8 +1150,11 @@ div#page-container {
 
     position: relative;
    /* min-height: 800px;*/
-    padding-left: 20px;
+    padding-left: 25px;
     padding-top: 75px;
+    
+    padding-right: 25px;
+    padding-bottom: 25px;
 }
 
 div.panelMain {
@@ -1156,15 +1162,15 @@ div.panelMain {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    background-color: white;
 }
 
 div.profilesContentPassive {
     float:right;
+    padding: 10px;
 }
 
 .profiles .profilesContentPassive {
-    padding-top: 30px;
+    margin-top: 30px;
 }
 
 div#minisearch.activeContainer{
@@ -1205,13 +1211,19 @@ div.listtable {
     width: 100%;
 }
 
+div.activeSectionHead {
+    /*padding: 5px;
+    background-color: white;*/
+    margin-bottom: 10px;
+}
+
 div.activeSectionBody {
     position: relative;
 
 }
 
 div.activeContainerCenter {
-    margin-top: 50px;
+    margin-top: 55px;
 }
 
 div#minisearch.activeContainer {
@@ -1225,7 +1237,9 @@ div#minisearch.activeContainer {
 
 }
 
-
+h2 {
+    padding-bottom: 15px;
+}
 
 /* TODO: delete the previous css rules for below once I finalize the layout style
 .profiles .profilesContentMain .pageTabs .tabBack
