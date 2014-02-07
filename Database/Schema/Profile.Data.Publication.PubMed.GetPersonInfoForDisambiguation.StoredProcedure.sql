@@ -27,7 +27,7 @@ SELECT personid,
 								 WHEN a.n is not null or b.n is not null 
 									    /*  Below is example of a custom piece of logic to alter the disambiguation by telling the disambiguation service
 										to Require First Name usage in the algorithm for faculty who are lower in rank */
-									or facultyranksort > 4 
+									or (facultyranksort = 0 or facultyranksort > 27) 
 									THEN 'true'
 								 ELSE 'false'
 							 END "RequireFirstName",
