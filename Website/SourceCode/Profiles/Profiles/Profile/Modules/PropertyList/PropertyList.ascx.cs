@@ -36,7 +36,8 @@ namespace Profiles.Profile.Modules.PropertyList
         protected void Page_Load(object sender, EventArgs e)
         {
             DrawProfilesModule();
-            DrawGrantInformation();
+            //TODO: remove this manually added grant UI
+            //DrawGrantInformation();
         }
 
         public PropertyList() { }
@@ -299,6 +300,8 @@ namespace Profiles.Profile.Modules.PropertyList
                     if ((propertygroup.SelectNodes("Property/Network/Connection").Count > 0 && propertygroup.SelectNodes("Property[@CustomDisplay='false']").Count > 0) || propertygroup.SelectNodes("Property/CustomModule").Count > 0)
                     {
                         // START Hacks to remove auto generated GrantUI
+                        
+                        /*
                         if (propertygroup.SelectSingleNode("@URI").Value == "http://profiles.catalyst.harvard.edu/ontology/prns#PropertyGroupResearch")
                         {
                             continue;
@@ -314,7 +317,7 @@ namespace Profiles.Profile.Modules.PropertyList
                             continue;
                         }
                         // END Hacks to remove auto generated GrantUI
-
+                        */
 
                         // ORNG 
                         if (propertygroup.SelectSingleNode("@URI").Value == "http://profiles.catalyst.harvard.edu/ontology/prns#PropertyGroupBibliographic")

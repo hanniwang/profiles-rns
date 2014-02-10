@@ -1224,6 +1224,8 @@ div.activeSectionBody {
 
 div.activeContainerCenter {
     margin-top: 55px;
+    background-color: rgba(243, 243, 243, 1);
+    /*padding: 4px;*/
 }
 
 div#minisearch.activeContainer {
@@ -1236,6 +1238,11 @@ div#minisearch.activeContainer {
     border: none;
 
 }
+
+div.panelPassive {
+    background-color: rgba(243, 243, 243, 1);
+}
+
 
 h2 {
     padding-bottom: 15px;
@@ -1258,4 +1265,5 @@ h2 {
 .profiles .profilesContentMain .pageTitle h2 {
     font-size: 30px;
 }
+
 

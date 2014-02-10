@@ -23,69 +23,79 @@ BEGIN
           +', @InternalIdIn = '+InternalIdIn
           +', @TurnOffIndexing=0, @SaveLog=0; '
     FROM (
-      SELECT *, '''SELECT CAST(GI.GrantID AS VARCHAR(50)) FROM [Profile.Data].[Grant.Information] as GI
-        INNER JOIN [Profile.Data].[Grant.AffiliatedPeople] as GA
-        ON GI.GrantID = GA.GrantID
-        WHERE PersonID = '+CAST(@PersonID AS VARCHAR(50))+'''' InternalIdIn
+      -- Research Roles:
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) FROM [Profile.Data].[Grant.AffiliatedPeople] 
+        WHERE IsPrincipalInvestigator = 0 AND PersonID = '+CAST(@PersonID AS VARCHAR(50))+'''' InternalIdIn
         FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#Grant'
+        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole'
           AND NetworkProperty IS NULL
           AND Property IS NULL
+
+      UNION ALL
+      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) + '' InternalIdIn
+        FROM [Ontology.].DataMap
+        WHERE class = 'http://xmlns.com/foaf/0.1/Person' 
+          AND property = 'http://vivoweb.org/ontology/core#hasResearcherRole'
+          AND NetworkProperty IS NULL
+
+      UNION ALL
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
+        FROM [Ontology.].DataMap
+        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole' 
+          AND property = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+          AND NetworkProperty IS NULL
+
+      UNION ALL
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
+        FROM [Ontology.].DataMap
+        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole' 
+          AND property = 'http://www.w3.org/2000/01/rdf-schema#label'
+          AND NetworkProperty IS NULL
+
+    UNION ALL
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
+        FROM [Ontology.].DataMap
+        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole' 
+          AND property = 'http://vivoweb.org/ontology/core#researcherRoleOf'
+          AND NetworkProperty IS NULL
+
+  UNION ALL
+    --PrincipalInvestigator Roles:
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) FROM [Profile.Data].[Grant.AffiliatedPeople] 
+        WHERE IsPrincipalInvestigator = 1 AND PersonID = '+CAST(@PersonID AS VARCHAR(50))+'''' InternalIdIn
+        FROM [Ontology.].DataMap
+        WHERE class = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole'
+          AND NetworkProperty IS NULL
+          AND Property IS NULL
+
       UNION ALL
       SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) + '' InternalIdIn
         FROM [Ontology.].DataMap
         WHERE class = 'http://xmlns.com/foaf/0.1/Person' 
           AND property = 'http://vivoweb.org/ontology/core#hasPrincipalInvestigatorRole'
           AND NetworkProperty IS NULL
+
       UNION ALL
-      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) + '' InternalIdIn
-        FROM [Ontology.].DataMap
-        WHERE class = 'http://xmlns.com/foaf/0.1/Person' 
-          AND property = 'http://vivoweb.org/ontology/core#hasResearcherRole'
-          AND NetworkProperty IS NULL          
-      UNION ALL
-      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) +  '' InternalIdIn
-        FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole' 
-          AND property IS NULL
-          AND NetworkProperty IS NULL
-      UNION ALL
-      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) +  '' InternalIdIn
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
         FROM [Ontology.].DataMap
         WHERE class = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole' 
-          AND property IS NULL
-          AND NetworkProperty IS NULL
-      UNION ALL
-      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) +  '' InternalIdIn
-        FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole' 
-          AND property  = 'http://vivoweb.org/ontology/core#roleContributesTo'
-          AND NetworkProperty IS NULL
-      UNION ALL
-      SELECT *, '' + CAST(@PersonID AS VARCHAR(50)) +  '' InternalIdIn 
-        FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#ResearcherRole' 
-          AND property  = 'http://vivoweb.org/ontology/core#roleContributesTo'
+          AND property = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
           AND NetworkProperty IS NULL
 
       UNION ALL
-      SELECT *, '''SELECT CAST(GI.GrantID AS VARCHAR(50))  InternalIdIn FROM [Profile.Data].[Grant.Information] as GI
-        INNER JOIN [Profile.Data].[Grant.AffiliatedPeople] as GA
-        ON GI.GrantID = GA.GrantID
-        WHERE PersonID = '+CAST(@PersonID AS VARCHAR(50))+''''
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
         FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#Grant'
-          AND property  = 'http://www.w3.org/2000/01/rdf-schema#label'
+        WHERE class = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole' 
+          AND property = 'http://www.w3.org/2000/01/rdf-schema#label'
           AND NetworkProperty IS NULL
+
     UNION ALL
-       SELECT *, '''SELECT CAST(GI.GrantID AS VARCHAR(50))  InternalIdIn FROM [Profile.Data].[Grant.Information] as GI
-        INNER JOIN [Profile.Data].[Grant.AffiliatedPeople] as GA
-        ON GI.GrantID = GA.GrantID
-        WHERE PersonID = '+CAST(@PersonID AS VARCHAR(50))+''''
+      SELECT *, '''SELECT CAST(GrantID AS VARCHAR(50)) InternalIdIn FROM [Profile.Data].[Grant.AffiliatedPeople] '''
         FROM [Ontology.].DataMap
-        WHERE class = 'http://vivoweb.org/ontology/core#Grant'
-          AND property  = 'http://vivoweb.org/ontology/core#grantDirectCosts'
-          AND NetworkProperty IS NULL
+        WHERE class = 'http://vivoweb.org/ontology/core#PrincipalInvestigatorRole' 
+          AND property = 'http://vivoweb.org/ontology/core#researcherRoleOf'
+
+      
     ) t
     ORDER BY DataMapID
 
