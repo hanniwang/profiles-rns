@@ -13,7 +13,7 @@ BEGIN
   SET NOCOUNT ON;  
   DECLARE @PersonID INT;
   declare cur CURSOR LOCAL for
-    select PersonID FROM [ProfilesRNS].[User.Account].[User] WHERE PersonID IS NOT NULL
+    SELECT DISTINCT PersonID FROM [ProfilesRNS].[Profile.Data].[Grant.AffiliatedPeople]
     
   open cur
 
