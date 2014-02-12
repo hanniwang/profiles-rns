@@ -49,7 +49,7 @@ namespace Profiles.About.Modules.About
                     tabs += Tabs.DrawActiveTab("Overview");
                     tabs += Tabs.DrawDisabledTab("Frequently Asked Questions", Root.Domain + "/about/default.aspx?tab=faq");
                     tabs += Tabs.DrawDisabledTab("Sharing Data", Root.Domain + "/about/default.aspx?tab=data");
-                    
+                    tabs += Tabs.DrawDisabledTab("Development and Acknowledgements", Root.Domain + "/about/default.aspx?tab=dev");                    
 
                     pnlOverview.Visible = true;
 
@@ -59,6 +59,7 @@ namespace Profiles.About.Modules.About
                     tabs += Tabs.DrawDisabledTab("Overview", Root.Domain + "/about/default.aspx?tab=overview");
                     tabs += Tabs.DrawActiveTab("Frequently Asked Questions");
                     tabs += Tabs.DrawDisabledTab("Sharing Data", Root.Domain + "/about/default.aspx?tab=data");
+                    tabs += Tabs.DrawDisabledTab("Development and Acknowledgements", Root.Domain + "/about/default.aspx?tab=dev");
                     
                     pnlFAQ.Visible = true;
                     break;
@@ -68,8 +69,18 @@ namespace Profiles.About.Modules.About
                     tabs += Tabs.DrawDisabledTab("Overview", Root.Domain + "/about/default.aspx?tab=overview");
                     tabs += Tabs.DrawDisabledTab("Frequently Asked Questions", Root.Domain + "/about/default.aspx?tab=faq");
                     tabs += Tabs.DrawActiveTab("Sharing Data");
+                    tabs += Tabs.DrawDisabledTab("Development and Acknowledgements", Root.Domain + "/about/default.aspx?tab=dev");
 
                     pnlData.Visible = true;
+                    break;
+
+                case "dev":
+                    tabs += Tabs.DrawDisabledTab("Overview", Root.Domain + "/about/default.aspx?tab=overview");
+                    tabs += Tabs.DrawDisabledTab("Frequently Asked Questions", Root.Domain + "/about/default.aspx?tab=faq");
+                    tabs += Tabs.DrawDisabledTab("Sharing Data", Root.Domain + "/about/default.aspx?tab=data");
+                    tabs += Tabs.DrawActiveTab("Development and Acknowledgements");
+
+                    pnlDev.Visible = true;
                     break;
 
 
