@@ -14,8 +14,3 @@ C:\Users\nichbrown\Documents\profiles\OpenSource\ProfilesRNS\Code\ProfilesSearch
 C:\Users\nichbrown\Documents\profiles\OpenSource\ProfilesRNS\Code\ProfilesSearchAPI\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\nichbrown\Documents\profiles\OpenSource\ProfilesRNS\Code\ProfilesSearchAPI\obj\Debug\Search.dll
 C:\Users\nichbrown\Documents\profiles\OpenSource\ProfilesRNS\Code\ProfilesSearchAPI\obj\Debug\Search.pdb
-C:\Users\hullharrym\Documents\Projects\Profiles\profiles-dbmi\profiles-dbmi\Website\SourceCode\ProfilesSearchAPI\bin\Search.dll
-C:\Users\hullharrym\Documents\Projects\Profiles\profiles-dbmi\profiles-dbmi\Website\SourceCode\ProfilesSearchAPI\bin\Search.pdb
-C:\Users\hullharrym\Documents\Projects\Profiles\profiles-dbmi\profiles-dbmi\Website\SourceCode\ProfilesSearchAPI\obj\Debug\ProfilesSearchAPI.csprojResolveAssemblyReference.cache
-C:\Users\hullharrym\Documents\Projects\Profiles\profiles-dbmi\profiles-dbmi\Website\SourceCode\ProfilesSearchAPI\obj\Debug\Search.dll
-C:\Users\hullharrym\Documents\Projects\Profiles\profiles-dbmi\profiles-dbmi\Website\SourceCode\ProfilesSearchAPI\obj\Debug\Search.pdb

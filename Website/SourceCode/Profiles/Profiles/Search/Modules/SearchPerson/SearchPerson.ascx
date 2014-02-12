@@ -213,6 +213,28 @@
                                         All <b>except</b> the one selected
                                     </td>
                                 </tr>
+                                <tr runat="server" id="trFacultyType">
+                                    <th>
+                                        Faculty Type
+                                    </th>
+                                    <td style="padding:0" colspan="2">
+                                        <table cellpadding="0" style="padding:0">
+                                            <tr>
+                                                <td>
+                                                    <asp:PlaceHolder ID="phDDLCHK" runat="server"></asp:PlaceHolder>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <asp:PlaceHolder ID="phDDLList" runat="server"></asp:PlaceHolder>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <asp:Label ID="lblSelectedItem" runat="server"></asp:Label>
+                                        <asp:HiddenField ID="hidList" runat="server" />
+                                        <asp:HiddenField ID="hidURIs" runat="server" />
+                                    </td>
+                                </tr>
                                
                                 <tr>
                                     <th>
