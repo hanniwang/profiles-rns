@@ -15,12 +15,8 @@ body
 {
 	padding: 0px;
 	margin: 0px;
-    background: #999999;
+    background: #ddd;
 
-    background-image: -webkit-linear-gradient(top, #ffffff, #999999);
-    background-image: -moz-linear-gradient(top, #ffffff, #999999);
-    background-image: -o-linear-gradient(top, #ffffff, rgba(246, 228, 228, 1));
-    background-image: linear-gradient(to top, #ffffff, #999999);
     min-height: 1000px;
 }
 form
@@ -38,18 +34,25 @@ form
 /* Customize this part                      */
 /********************************************/
 
+#grant {
+    padding:16px;
+    padding-top:0px;
+}
+#grant h4{
+   color:#DB4839;
+}
 
 .PropertyGroup
 {
 	font-family: Arial;
 	font-weight: bold;
 	font-size: 15px;
-	color: #993333;
+	color: #DB4839;
 	padding-bottom: 12px;
 }
 .PropertyItemHeader
 {
-	background-color: #EEEBE5;
+	background-color: #d9d9d9;
 	color: #666;
 	font-family: Arial;
 	font-size: 14px;
@@ -317,7 +320,7 @@ form
 	display: block;
 	padding: 0px;
 	margin: 0px 0px 12px 0px;
-	color: #AC1B30;
+	color: #DB4839;
 	font-size: 18px;
 	font-weight: normal;
 }
@@ -512,10 +515,7 @@ form
 	padding-left: 1em;
 	text-indent: -1em;
 	line-height: 14px;
-    background-color: rgba(242, 242, 242, 0.45);
-    border-left: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
+    background:none;
 }
 .profiles .profilesContentPassive .passiveSectionBodyDetails
 {
@@ -877,7 +877,7 @@ form
 /********************************************/
 .editPage h2
 {
-	color: #AC1B30;
+	color: #DB4839;
 	font-size: 13px;
 }
 .editPage table
@@ -952,7 +952,7 @@ table tbody .height25
 }
 .topRow
 {
-	background-color: #EEEBE5;
+	background-color: #d9d9d9;
 	font-weight: bold;
 	color: #666;
 	font-family: Arial;
@@ -1081,7 +1081,7 @@ ul.ProfileNav li {
     word-wrap: break-word;
     text-align: center;
     background-color: #f2f2f2;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 10px 10px 0px 0px;
     border-radius: 10px 10px 0px 0px;
@@ -1093,7 +1093,7 @@ ul.ProfileNav li a{
 	text-decoration: none;
 	font-weight: normal;
 	color: #069;
-	border-right: 2px solid #A8A8A8;
+	border-right: 2px solid #ddd;
 }
 
 
@@ -1169,9 +1169,6 @@ div.profilesContentPassive {
     padding: 10px;
 }
 
-.profiles .profilesContentPassive {
-    margin-top: 30px;
-}
 
 div#minisearch.activeContainer{
    float:right;
@@ -1224,12 +1221,13 @@ div.activeSectionBody {
 
 div.activeContainerCenter {
     margin-top: 55px;
-    background-color: rgba(243, 243, 243, 1);
+    background:none;
     /*padding: 4px;*/
 }
 
 div#minisearch.activeContainer {
     position: relative;
+    margin-top: 40px;
 }
 
 .searchForm .searchSection {
@@ -1240,7 +1238,7 @@ div#minisearch.activeContainer {
 }
 
 div.panelPassive {
-    background-color: rgba(243, 243, 243, 1);
+    background:none;
 }
 
 
