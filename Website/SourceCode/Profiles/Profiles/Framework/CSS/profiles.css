@@ -1114,9 +1114,9 @@ ul.ProfileNav li a:hover{
     -webkit-border-radius: 10px 10px 0px 0px;
     border-radius: 10px 10px 0px 0px;
 }
-div#page-container {
-    max-width: 1200px;
-    margin-left: auto;
+div#page-container {    
+    width: 800px;   
+    margin: 0px auto;
     background-color: white;
     margin-right: auto;
     position: relative;
