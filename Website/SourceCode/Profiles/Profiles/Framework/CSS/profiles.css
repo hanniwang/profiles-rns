@@ -1146,7 +1146,7 @@ div#page-container {
     margin-left: auto;
     margin-right: auto;
 
-    background-color: rgba(243, 243, 243, 1);
+    background-color: rgb(243, 243, 243);
 
     position: relative;
    /* min-height: 800px;*/
