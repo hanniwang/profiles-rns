@@ -97,7 +97,6 @@
         var obj1 = document.querySelectorAll('[id*=ddlChkList]');
         if (target.id != "alst" && !target.id.match("chkLstItem")) {            
             if (!(target == obj || target == obj1)) {
-                console.log(obj);
                 obj[0].style.display = 'none';
             }
             else if (target == obj || target == obj1) {
