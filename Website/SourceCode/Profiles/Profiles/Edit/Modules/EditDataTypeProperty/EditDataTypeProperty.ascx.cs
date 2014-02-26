@@ -65,7 +65,17 @@ namespace Profiles.Edit.Modules.EditDataTypeProperty
             btnEditProperty.Text = "Add " + PropertyLabel;
 
             this.PropertyListXML = propdata.GetPropertyList(this.BaseData, base.PresentationXML, predicateuri, false, true, false);
-            this.MaxCardinality = this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@MaxCardinality").Value;
+            //TODO: Put hack to not insert null MaxCardinality Value
+            if (this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@MaxCardinality") == null) // TODO: this doesnt work
+            {
+                this.MaxCardinality = "1";
+            }
+            else
+            {
+                this.MaxCardinality = this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@MaxCardinality").Value;
+            }
+
+           
             this.MinCardinality = this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@MinCardinality").Value;
 
             securityOptions.Subject = this.SubjectID;
