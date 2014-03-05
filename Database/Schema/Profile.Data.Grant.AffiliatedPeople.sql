@@ -9,7 +9,8 @@ CREATE TABLE [Profile.Data].[Grant.AffiliatedPeople](
   [GrantID] [int] NOT NULL,
   [PersonID] [int] NULL,
   [SAPID] [varchar](8) NOT NULL,
-  [IsPrincipalInvestigator] [bit] NULL)
+  [IsPrincipalInvestigator] [bit] NULL
+  [Excluded] [bit] NULL)
 GO
 SET ANSI_PADDING OFF
 GO

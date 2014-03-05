@@ -29,6 +29,10 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
 {
     public partial class EditObjectTypeProperty : BaseModule
     {
+
+        public int _personId = 0;
+        public Int64 _subject = 0;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -36,7 +40,21 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
                 Session["pnlAddBySearch.Visible"] = null;
                 Session["pnlAddByURI.Visible"] = null;
                 Session["pnlAddNew.Visible"] = null;
+
+               
             }
+
+            Session["ProfileUsername"] = _personId;
+
+            if (_personId == 0)
+            {
+                if (Session["CurrentPersonEditing"] != null)
+                    _personId = System.Convert.ToInt32(Session["CurrentPersonEditing"]);
+            }
+            else
+                Session["CurrentPersonEditing"] = _personId;
+
+
             DrawProfilesModule();
             
         }
@@ -73,6 +91,9 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
             securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
             securityOptions.SecurityGroups = new XmlDataDocument();
             securityOptions.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
+
+            this._subject = Convert.ToInt64(Request.QueryString["subject"]);
+            this._personId = data.GetPersonID(_subject);
 
         }
         public void LoadEntityGrid(bool reload)
@@ -223,7 +244,29 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
 
             Int64 _object = Convert.ToInt64(data.GetStoreNode(gridEntities.DataKeys[e.RowIndex].Values[0].ToString()));
 
-            data.DeleteTriple(this.SubjectID, this.PredicateID, _object);
+            // ULTIMATE HACK TO END ALL HACKS START
+            if (this.PredicateID == 1445 || this.PredicateID == 1472)
+            {
+                long nodeIDOfGrantProfilePage = _object;
+                                
+                string grantid = data.getGrantIDFromResearchRoleNodeID(nodeIDOfGrantProfilePage);
+
+                if (grantid != " ")
+                {
+                    data.DeleteOneGrant(Convert.ToInt32(Session["ProfileUsername"]), grantid); 
+                }
+                else
+                {
+                    data.DeleteTriple(this.SubjectID, this.PredicateID, _object);
+                }
+
+            }
+            else
+            {
+                data.DeleteTriple(this.SubjectID, this.PredicateID, _object);
+            }
+            // ULTIMATE HACK TO END ALL HACKS END
+            
             this.LoadEntityGrid(true);
 
             upnlEditSection.Update();

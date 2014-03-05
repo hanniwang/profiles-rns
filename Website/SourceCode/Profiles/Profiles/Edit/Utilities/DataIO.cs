@@ -255,6 +255,87 @@ namespace Profiles.Edit.Utilities
 
         }
 
+        public string getGrantIDFromResearchRoleNodeID(long researchRoleNodeID)
+        {
+            string grantID = null;
+
+            SqlDataReader dbreader = null;
+
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                dbconnection.Open();
+
+                SqlCommand dbcommand = new SqlCommand();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+
+                dbcommand.CommandText = "[RDF.].[Node.GetInternalNodeMapIDByNodeID]";
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+
+                dbcommand.Parameters.Add(new SqlParameter("@NodeID", researchRoleNodeID));
+
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader(CommandBehavior.CloseConnection);
+
+                dbreader.Read();
+                grantID = dbreader["InternalID"].ToString();
+                dbreader.Close();
+
+            }
+            catch (Exception e)
+            {
+                Framework.Utilities.DebugLogging.Log(e.Message + e.StackTrace);
+                throw new Exception(e.Message);
+            }
+
+            return grantID;
+        }
+
+        public void DeleteOneGrant(int personid, string grantid)
+        {
+            try
+            {
+                SessionManagement sm = new SessionManagement();
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                SqlCommand comm = new SqlCommand();
+
+                comm.Parameters.Add(new SqlParameter("PersonID", personid));
+                comm.Parameters.Add(new SqlParameter("GrantID", grantid));
+
+
+                comm.Connection = dbconnection;
+                comm.Connection.Open();
+                comm.CommandType = CommandType.StoredProcedure;
+                comm.CommandText = "[Profile.Data].[Grant.DeleteOneGrant]";
+                comm.ExecuteScalar();
+
+                comm.Connection.Close();
+
+                if (dbconnection.State != ConnectionState.Closed)
+                    dbconnection.Close();
+
+                //TODO: Uncomment below once I fix the updateGrantByPerson stored procedure to only generate triples if the excluded column is not 1 (make sure it can be 0 or null)
+                //this.UpdateGrantsByPersonID(personid);
+
+            }
+            catch (Exception e)
+            {
+                Framework.Utilities.DebugLogging.Log(e.Message + e.StackTrace);
+                throw new Exception(e.Message);
+            }
+
+        }
+
+        public void UpdateGrantsByPersonID(string personid)
+        {
+            // TODO: call the updateGrantByPersonID stored procedure.
+        }
+
         public void DeleteOnePublication(int personid, string pubid)
         {
             string skey = string.Empty;

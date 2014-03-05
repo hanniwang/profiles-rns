@@ -31,7 +31,7 @@ namespace Profiles.Framework.Utilities
 
                 // If in development mode, return localhost with default vs.net port assignment.
                 //if (HttpContext.Current.Request.Url.Host.ToUpper() == "LOCALHOST")
-                //    return "http://localhost:55956"; //Run locally
+                    return "http://localhost:55956"; //Run locally
 
                 DataIO data = new DataIO();
 
