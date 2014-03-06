@@ -1,7 +1,7 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/06/2014 14:19:37 ******/
+/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/06/2014 14:50:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -9,11 +9,11 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
 CREATE procedure [Profile.Data].[LoadGrantsData]
 AS 
     BEGIN
         SET NOCOUNT ON;	
-
 
 	-- Start Transaction. Log load failures, roll back transaction on error.
         BEGIN TRY	 
@@ -21,8 +21,6 @@ AS
             DECLARE @ErrMsg NVARCHAR(4000) ,
                 @ErrSeverity INT
                 
-            -- truncate table
-            truncate table [Profile.Data].[Grant.Information]; 
             delete from [Profile.Data].[Grant.AffiliatedPeople] where  (Excluded is null or Excluded='0');
             
             INSERT INTO [Profile.Data].[Grant.Information] (
@@ -36,7 +34,13 @@ AS
 	    )
 	    SELECT [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1
 	    FROM [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] ARIAGrant
-	    WHERE ProjectStatus = 'Awarded';
+	    left outer join [Profile.Data].[Grant.Information] GrantInformation 
+	    on ARIAGrant.ARIAGrantID=GrantInformation.ARIAGrantID
+	    and ARIAGrant.ARIARecordID=GrantInformation.ARIARecordID
+	    and ARIAGrant.Title=GrantInformation.GrantTitle
+	    and ARIAGrant.TotalAmount=GrantInformation.GrantAmount
+	    WHERE [ARIAGrant].ProjectStatus = 'Awarded'
+	    AND GrantInformation.ARIAGrantID is null;
 	    
 	    INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
 	      [GrantID],
@@ -72,6 +76,7 @@ AS
             RAISERROR(@ErrMsg, @ErrSeverity, 1)
         END CATCH	            
     END;
+
 
 
 GO
