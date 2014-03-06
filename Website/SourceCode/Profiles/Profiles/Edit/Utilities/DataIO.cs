@@ -319,8 +319,7 @@ namespace Profiles.Edit.Utilities
                 if (dbconnection.State != ConnectionState.Closed)
                     dbconnection.Close();
 
-                //TODO: Uncomment below once I fix the updateGrantByPerson stored procedure to only generate triples if the excluded column is not 1 (make sure it can be 0 or null)
-                //this.UpdateGrantsByPersonID(personid);
+                this.UpdateGrantsByPersonID(personid);
 
             }
             catch (Exception e)
@@ -331,9 +330,37 @@ namespace Profiles.Edit.Utilities
 
         }
 
-        public void UpdateGrantsByPersonID(string personid)
+        public void UpdateGrantsByPersonID(int personid)
         {
-            // TODO: call the updateGrantByPersonID stored procedure.
+            try
+            {
+                SessionManagement sm = new SessionManagement();
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+
+                SqlConnection dbconnection = new SqlConnection(connstr);
+
+                SqlCommand comm = new SqlCommand();
+
+                comm.Parameters.Add(new SqlParameter("PersonID", personid));
+
+
+                comm.Connection = dbconnection;
+                comm.Connection.Open();
+                comm.CommandType = CommandType.StoredProcedure;
+                comm.CommandText = "[Profile.Data].[Grant.Entity.UpdateEntityOnePerson]";
+                comm.ExecuteScalar();
+
+                comm.Connection.Close();
+
+                if (dbconnection.State != ConnectionState.Closed)
+                    dbconnection.Close();
+
+            }
+            catch (Exception e)
+            {
+                Framework.Utilities.DebugLogging.Log(e.Message + e.StackTrace);
+                throw new Exception(e.Message);
+            }
         }
 
         public void DeleteOnePublication(int personid, string pubid)
