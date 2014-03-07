@@ -1,12 +1,13 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/07/2014 01:13:29 ******/
+/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/07/2014 02:46:16 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 
 
@@ -61,6 +62,7 @@ AS
 		    and B.SAPID  <> 'Non-UAMS'
 		    and C.PersonID IS NOT NULL;
 
+		    -- Remove duplicate values of grant affiliations
 		    with a as
 		   (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
 		    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
@@ -68,7 +70,8 @@ AS
 		ELSE
 		  BEGIN
 		    delete from [Profile.Data].[Grant.AffiliatedPeople] where  (Excluded is null or Excluded='0');
-		    
+
+		    -- Add new Records of Existing Grants
 		    INSERT INTO [Profile.Data].[Grant.Information] (
 		      [ARIAGrantID],
 		      [ARIARecordID],
@@ -85,6 +88,24 @@ AS
 		    and ARIAGrant.ARIARecordID > GrantInformation.ARIARecordID 
 		    WHERE [ARIAGrant].ProjectStatus = 'Awarded';
 		    
+		    -- Add Records of Grants that did not exist
+		    INSERT INTO [Profile.Data].[Grant.Information] (
+		      [ARIAGrantID],
+		      [ARIARecordID],
+		      [StartDate],
+		      [EndDate],
+		      [GrantTitle],
+		      [GrantAmount],
+		      [IsActive]
+		    )
+		    SELECT [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1
+		    FROM [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] ARIAGrant
+		    WHERE NOT EXISTS  
+		    (select * from [Profile.Data].[Grant.Information] GrantInformation
+		    where ARIAGrant.Title=GrantInformation.GrantTitle)
+		    AND [ARIAGrant].ProjectStatus = 'Awarded';
+		    
+		    -- Remove duplicate values of grants
 		    with a as
 		    (select ROW_NUMBER() over (PARTITION by GrantTitle order by ARIARecordID desc, EndDate desc) as rownum, *
 		    from [Profile.Data].[Grant.Information]) delete from a where rownum > 1;
@@ -105,6 +126,7 @@ AS
 		    and B.SAPID  <> 'Non-UAMS'
 		    and C.PersonID IS NOT NULL;
 		    
+		    -- Remove duplicate values of grant affiliations
 		    with a as
 		    (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
 		    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
@@ -124,5 +146,6 @@ AS
             RAISERROR(@ErrMsg, @ErrSeverity, 1)
         END CATCH	            
     END;
+
 
 GO
