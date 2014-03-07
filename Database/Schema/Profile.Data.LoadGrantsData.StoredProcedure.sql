@@ -1,7 +1,7 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/06/2014 14:50:19 ******/
+/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 03/07/2014 01:13:29 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -10,7 +10,9 @@ GO
 
 
 
-CREATE procedure [Profile.Data].[LoadGrantsData]
+
+
+CREATE procedure [Profile.Data].[LoadGrantsData] (@REFRESH BIT=0 )
 AS 
     BEGIN
         SET NOCOUNT ON;	
@@ -18,51 +20,97 @@ AS
 	-- Start Transaction. Log load failures, roll back transaction on error.
         BEGIN TRY	 
           BEGIN TRAN
+           
             DECLARE @ErrMsg NVARCHAR(4000) ,
                 @ErrSeverity INT
-                
-            delete from [Profile.Data].[Grant.AffiliatedPeople] where  (Excluded is null or Excluded='0');
-            
-            INSERT INTO [Profile.Data].[Grant.Information] (
-	      [ARIAGrantID],
-	      [ARIARecordID],
-	      [StartDate],
-	      [EndDate],
-	      [GrantTitle],
-	      [GrantAmount],
-	      [IsActive]
-	    )
-	    SELECT [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1
-	    FROM [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] ARIAGrant
-	    left outer join [Profile.Data].[Grant.Information] GrantInformation 
-	    on ARIAGrant.ARIAGrantID=GrantInformation.ARIAGrantID
-	    and ARIAGrant.ARIARecordID=GrantInformation.ARIARecordID
-	    and ARIAGrant.Title=GrantInformation.GrantTitle
-	    and ARIAGrant.TotalAmount=GrantInformation.GrantAmount
-	    WHERE [ARIAGrant].ProjectStatus = 'Awarded'
-	    AND GrantInformation.ARIAGrantID is null;
-	    
-	    INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
-	      [GrantID],
-	      [PersonID],
-	      [SAPID],
-	      [IsPrincipalInvestigator],
-	      [Excluded]
-	    )                                              
-	    select A.GrantID,C.PersonId, B.SAPID,
-	    (SELECT CASE WHEN B.Role='Principal Investigator' THEN 1 ELSE 0 END),'0'  from [Profile.Data].[Grant.Information] A
-	    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrantRole] B on A.ARIARECORDID=B.ARIARecordID
-	    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] X on B.ARIARecordID=X.ARIARecordID
-	    inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
-	    where X.ProjectStatus='Awarded'
-	    and B.SAPID  <> 'Non-UAMS'
-	    and C.PersonID IS NOT NULL;
-	    
-	    with a as
-	   (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
-	    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
+		
+		IF @REFRESH = 1
+		  BEGIN
+		    truncate table [Profile.Data].[Grant.Information]; 
+		    truncate table [Profile.Data].[Grant.AffiliatedPeople];
+   
+		    INSERT INTO [Profile.Data].[Grant.Information] (
+		      [ARIAGrantID],
+		      [ARIARecordID],
+		      [StartDate],
+		      [EndDate],
+		      [GrantTitle],
+		      [GrantAmount],
+		      [IsActive]
+		    )
+		    select [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1 
+		    From ( 
+		    select ROW_NUMBER() over (partition by Title order by ARIARecordID desc, StopDate desc) as rownumber, * 
+		    from  [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
+		    where ProjectStatus = 'Awarded') ARIAGrant 
+		    where rownumber < 2;
 
-          COMMIT;    
+		    INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
+		      [GrantID],
+		      [PersonID],
+		      [SAPID],
+		      [IsPrincipalInvestigator],
+		      [Excluded]
+		    )                                              
+		    select A.GrantID,C.PersonId, B.SAPID,
+		    (SELECT CASE WHEN B.Role='Principal Investigator' THEN 1 ELSE 0 END),'0'  from [Profile.Data].[Grant.Information] A
+		    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrantRole] B on A.ARIARECORDID=B.ARIARecordID
+		    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] X on B.ARIARecordID=X.ARIARecordID
+		    inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
+		    where X.ProjectStatus='Awarded'
+		    and B.SAPID  <> 'Non-UAMS'
+		    and C.PersonID IS NOT NULL;
+
+		    with a as
+		   (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
+		    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
+		  END;  
+		ELSE
+		  BEGIN
+		    delete from [Profile.Data].[Grant.AffiliatedPeople] where  (Excluded is null or Excluded='0');
+		    
+		    INSERT INTO [Profile.Data].[Grant.Information] (
+		      [ARIAGrantID],
+		      [ARIARecordID],
+		      [StartDate],
+		      [EndDate],
+		      [GrantTitle],
+		      [GrantAmount],
+		      [IsActive]
+		    )
+		    SELECT [ARIAGrant].ARIAGrantID, [ARIAGrant].ARIARecordID, [ARIAGrant].StartDate, [ARIAGrant].StopDate, [ARIAGrant].Title, [ARIAGrant].TotalAmount, 1
+		    FROM [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] ARIAGrant
+		    inner join [Profile.Data].[Grant.Information] GrantInformation 
+		    on ARIAGrant.Title=GrantInformation.GrantTitle
+		    and ARIAGrant.ARIARecordID > GrantInformation.ARIARecordID 
+		    WHERE [ARIAGrant].ProjectStatus = 'Awarded';
+		    
+		    with a as
+		    (select ROW_NUMBER() over (PARTITION by GrantTitle order by ARIARecordID desc, EndDate desc) as rownum, *
+		    from [Profile.Data].[Grant.Information]) delete from a where rownum > 1;
+
+		    INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] (
+		      [GrantID],
+		      [PersonID],
+		      [SAPID],
+		      [IsPrincipalInvestigator],
+		      [Excluded]
+		    )                                              
+		    select A.GrantID,C.PersonId, B.SAPID,
+		    (SELECT CASE WHEN B.Role='Principal Investigator' THEN 1 ELSE 0 END),'0'  from [Profile.Data].[Grant.Information] A
+		    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrantRole] B on A.ARIARECORDID=B.ARIARecordID
+		    inner join [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] X on B.ARIARecordID=X.ARIARecordID
+		    inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
+		    where X.ProjectStatus='Awarded'
+		    and B.SAPID  <> 'Non-UAMS'
+		    and C.PersonID IS NOT NULL;
+		    
+		    with a as
+		    (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
+		    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
+		  END;
+          COMMIT; 
+          EXEC  [Profile.Data].[Grant.Entity.UpdateEntityAllPersons];
         END TRY
         BEGIN CATCH
 			--Check success
@@ -76,7 +124,5 @@ AS
             RAISERROR(@ErrMsg, @ErrSeverity, 1)
         END CATCH	            
     END;
-
-
 
 GO
