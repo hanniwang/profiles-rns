@@ -1,0 +1,64 @@
+USE [ProfilesStaging]
+GO
+
+/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_KL2]    Script Date: 04/17/2014 11:26:52 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [Profile.Import].[SCHOLAR_KL2]
+AS
+BEGIN
+		insert into [ProfilesStaging].[Profile.Import].[Person_T32] (internalusername,firstname,middlename,lastname,displayname,suffix,addressline1,addressline2,addressline3,addressline4,addressstring,City,State,Zip,building,room,floor,latitude,longitude,phone,fax,emailaddr,isactive,isvisible)
+		select cast(CAST(A.ZTXTSAPID as int) as varchar),
+			   A.ZTXTFNAME, 
+			   A.ZTXTMNAME, 
+			   A.ZTXTLNAME, 
+			   A.ZTXTFNAME + ' ' + A.ZTXTLNAME, 
+			   A.ZGENDER, 
+			   A.ZTXTWORKLOCATION + (CASE WHEN LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(A.ZTXTBUILDING)),
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
+			   null, 
+			   null, 
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
+			   'Little Rock',
+			   'AR', 
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END),
+			   LTRIM(RTRIM(ISNULL(A.ZTXTBUILDING,''))), 
+			   LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))),
+			   null,
+			   null, 
+			   null,
+			   LTRIM(RTRIM(ISNULL(A.ZTXTPHONE1,''))),
+			   null, 
+			   LTRIM(RTRIM(ISNULL(A.ZTXTEMAILADDRESS,''))),
+			   '1',
+			   '1'
+		From [DevDataRepo].[dbo].[ZHRSEC] A
+		inner join  [ProfilesStaging].[dbo].[KL2_Scholar] B on A.ZTXTSAPID=B.sapid 
+		left outer join [HOSP_SQL1].[FacFac].[dbo].[vTRI_Appointments] C on B.SAPID=C.SAPID
+		where B.SAPID is not null 
+		and C.SAPID is null and B.isprimary='1';
+		
+		insert into [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] (internalusername,title,emailaddr,primaryaffiliation,affiliationorder,institutionname,institutionabbreviation,departmentname,departmentvisible,divisionname,facultyrank,facultyrankorder)
+		select cast(CAST(A.ZTXTSAPID as int) as varchar),
+			   A.ZTXTPOSDESCRIPT, 
+			   null, 
+			   '1', 
+			   '1',
+			   'University of Arkansas for Medical Sciences',
+			   'UAMS',
+			   B.department, 
+			   (CASE WHEN ISNULL(B.department,'')='' THEN 0 ELSE 1 END), 
+			   ISNULL(B.division,''), 
+			   null, 
+			   null
+		From [DevDataRepo].[dbo].[ZHRSEC] A
+		inner join [ProfilesStaging].[dbo].[KL2_Scholar] B on A.ZTXTSAPID=B.sapid
+		left outer join [HOSP_SQL1].[FacFac].[dbo].[vTRI_Appointments] C on B.SAPID=C.SAPID
+		where B.SAPID is not null 
+		and C.SAPID is null and B.isprimary='1';
+END;
+GO
