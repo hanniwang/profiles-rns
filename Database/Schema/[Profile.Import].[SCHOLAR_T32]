@@ -1,0 +1,119 @@
+USE [ProfilesStaging]
+GO
+
+/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_T32]    Script Date: 04/17/2014 11:25:41 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [Profile.Import].[SCHOLAR_T32]
+AS
+BEGIN
+	DECLARE @SQLString0 NVARCHAR(MAX),
+	@SQLString1 NVARCHAR(MAX);
+	SET @SQLString0='truncate table [ProfilesStaging].[Profile.Import].[Person_T32]';
+	SET @SQLString1='truncate table [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32]';
+	EXEC sp_executeSql @SQLString0;
+	EXEC sp_executeSql @SQLString1;
+	EXEC [Profile.Import].[SCHOLAR_KL2];
+	
+	
+		insert into [ProfilesStaging].[Profile.Import].[Person_T32] (internalusername,firstname,middlename,lastname,displayname,suffix,addressline1,addressline2,addressline3,addressline4,addressstring,City,State,Zip,building,room,floor,latitude,longitude,phone,fax,emailaddr,isactive,isvisible)
+		select cast(CAST(A.ZTXTSAPID as int) as varchar),
+			   A.ZTXTFNAME, 
+			   A.ZTXTMNAME, 
+			   A.ZTXTLNAME, 
+			   A.ZTXTFNAME + ' ' + A.ZTXTLNAME, 
+			   A.ZGENDER, 
+			   A.ZTXTWORKLOCATION + (CASE WHEN LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(A.ZTXTBUILDING)),
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
+			   null, 
+			   null, 
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
+			   'Little Rock',
+			   'AR', 
+			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END),
+			   LTRIM(RTRIM(ISNULL(A.ZTXTBUILDING,''))), 
+			   LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))),
+			   null,
+			   null, 
+			   null,
+			   LTRIM(RTRIM(ISNULL(A.ZTXTPHONE1,''))),
+			   null, 
+			   LTRIM(RTRIM(ISNULL(A.ZTXTEMAILADDRESS,''))),
+			   '1',
+			   '1'
+		From [DevDataRepo].[dbo].[ZHRSEC] A
+		inner join [ProfilesStaging].[dbo].[T32_Scholar] B on A.ZTXTSAPID=B.sapid;
+		
+		insert into [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] (internalusername,title,emailaddr,primaryaffiliation,affiliationorder,institutionname,institutionabbreviation,departmentname,departmentvisible,divisionname,facultyrank,facultyrankorder)
+		select cast(CAST(A.ZTXTSAPID as int) as varchar),
+			   A.ZTXTPOSDESCRIPT, 
+			   null, 
+			   '1', 
+			   '1',
+			   'University of Arkansas for Medical Sciences',
+			   'UAMS',
+			   C.STEXT, 
+			   (CASE WHEN ISNULL(C.STEXT,'')='' THEN 0 ELSE 1 END), 
+			   D.STEXT, 
+			   null, 
+			   null
+		From [DevDataRepo].[dbo].[ZHRSEC] A
+		inner join [ProfilesStaging].[dbo].[T32_Scholar] B on A.ZTXTSAPID=B.sapid
+		inner join [DevDataRepo].[dbo].ZHRITDEPTXT C ON A.ZTXTDEPTNUMBER=C.OBJID
+		inner join [DevDataRepo].[dbo].ZHRITDEPTXT D ON A.ZTXTSUBDEPTNUM=D.OBJID;
+
+		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		set departmentname='COM Pharmocology & Toxicology'
+		where internalusername='19984';
+
+		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		set departmentname='COM Psychiatry'
+		where internalusername='37342';
+
+		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		set departmentname='COM Pharmaceutical Sciences'
+		where internalusername='43982';
+
+		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		set departmentname='COM Psychiatry'
+		where internalusername='21902';
+
+		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		set divisionname='';
+
+		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		set departmentname='COM Pharmocology & Toxicology'
+		where internalusername='19984';
+
+		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		set departmentname='COM Psychiatry'
+		where internalusername='37342';
+
+		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		set departmentname='COM Pharmaceutical Sciences'
+		where internalusername='43982';
+
+		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		set departmentname='COM Psychiatry'
+		where internalusername='21902';
+
+		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		set departmentname='COM Psychiatry'
+		where internalusername='32943';
+
+		update B
+		set divisionname=A.divisionname
+		From [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] A
+		inner join [ProfilesRNS].[Profile.Import].[PersonAffiliation] B on A.internalusername=B.internalusername;
+	
+END;
+
+
+
+GO
