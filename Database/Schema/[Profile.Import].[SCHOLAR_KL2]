@@ -1,7 +1,7 @@
 USE [ProfilesStaging]
 GO
 
-/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_KL2]    Script Date: 04/17/2014 11:26:52 ******/
+/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_KL2]    Script Date: 04/25/2014 09:45:10 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -12,53 +12,92 @@ CREATE PROCEDURE [Profile.Import].[SCHOLAR_KL2]
 AS
 BEGIN
 		insert into [ProfilesStaging].[Profile.Import].[Person_T32] (internalusername,firstname,middlename,lastname,displayname,suffix,addressline1,addressline2,addressline3,addressline4,addressstring,City,State,Zip,building,room,floor,latitude,longitude,phone,fax,emailaddr,isactive,isvisible)
-		select cast(CAST(A.ZTXTSAPID as int) as varchar),
-			   A.ZTXTFNAME, 
-			   A.ZTXTMNAME, 
-			   A.ZTXTLNAME, 
-			   A.ZTXTFNAME + ' ' + A.ZTXTLNAME, 
-			   A.ZGENDER, 
-			   A.ZTXTWORKLOCATION + (CASE WHEN LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(A.ZTXTBUILDING)),
-			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
+		select cast(CAST(A.SAPID as int) as varchar),
+			   A.FirstName, 
+			   A.MiddleName, 
+			   A.LastName, 
+			   A.FirstName + ' ' + A.LastName, 
+			   A.Gender, 
+			   A.Address1,
+			   A.Address2,
+			   'Mail Slot # ' + CASE WHEN LTRIM(RTRIM(A.Slot))='' THEN NULL ELSE LTRIM(RTRIM(A.Slot)) END,
 			   null, 
-			   null, 
-			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave, Little Rock, AR 72204' ELSE '4301 W Markham St, Little Rock, AR 72205' END),
-			   'Little Rock',
-			   'AR', 
-			   (CASE WHEN LTRIM(RTRIM(A.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END),
-			   LTRIM(RTRIM(ISNULL(A.ZTXTBUILDING,''))), 
-			   LTRIM(RTRIM(ISNULL(A.ZTXTWORKLOCATION,''))),
+			   (case when (A.Address2 like '%location%' or A.Address2 like '%various%') then null else LTRIM(RTRIM(A.Address2)) + ' ' + LTRIM(RTRIM(A.City)) + ' ' + LTRIM(RTRIM(A.State)) + ' ' +  LTRIM(RTRIM(A.Zip)) end),
+			   A.City,
+			   A.State, 
+			   A.Zip,
+			   A.Building, 
+			   A.Room,
 			   null,
 			   null, 
 			   null,
-			   LTRIM(RTRIM(ISNULL(A.ZTXTPHONE1,''))),
-			   null, 
-			   LTRIM(RTRIM(ISNULL(A.ZTXTEMAILADDRESS,''))),
+			   LTRIM(RTRIM(ISNULL(A.Workphone,''))),
+			   LTRIM(RTRIM(ISNULL(A.Faxnum,''))),
+			   LTRIM(RTRIM(ISNULL(A.EmailAddress,''))),
 			   '1',
 			   '1'
-		From [DevDataRepo].[dbo].[ZHRSEC] A
-		inner join  [ProfilesStaging].[dbo].[KL2_Scholar] B on A.ZTXTSAPID=B.sapid 
+		From (select	(case when X.SAPID is null then Y.ZTXTSAPID else X.SAPID end) SAPID,
+			(case when X.LastName is null then Y.ZTXTLNAME else X.LastName end) LastName,
+			(case when X.FirstName is null then Y.ZTXTFNAME else X.FirstName end) FirstName,
+			(case when X.MiddleName is null then Y.ZTXTMNAME else X.MiddleName end) MiddleName,
+			(case when X.Gender is null then Y.ZGENDER else X.Gender end) Gender,
+			(case when (X.EmailAddress is null OR LTRIM(RTRIM(X.EmailAddress))='') then Y.ZTXTEMAILADDRESS else X.EmailAddress end) EmailAddress,
+			(case when X.Workphone is null then Y.ZTXTPHONE1 else X.Workphone end) Workphone,
+			(case when X.Department is null then null else X.Department end) Department,
+			(case when X.Slot is null then Y.ZTXTMAILSLOT else X.Slot end) Slot,
+			(case when X.Room is null then Y.ZTXTWORKLOCATION else X.Room end) Room,
+			(case when X.Building is null then Y.ZTXTBUILDING else X.Building end) Building,
+			(case when X.faxnum is null then null else X.faxnum end) faxnum,
+			(case when X.title is null then Y.ZTXTPOSDESCRIPT else X.title end) title,
+			(case when (X.Room is null or X.Building is null) then (Y.ZTXTWORKLOCATION + (CASE WHEN LTRIM(RTRIM(ISNULL(Y.ZTXTWORKLOCATION,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(Y.ZTXTBUILDING))) else (X.Room + (CASE WHEN LTRIM(RTRIM(ISNULL(X.Room,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(X.Building))) end) Address1,
+			(case when X.Address1 is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave.' ELSE '4301 W Markham St.' END) else X.Address1 end) Address2,
+			(case when X.City is null then 'Little Rock' else X.City end) City,
+			(case when X.State is null then 'AR' else X.State end) State,
+			(case when X.Zip is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END) else X.Zip end) Zip
+		FROM [HOSP_SQL1].[FacFac].[dbo].[vTRI_SAPFaculty] X
+		full outer join [DevDataRepo].[dbo].[ZHRSEC] Y on X.SAPID=Y.ZTXTSAPID) A
+		inner join  [ProfilesStaging].[dbo].[KL2_Scholar] B on A.SAPID=B.sapid 
 		left outer join [HOSP_SQL1].[FacFac].[dbo].[vTRI_Appointments] C on B.SAPID=C.SAPID
 		where B.SAPID is not null 
 		and C.SAPID is null and B.isprimary='1';
 		
 		insert into [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] (internalusername,title,emailaddr,primaryaffiliation,affiliationorder,institutionname,institutionabbreviation,departmentname,departmentvisible,divisionname,facultyrank,facultyrankorder)
-		select cast(CAST(A.ZTXTSAPID as int) as varchar),
-			   A.ZTXTPOSDESCRIPT, 
+		select cast(CAST(A.SAPID as int) as varchar),
+			   A.Title, 
 			   null, 
 			   '1', 
 			   '1',
 			   'University of Arkansas for Medical Sciences',
 			   'UAMS',
-			   B.department, 
+			   (CASE WHEN ISNULL(A.department,'')='' THEN B.department ELSE A.DEPARTMENT END), 
 			   (CASE WHEN ISNULL(B.department,'')='' THEN 0 ELSE 1 END), 
 			   ISNULL(B.division,''), 
 			   null, 
 			   null
-		From [DevDataRepo].[dbo].[ZHRSEC] A
-		inner join [ProfilesStaging].[dbo].[KL2_Scholar] B on A.ZTXTSAPID=B.sapid
+		From (select	(case when X.SAPID is null then Y.ZTXTSAPID else X.SAPID end) SAPID,
+			(case when X.LastName is null then Y.ZTXTLNAME else X.LastName end) LastName,
+			(case when X.FirstName is null then Y.ZTXTFNAME else X.FirstName end) FirstName,
+			(case when X.MiddleName is null then Y.ZTXTMNAME else X.MiddleName end) MiddleName,
+			(case when X.Gender is null then Y.ZGENDER else X.Gender end) Gender,
+			(case when (X.EmailAddress is null OR LTRIM(RTRIM(X.EmailAddress))='') then Y.ZTXTEMAILADDRESS else X.EmailAddress end) EmailAddress,
+			(case when X.Workphone is null then Y.ZTXTPHONE1 else X.Workphone end) Workphone,
+			(case when X.Department is null then null else X.Department end) Department,
+			(case when X.Slot is null then Y.ZTXTMAILSLOT else X.Slot end) Slot,
+			(case when X.Room is null then Y.ZTXTWORKLOCATION else X.Room end) Room,
+			(case when X.Building is null then Y.ZTXTBUILDING else X.Building end) Building,
+			(case when X.faxnum is null then null else X.faxnum end) faxnum,
+			(case when X.title is null then Y.ZTXTPOSDESCRIPT else X.title end) title,
+			(case when (X.Room is null or X.Building is null) then (Y.ZTXTWORKLOCATION + (CASE WHEN LTRIM(RTRIM(ISNULL(Y.ZTXTWORKLOCATION,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(Y.ZTXTBUILDING))) else (X.Room + (CASE WHEN LTRIM(RTRIM(ISNULL(X.Room,''))) ='' THEN '' ELSE ' ' END) + LTRIM(RTRIM(X.Building))) end) Address1,
+			(case when X.Address1 is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave.' ELSE '4301 W Markham St.' END) else X.Address1 end) Address2,
+			(case when X.City is null then 'Little Rock' else X.City end) City,
+			(case when X.State is null then 'AR' else X.State end) State,
+			(case when X.Zip is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END) else X.Zip end) Zip
+		FROM [HOSP_SQL1].[FacFac].[dbo].[vTRI_SAPFaculty] X
+		full outer join [DevDataRepo].[dbo].[ZHRSEC] Y on X.SAPID=Y.ZTXTSAPID) A
+		inner join [ProfilesStaging].[dbo].[KL2_Scholar] B on A.SAPID=B.sapid
 		left outer join [HOSP_SQL1].[FacFac].[dbo].[vTRI_Appointments] C on B.SAPID=C.SAPID
 		where B.SAPID is not null 
 		and C.SAPID is null and B.isprimary='1';
 END;
+
 GO
