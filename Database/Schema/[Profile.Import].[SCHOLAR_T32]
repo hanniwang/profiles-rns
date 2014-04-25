@@ -1,7 +1,7 @@
 USE [ProfilesStaging]
 GO
 
-/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_T32]    Script Date: 04/25/2014 10:19:23 ******/
+/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_T32]    Script Date: 04/25/2014 10:45:56 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -17,7 +17,7 @@ BEGIN
 	SET @SQLString1='truncate table [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32]';
 	EXEC sp_executeSql @SQLString0;
 	EXEC sp_executeSql @SQLString1;
-	EXEC [Profile.Import].[SCHOLAR_KL2];
+	EXEC [ProfilesStaging].[Profile.Import].[SCHOLAR_KL2];
 	
 	
 		insert into [ProfilesStaging].[Profile.Import].[Person_T32] (internalusername,firstname,middlename,lastname,displayname,suffix,addressline1,addressline2,addressline3,addressline4,addressstring,City,State,Zip,building,room,floor,latitude,longitude,phone,fax,emailaddr,isactive,isvisible)
@@ -122,10 +122,10 @@ BEGIN
 		set departmentname='COM Psychiatry'
 		where internalusername='21902';
 
-		update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
-		set divisionname='';
+		--update [ProfilesStaging].[Profile.Import].[PersonAffiliation_T32] 
+		--set divisionname='';
 
-		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
+		/*update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
 		set departmentname='COM Pharmocology & Toxicology'
 		where internalusername='19984';
 
@@ -143,7 +143,7 @@ BEGIN
 
 		update [ProfilesRNS].[Profile.Import].[PersonAffiliation] 
 		set departmentname='COM Psychiatry'
-		where internalusername='32943';
+		where internalusername='32943';*/
 
 		--update B
 		--set divisionname=A.divisionname
@@ -151,5 +151,6 @@ BEGIN
 		--inner join [ProfilesRNS].[Profile.Import].[PersonAffiliation] B on A.internalusername=B.internalusername;
 	
 END;
+
 GO
 
