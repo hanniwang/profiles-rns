@@ -1,7 +1,7 @@
 USE [ProfilesStaging]
 GO
 
-/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_KL2]    Script Date: 04/25/2014 09:45:10 ******/
+/****** Object:  StoredProcedure [Profile.Import].[SCHOLAR_KL2]    Script Date: 04/29/2014 08:46:10 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -17,7 +17,7 @@ BEGIN
 			   A.MiddleName, 
 			   A.LastName, 
 			   A.FirstName + ' ' + A.LastName, 
-			   A.Gender, 
+			   null, 
 			   A.Address1,
 			   A.Address2,
 			   'Mail Slot # ' + CASE WHEN LTRIM(RTRIM(A.Slot))='' THEN NULL ELSE LTRIM(RTRIM(A.Slot)) END,
@@ -69,9 +69,30 @@ BEGIN
 			   '1',
 			   'University of Arkansas for Medical Sciences',
 			   'UAMS',
-			   (CASE WHEN ISNULL(A.department,'')='' THEN B.department ELSE A.DEPARTMENT END), 
+				CASE	WHEN ISNULL(A.Department,'')='' THEN (CASE	
+						WHEN D.STEXT like 'COM %' THEN B.department + ', College of Medicine'
+						WHEN D.STEXT like 'COPH %' THEN B.department + ', College of Public Health' 
+						WHEN D.STEXT like 'CPH %' THEN B.department + ', College of Public Health' 
+						WHEN D.STEXT like 'CHP %' THEN B.department + ', College of Health Professions'
+						WHEN D.STEXT like 'COP %' THEN B.department + ', College of Pharmacy'
+						WHEN D.STEXT like 'CON %' THEN B.department + ', College of Nursing'
+				END) ELSE  (CASE	
+								WHEN A.Department like 'COM%' THEN REPLACE(A.Department,'COM','') + 'College of Medicine'
+								WHEN A.Department like 'COPH%' THEN REPLACE(A.Department,'COPH','') + 'College of Public Health' 
+								WHEN A.Department like 'CPH%' THEN REPLACE(A.Department,'CPH','') + 'College of Public Health' 
+								WHEN A.Department like 'CHP%' THEN REPLACE(A.Department,'CHP','') + 'College of Health Professions'
+								WHEN A.Department like 'COP%' THEN REPLACE(A.Department,'COP','') + 'College of Pharmacy'
+								WHEN A.Department like 'CON%' THEN REPLACE(A.Department,'CON','') + 'College of Nursing'
+							ELSE A.Department END) END, --A.Department, 
 			   (CASE WHEN ISNULL(B.department,'')='' THEN 0 ELSE 1 END), 
-			   ISNULL(B.division,''), 
+			   ISNULL(CASE	
+							WHEN E.STEXT like 'COM %' THEN REPLACE(E.STEXT,'COM ','')
+							WHEN E.STEXT like 'COPH %' THEN REPLACE(E.STEXT,'COPH ','')
+							WHEN E.STEXT like 'CPH %' THEN REPLACE(E.STEXT,'CPH ','')
+							WHEN E.STEXT like 'CHP %' THEN REPLACE(E.STEXT,'CHP ','')
+							WHEN E.STEXT like 'COP %' THEN REPLACE(E.STEXT,'COP ','')
+							WHEN E.STEXT like 'CON %' THEN REPLACE(E.STEXT,'CON ','')
+							ELSE E.STEXT END,''), 
 			   null, 
 			   null
 		From (select	(case when X.SAPID is null then Y.ZTXTSAPID else X.SAPID end) SAPID,
@@ -91,13 +112,21 @@ BEGIN
 			(case when X.Address1 is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '1123 S University Ave.' ELSE '4301 W Markham St.' END) else X.Address1 end) Address2,
 			(case when X.City is null then 'Little Rock' else X.City end) City,
 			(case when X.State is null then 'AR' else X.State end) State,
-			(case when X.Zip is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END) else X.Zip end) Zip
+			(case when X.Zip is null then (CASE WHEN LTRIM(RTRIM(Y.ZTXTBUILDING)) like '%University Tower%' THEN '72204' ELSE '72205' END) else X.Zip end) Zip,
+			Y.ZTXTDEPTNUMBER Department_Number, 
+			Y.ZTXTSUBDEPTNUM Sub_Department_Number
 		FROM [HOSP_SQL1].[FacFac].[dbo].[vTRI_SAPFaculty] X
 		full outer join [DevDataRepo].[dbo].[ZHRSEC] Y on X.SAPID=Y.ZTXTSAPID) A
 		inner join [ProfilesStaging].[dbo].[KL2_Scholar] B on A.SAPID=B.sapid
 		left outer join [HOSP_SQL1].[FacFac].[dbo].[vTRI_Appointments] C on B.SAPID=C.SAPID
+		inner join [DevDataRepo].[dbo].ZHRITDEPTXT D ON A.Department_Number=D.OBJID
+		inner join [DevDataRepo].[dbo].ZHRITDEPTXT E ON A.Sub_Department_Number=E.OBJID
 		where B.SAPID is not null 
 		and C.SAPID is null and B.isprimary='1';
 END;
 
+
+
+
 GO
+
