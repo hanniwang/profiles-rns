@@ -1,12 +1,13 @@
 USE [ProfilesStaging]
 GO
 
-/****** Object:  StoredProcedure [Profile.Import].[Import_SAP_Data]    Script Date: 04/29/2014 08:37:36 ******/
+/****** Object:  StoredProcedure [Profile.Import].[Import_SAP_Data]    Script Date: 05/01/2014 10:58:01 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+
 
 CREATE PROCEDURE [Profile.Import].[Import_SAP_Data]
 AS
@@ -48,8 +49,42 @@ BEGIN
 		   null,
 		   null, 
 		   null,
-		   LTRIM(RTRIM(ISNULL(A.Workphone,''))),
-		   LTRIM(RTRIM(ISNULL(A.Faxnum,''))),
+		   (case 
+			when LTRIM(RTRIM(ISNULL(A.Workphone,'')))='' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%9999%' then ''
+			when LEN(A.Workphone) > 10 then 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone, 7,4) + ' x' + SUBSTRING(A.Workphone, 11,4)
+					else A.Workphone
+				end	
+			when LEN(A.Workphone) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '526%')) then '501-' + SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone,7,4)
+					else A.Workphone
+				end
+		   end),
+		   (case
+			when LTRIM(RTRIM(ISNULL(A.Faxnum,'')))='' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%9999%' then ''
+			when LEN(A.Faxnum) > 10 then 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum, 7,4) + ' x' + SUBSTRING(A.Faxnum, 11,4)
+					else A.Faxnum
+				end	
+			when LEN(A.Faxnum) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '526%')) then '501-' + SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum,7,4)
+					else A.Faxnum
+				end
+		   end),
 		   LTRIM(RTRIM(ISNULL(A.EmailAddress,''))),
 		   '1',
 		   '1'
@@ -104,8 +139,42 @@ BEGIN
 		   null,
 		   null, 
 		   null,
-		   LTRIM(RTRIM(ISNULL(A.Workphone,''))),
-		   LTRIM(RTRIM(ISNULL(A.Faxnum,''))),
+		   (case 
+			when LTRIM(RTRIM(ISNULL(A.Workphone,'')))='' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%9999%' then ''
+			when LEN(A.Workphone) > 10 then 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone, 7,4) + ' x' + SUBSTRING(A.Workphone, 11,4)
+					else A.Workphone
+				end	
+			when LEN(A.Workphone) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '526%')) then '501-' + SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone,7,4)
+					else A.Workphone
+				end
+		   end),
+		   (case
+			when LTRIM(RTRIM(ISNULL(A.Faxnum,'')))='' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%9999%' then ''
+			when LEN(A.Faxnum) > 10 then 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum, 7,4) + ' x' + SUBSTRING(A.Faxnum, 11,4)
+					else A.Faxnum
+				end	
+			when LEN(A.Faxnum) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '526%')) then '501-' + SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum,7,4)
+					else A.Faxnum
+				end
+		   end),
 		   LTRIM(RTRIM(ISNULL(A.EmailAddress,''))),
 		   '1',
 		   '1'
@@ -152,8 +221,42 @@ BEGIN
 		   null,
 		   null, 
 		   null,
-		   LTRIM(RTRIM(ISNULL(A.Workphone,''))),
-		   LTRIM(RTRIM(ISNULL(A.Faxnum,''))),
+		   (case 
+			when LTRIM(RTRIM(ISNULL(A.Workphone,'')))='' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%9999%' then ''
+			when LEN(A.Workphone) > 10 then 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone, 7,4) + ' x' + SUBSTRING(A.Workphone, 11,4)
+					else A.Workphone
+				end	
+			when LEN(A.Workphone) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '526%')) then '501-' + SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone,7,4)
+					else A.Workphone
+				end
+		   end),
+		   (case
+			when LTRIM(RTRIM(ISNULL(A.Faxnum,'')))='' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%9999%' then ''
+			when LEN(A.Faxnum) > 10 then 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum, 7,4) + ' x' + SUBSTRING(A.Faxnum, 11,4)
+					else A.Faxnum
+				end	
+			when LEN(A.Faxnum) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '526%')) then '501-' + SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum,7,4)
+					else A.Faxnum
+				end
+		   end),
 		   LTRIM(RTRIM(ISNULL(A.EmailAddress,''))),
 		   '1',
 		   '1'
@@ -202,8 +305,42 @@ BEGIN
 		   null,
 		   null, 
 		   null,
-		   LTRIM(RTRIM(ISNULL(A.Workphone,''))),
-		   LTRIM(RTRIM(ISNULL(A.Faxnum,''))),
+		   (case 
+			when LTRIM(RTRIM(ISNULL(A.Workphone,'')))='' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '%9999%' then ''
+			when LEN(A.Workphone) > 10 then 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone, 7,4) + ' x' + SUBSTRING(A.Workphone, 11,4)
+					else A.Workphone
+				end	
+			when LEN(A.Workphone) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Workphone,''))) like '526%')) then '501-' + SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Workphone not like '%-%' then SUBSTRING(A.Workphone, 1, 3) + '-' + SUBSTRING(A.Workphone, 4, 3) + '-' + SUBSTRING(A.Workphone,7,4)
+					else A.Workphone
+				end
+		   end),
+		   (case
+			when LTRIM(RTRIM(ISNULL(A.Faxnum,'')))='' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%00000%' OR LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '%9999%' then ''
+			when LEN(A.Faxnum) > 10 then 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum, 7,4) + ' x' + SUBSTRING(A.Faxnum, 11,4)
+					else A.Faxnum
+				end	
+			when LEN(A.Faxnum) < 10 then
+				case 
+					when (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '686%' OR (LTRIM(RTRIM(ISNULL(A.Faxnum,''))) like '526%')) then '501-' + SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 4)
+					else ''
+				end
+			else 
+				case 
+					when A.Faxnum not like '%-%' then SUBSTRING(A.Faxnum, 1, 3) + '-' + SUBSTRING(A.Faxnum, 4, 3) + '-' + SUBSTRING(A.Faxnum,7,4)
+					else A.Faxnum
+				end
+		   end),
 		   LTRIM(RTRIM(ISNULL(A.EmailAddress,''))),
 		   '1',
 		   '1'
@@ -413,6 +550,12 @@ BEGIN
 	
 	
 END;
+
+
+
+
+
+
 
 GO
 
