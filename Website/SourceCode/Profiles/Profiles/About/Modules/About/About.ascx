@@ -10,7 +10,7 @@
                     <h3>
                         Introduction</h3>
                     <p>
-                        Profiles Research Networking Software UAMS Profiles RNS) is a networking tool designed to help researchers at UAMS more easily connect with each other through common interests, projects, and specialties. Profiles goes beyond a traditional directory to not only shows traditional directory information, but it also illustrates how each person is connected to others in the broad research community.
+                        Profiles Research Networking Software UAMS Profiles RNS) is a networking tool designed to help researchers at UAMS more easily connect with each other through common interests, projects, and specialties. Profiles goes beyond a traditional directory to not only show traditional directory information, but it also illustrates how each person is connected to others in the broad research community.
                     </p>
                     <p>
                         As you navigate through the website, you will see three types of pages:
