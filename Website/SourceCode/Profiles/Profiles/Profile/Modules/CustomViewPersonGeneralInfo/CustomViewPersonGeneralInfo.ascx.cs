@@ -65,9 +65,7 @@ namespace Profiles.Profile.Modules.CustomViewPersonGeneralInfo
             {
                 imgPhoto.Visible = false;
             }
-
-
-
+            
         }
 
     }
