@@ -61,6 +61,7 @@ form
 	vertical-align: middle;
 	padding-left: 6px;
 	padding-top: 2px;
+    text-transform: capitalize;
 }
 .PropertyGroupItem
 {
