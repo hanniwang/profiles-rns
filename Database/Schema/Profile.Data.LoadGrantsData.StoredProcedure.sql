@@ -1,15 +1,12 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 05/01/2014 12:18:07 ******/
+/****** Object:  StoredProcedure [Profile.Data].[LoadGrantsData]    Script Date: 05/14/2014 14:54:50 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
-
-
 
 CREATE procedure [Profile.Data].[LoadGrantsData] (@REFRESH BIT=0 )
 AS 
@@ -22,7 +19,9 @@ AS
            
             DECLARE @ErrMsg NVARCHAR(4000) ,
                 @ErrSeverity INT
-		
+		BEGIN
+			EXECUTE [ProfilesStaging].[dbo].[Load_GrantRecipients];
+		END;
 		IF @REFRESH = 1
 		  BEGIN
 		    truncate table [Profile.Data].[Grant.Information]; 
@@ -42,7 +41,7 @@ AS
 		    		[ARIAGrant].ARIARecordID, 
 		    		[ARIAGrant].StartDate, 
 		    		[ARIAGrant].StopDate, 
-		    		[ARIAGrant].FundName + ' - ' + [ARIAGrant].Title + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST(ARIAGrant.DirectCostsTotal as VARCHAR(20)) ELSE '' END), 
+		    		[ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].FundName) + ' - ' + [ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].Title) + (CASE WHEN ISNULL([ARIAGrant].AwardNumber,'')='' OR [ARIAGrant].AwardNumber='' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='01' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='N/A' or [ARIAGrant].AwardNumber='na' THEN '' ELSE ' - Award Number: ' + ARIAGrant.AwardNumber END) + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST([ProfilesStaging].[dbo].[fn_FormatWithCommas](ARIAGrant.DirectCostsTotal) as VARCHAR(20)) ELSE '' END), 
 		    		[ARIAGrant].TotalAmount, 
 		    		[ARIAGrant].PRN, 
 		    		1  
@@ -60,7 +59,12 @@ AS
 		    					select * 
 		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
 		    					where ProjectStatus = 'Awarded' 
-		    					and Granttype='Recruitment') B 
+		    					and Granttype='Recruitment'
+		    					union
+		    					select * 
+		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+		    					where ProjectStatus = 'Awarded' 
+		    					and GrantCategory='IPA') B 
 		    		 	where A.ARIAGrantID=B.ARIAGrantID)) ARIAGrant
 		    where ARIAGrant.rownum < 2;
 
@@ -79,21 +83,51 @@ AS
 		    		where ProjectStatus = 'Awarded' 
 		    		and 
 		    		not exists (	select * 
-		    				from	(select * 
-		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
-		    					where ProjectStatus = 'Awarded' 
-		    					and Granttype in ('Other') 
-		    					and Title like '%Recruit%'
-		    				union
-		    				select * 
-						From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
-						where ProjectStatus = 'Awarded' 
-						and Granttype='Recruitment') B 
+		    						from	(select * 
+		    								From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
+		    								where ProjectStatus = 'Awarded' 
+		    								and Granttype in ('Other') 
+		    								and Title like '%Recruit%'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and Granttype='Recruitment'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and GrantCategory='IPA') B 
 						where A.ARIAGrantID=B.ARIAGrantID)) X on B.ARIARecordID=X.ARIARecordID and A.PRJID=X.PRN
 		    inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
 		    where X.ProjectStatus='Awarded'
 		    and B.SAPID  <> 'Non-UAMS'
 		    and C.PersonID IS NOT NULL;
+		    
+		    BEGIN
+		    	INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] 
+					([GrantID],
+					[PersonID],
+					[SAPID],
+					[IsPrincipalInvestigator],
+					[Excluded])     
+				select	GI.GrantID,
+						CAST(GR.SAPID AS INT),
+						GR.SAPID, 
+						GR.IsPrincipalInvestigator,
+						0
+				FROM	[ProfilesStaging].dbo.Grant_Recipients GR
+				inner 
+				join	[Profile.Data].[Grant.Information] GI on GR.PRN=GI.PRJID
+				inner 
+				join	[Profile.Data].[Person] P on RIGHT('00000000'+ISNULL(P.internalusername,''),8)=GR.SAPID
+				where
+				not 
+				exists	(select * 
+						From	[Profile.Data].[Grant.AffiliatedPeople] GA
+						where	GA.GrantID=GI.GrantID and GA.SAPID=GR.SAPID)
+				order by GR.SAPID;
+		    END;
 
 		    -- Remove duplicate values of grant affiliations
 		    with a as
@@ -118,7 +152,7 @@ AS
 					,CAST(EndDate as datetime)
 					,[GrantTitle]
 					,[PRN]
-					,CAST((CASE WHEN LTRIM(RTRIM(GrantAmount))='' THEN '0' ELSE GrantAmount END) as decimal)
+					,(CASE WHEN GrantAmount='' THEN '0' ELSE GrantAmount END)
 					,1
 			FROM	[ProfilesStaging].[dbo].[KL2_T32_Grant_Info];
 			
@@ -146,7 +180,7 @@ AS
 				[ARIAGrant].ARIARecordID, 
 				[ARIAGrant].StartDate, 
 				[ARIAGrant].StopDate, 
-				[ARIAGrant].FundName + ' - ' + [ARIAGrant].Title + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST(ARIAGrant.DirectCostsTotal as VARCHAR(20)) ELSE '' END), 
+				[ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].FundName) + ' - ' + [ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].Title) + (CASE WHEN ISNULL([ARIAGrant].AwardNumber,'')='' OR [ARIAGrant].AwardNumber='' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='01' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='N/A' or [ARIAGrant].AwardNumber='na' THEN '' ELSE ' - Award Number: ' + ARIAGrant.AwardNumber END) + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST([ProfilesStaging].[dbo].[fn_FormatWithCommas](ARIAGrant.DirectCostsTotal) as VARCHAR(20)) ELSE '' END), 
 				[ARIAGrant].TotalAmount, 
 				[ARIAGrant].PRN, 
 		    		1
@@ -155,16 +189,21 @@ AS
 		    		where ProjectStatus = 'Awarded' 
 		    		and 
 		    		not exists (	select * 
-		    				from	(select * 
-		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
-		    					where ProjectStatus = 'Awarded' 
-		    					and Granttype in ('Other') 
-		    					and Title like '%Recruit%'
-		    				union
-		    				select * 
-						From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
-						where ProjectStatus = 'Awarded' 
-						and Granttype='Recruitment') B 
+		    						from	(select * 
+		    								From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
+		    								where ProjectStatus = 'Awarded' 
+		    								and Granttype in ('Other') 
+		    								and Title like '%Recruit%'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and Granttype='Recruitment'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and GrantCategory='IPA') B 
 						where A.ARIAGrantID=B.ARIAGrantID)) ARIAGrant
 		    inner join [Profile.Data].[Grant.Information] GrantInformation 
 		    on ARIAGrant.PRN=GrantInformation.PRJID
@@ -186,7 +225,7 @@ AS
 		    		[ARIAGrant].ARIARecordID, 
 		    		[ARIAGrant].StartDate, 
 		    		[ARIAGrant].StopDate, 
-		    		[ARIAGrant].FundName + ' - ' + [ARIAGrant].Title + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST(ARIAGrant.DirectCostsTotal as VARCHAR(20)) ELSE '' END), 
+		    		[ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].FundName) + ' - ' + [ProfilesStaging].dbo.ReplaceSpecialChars([ARIAGrant].Title) + (CASE WHEN ISNULL([ARIAGrant].AwardNumber,'')='' OR [ARIAGrant].AwardNumber='' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='01' OR [ARIAGrant].AwardNumber='0' OR [ARIAGrant].AwardNumber='N/A' or [ARIAGrant].AwardNumber='na' THEN '' ELSE ' - Award Number: ' + ARIAGrant.AwardNumber END) + (CASE WHEN [ARIAGrant].DirectCostsTotal > 0 THEN ' - Total direct costs: $' + CAST([ProfilesStaging].[dbo].[fn_FormatWithCommas](ARIAGrant.DirectCostsTotal) as VARCHAR(20)) ELSE '' END), 
 		    		[ARIAGrant].TotalAmount, 
 		    		[ARIAGrant].PRN, 
 		    		1
@@ -195,16 +234,21 @@ AS
 		    		where ProjectStatus = 'Awarded' 
 		    		and 
 		    		not exists (	select * 
-		    				from	(select * 
-		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
-		    					where ProjectStatus = 'Awarded' 
-		    					and Granttype in ('Other') 
-		    					and Title like '%Recruit%'
-		    				union
-		    				select * 
-						From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
-						where ProjectStatus = 'Awarded' 
-						and Granttype='Recruitment') B 
+		    						from	(select * 
+		    								From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
+		    								where ProjectStatus = 'Awarded' 
+		    								and Granttype in ('Other') 
+		    								and Title like '%Recruit%'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and Granttype='Recruitment'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and GrantCategory='IPA') B 
 						where A.ARIAGrantID=B.ARIAGrantID)) ARIAGrant
 		    WHERE NOT EXISTS  
 		    (select * from [Profile.Data].[Grant.Information] GrantInformation
@@ -231,27 +275,79 @@ AS
 		    		where ProjectStatus = 'Awarded' 
 		    		and 
 		    		not exists (	select * 
-		    				from	(select * 
-		    					From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
-		    					where ProjectStatus = 'Awarded' 
-		    					and Granttype in ('Other') 
-		    					and Title like '%Recruit%'
-		    				union
-		    				select * 
-						From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
-						where ProjectStatus = 'Awarded' 
-						and Granttype='Recruitment') B 
+		    						from	(select * 
+		    								From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant] 
+		    								where ProjectStatus = 'Awarded' 
+		    								and Granttype in ('Other') 
+		    								and Title like '%Recruit%'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and Granttype='Recruitment'
+		    								union
+		    								select * 
+											From [HOSP_SQL1].[FacFac].[dbo].[vAriaGrant]
+											where ProjectStatus = 'Awarded' 
+											and GrantCategory='IPA') B 
 						where A.ARIAGrantID=B.ARIAGrantID)) X on B.ARIARecordID=X.ARIARecordID and A.PRJID=X.PRN
 		    inner join [ProfilesRNS].[User.Account].[User] C on B.SAPID=RIGHT('00000000'+ISNULL(C.internalusername,''),8)
 		    where X.ProjectStatus='Awarded'
 		    and B.SAPID  <> 'Non-UAMS'
 		    and C.PersonID IS NOT NULL;
+
+		    BEGIN
+		    	INSERT INTO [Profile.Data].[Grant.AffiliatedPeople] 
+					([GrantID],
+					[PersonID],
+					[SAPID],
+					[IsPrincipalInvestigator],
+					[Excluded])     
+				select	GI.GrantID,
+						CAST(GR.SAPID AS INT),
+						GR.SAPID, 
+						GR.IsPrincipalInvestigator,
+						0
+				FROM	[ProfilesStaging].dbo.Grant_Recipients GR
+				inner 
+				join	[Profile.Data].[Grant.Information] GI on GR.PRN=GI.PRJID
+				inner 
+				join	[Profile.Data].[Person] P on RIGHT('00000000'+ISNULL(P.internalusername,''),8)=GR.SAPID
+				where
+				not 
+				exists	(select * 
+						From	[Profile.Data].[Grant.AffiliatedPeople] GA
+						where	GA.GrantID=GI.GrantID and GA.SAPID=GR.SAPID)
+				order by GR.SAPID;
+		    END;
 		    
 		    -- Remove duplicate values of grant affiliations
 		    with a as
 		    (select ROW_NUMBER() over (PARTITION by GrantId, PersonId, SapID, IsPrincipalInvestigator order by excluded desc) as rownum, *
 		    from [Profile.Data].[Grant.AffiliatedPeople]) delete From a where rownum > 1;
 		  END;
+			update A
+			set A.StartDate=B.Start_Date 
+			From [Profile.Data].[Grant.Information] A
+			inner join (select GMIN.PRN, GMIN.Start_Date, GMAX.Stop_Date From 
+			(select PRN, MIN(Start_Date) Start_Date from [ProfilesStaging].dbo.Grant_Recipients group by PRN) GMIN
+			inner join 
+			(select PRN, MAX(Stop_Date) Stop_Date from [ProfilesStaging].dbo.Grant_Recipients group by PRN) GMAX on GMIN.PRN=GMAX.PRN) B on A.PRJID=B.PRN
+			where A.StartDate > B.Start_Date;  
+
+			update A
+			set A.EndDate=B.Stop_Date 
+			From [Profile.Data].[Grant.Information] A
+			inner join (select GMIN.PRN, GMIN.Start_Date, GMAX.Stop_Date From 
+			(select PRN, MIN(Start_Date) Start_Date from [ProfilesStaging].dbo.Grant_Recipients group by PRN) GMIN
+			inner join 
+			(select PRN, MAX(Stop_Date) Stop_Date from [ProfilesStaging].dbo.Grant_Recipients group by PRN) GMAX on GMIN.PRN=GMAX.PRN) B on A.PRJID=B.PRN
+			where A.EndDate < B.Stop_Date;  
+
+			update	[Profile.Data].[Grant.Information]
+			set	GrantTitle =	GrantTitle +
+				(CASE WHEN StartDate is NULL THEN '' WHEN StartDate > '2099-12-31' THEN '' ELSE ' - Start Date: ' + CONVERT(varchar(10), StartDate,126) END) + 
+				(CASE WHEN EndDate is NULL THEN '' WHEN EndDate > '2099-12-31 00:00:00.000' THEN '' ELSE ' - End Date: ' + CONVERT(varchar(10), EndDate,126) END);
           COMMIT; 
         EXEC  [Profile.Data].[Grant.Entity.UpdateEntityAllPersons];
         END TRY
@@ -267,6 +363,7 @@ AS
             RAISERROR(@ErrMsg, @ErrSeverity, 1)
         END CATCH	            
     END;
+
 
 
 
