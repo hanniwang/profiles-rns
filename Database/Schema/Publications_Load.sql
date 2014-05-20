@@ -1,7 +1,7 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [dbo].[Publications_Load]    Script Date: 05/14/2014 15:17:54 ******/
+/****** Object:  StoredProcedure [dbo].[Publications_Load]    Script Date: 05/20/2014 11:05:58 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -106,9 +106,6 @@ begin
 	end;
 
 	--PRINT @count;
-end;
-
-
-
+END;
 GO
 
