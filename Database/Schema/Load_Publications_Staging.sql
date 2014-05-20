@@ -1,7 +1,7 @@
 USE [ProfilesRNS]
 GO
 
-/****** Object:  StoredProcedure [dbo].[Load_Publications_Staging]    Script Date: 05/14/2014 15:12:27 ******/
+/****** Object:  StoredProcedure [dbo].[Load_Publications_Staging]    Script Date: 05/20/2014 11:03:10 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -732,7 +732,7 @@ BEGIN
 				(case when txt8 like 'http%'  or len(txt8) > 30 then '' else txt8 end), -- Pagination -- Page     
 				CAST(BibliographyID as varchar) + 
 			CASE WHEN Annotation='' or Annotation is null then '' else ' - Annotation : ' + CAST(Annotation as varchar) end +
-			CASE WHEN len(txt5) < 36 then '' else ' - Patent # is : ' + CAST(txt5 as varchar) end +
+			CASE WHEN len(txt5) < 36 or txt5 is null then '' else ' - Patent # is : ' + CAST(txt5 as varchar) end +
 				CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
 				FF_PUB.txt2, --fix this - Publisher, 
 				null, 
@@ -911,7 +911,7 @@ BEGIN
 			CAST(BibliographyID as varchar) + 
 			CASE WHEN Annotation='' or Annotation is null then '' else ' - Annotation : ' + CAST(Annotation as varchar) end +
 			CASE WHEN Editors='' or Editors is null then '' else ' - Editors : ' + CAST(Editors as varchar(100)) end +
-			CASE WHEN len(txt4)> 75 then ' - Place of Publication : ' + CAST(txt4 as varchar(125)) end +
+			CASE WHEN txt4='' or txt4 is null or len(txt4) < 76 then '' else ' - Place of Publication : ' + CAST(txt4 as varchar(125)) end +
 				CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end,
 				FF_PUB.txt5, --fix this - Publisher, 
 				null, 
@@ -970,7 +970,7 @@ BEGIN
 					CAST(BibliographyID as varchar) + 
 						CASE WHEN Annotation='' or Annotation is null then '' else ' - Annotation : ' + CAST(Annotation as varchar) end +
 						CASE WHEN Editors='' or Editors is null then '' else ' - Editors : ' + CAST(Editors as varchar(100)) end +
-						CASE WHEN len(txt7)> 75 then ' - Place of Publication : ' + CAST(txt7 as varchar(125)) end +
+						CASE WHEN txt7='' or txt7 is null or len(txt7) < 76 then '' else ' - Place of Publication : ' + CAST(txt7 as varchar(125)) end +
         					CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end,
 					FF_PUB.txt3, --fix this - Publisher, 
 					null, 
@@ -1190,60 +1190,78 @@ BEGIN
 		insert into [ProfilesStaging].[dbo].[Load_Publications]
 		select	NEWID(), 
 					PRF_PERSON.PersonID, 
-					null, 
-					[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
-					null, 
-					FF_PUB.txt13, --fix this - PubTitle
-					case 
-					when FF_PUB.txt2 IS null OR LTRIM(RTRIM(FF_PUB.txt2))='' OR ISNUMERIC(FF_PUB.txt2) = 1 then FF_PUB.noAuthorString	
-					else FF_PUB.txt2		
-					end, 
-					null, 
-					txt4, 
+			null, 
+			[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
+			null, 
+			case 
+				when (txt13 is null or ltrim(rtrim(txt13))='') THEN 
 					(case 
-						when len(txt8) < 76 then txt8
-						else REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt8,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH')
-					end), --Conference Location 
-					null,
+						when (txt3 is null or ltrim(rtrim(txt3))='') then  
+							(case 
+								when (txt6 is null or ltrim(rtrim(txt6))='') then '' 
+								else ltrim(rtrim(txt6)) 
+							end)
+						else ltrim(rtrim(txt3))
+					end)
+				else ltrim(rtrim(txt13))
+			end, --fix this - PubTitle
+			case 
+			when FF_PUB.txt2 IS null OR LTRIM(RTRIM(FF_PUB.txt2))='' OR ISNUMERIC(FF_PUB.txt2) = 1 then FF_PUB.noAuthorString	
+			else FF_PUB.txt2		
+			end, 
+			null, 
+			txt4, 
+			(case 
+				when len(txt8) < 76 then txt8
+				else REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt8,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH')
+			end), --Conference Location 
+			null,
+			(case 
+				when (txt9 is null or ltrim(rtrim(txt9))='') THEN 
 					(case 
-						when len(txt9) < 76 then txt9
-						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt9,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-					end),  
-					null, 
-					null, 
-					null, 
-					(case when txt12 like 'http%'  or len(txt12) > 30 then '' else txt12 end), -- Pagination -- Page     
-					CAST(BibliographyID as varchar) + 
-					CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
-					txt10, --fix this - Publisher, 
-					null, 
-					txt6, --fix this for ConfNm
+						when (txt8 is null or ltrim(rtrim(txt8))='') then  
+							(case 
+								when len(txt8) < 76 then ltrim(rtrim(txt8)) 
+							end)
+						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt8,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75) 
+					end)
+				else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt9,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
+			end), --Place of Publication
+			null, 
+			null, 
+			null, 
+			(case when txt12 like 'http%'  or len(txt12) > 30 then '' else txt12 end), -- Pagination -- Page     
+			CAST(BibliographyID as varchar) + 
+			CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
+			txt10, --fix this - Publisher, 
+			null, 
+			txt6, --fix this for ConfNm
+			case 
+				when ISDATE(txt7)=1 THEN 
 					case 
-						when ISDATE(txt7)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt7,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt7,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --fix this for Conf DT 
-					null, 
-					null, 
-					null,
-					null, 
-					null, 
+						when cast(CAST(replace(replace(txt7,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt7,',', ' '),'  ',' ') as DATE) as varchar(10))
+					end
+				when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+			end, --fix this for Conf DT 
+			null, 
+			null, 
+			null,
+			null, 
+			null, 
+			case 
+				when ISDATE(txt11)=1 THEN 
 					case 
-						when ISDATE(txt11)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt11,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt11,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --fix this for PublicationDT
-					'', --Abstract,   
-					[ProfilesRNS].[dbo].[Publications_Author](BibliographyID),
-					null, --fix this for URL
-					RecordDate, 
-					PRF_PERSON.PersonID, 
-					RecordDate, 
-					PRF_PERSON.PersonID 
+						when cast(CAST(replace(replace(txt11,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt11,',', ' '),'  ',' ') as DATE) as varchar(10))
+					end
+				when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+			end, --fix this for PublicationDT
+			'', --Abstract,   
+			[ProfilesRNS].[dbo].[Publications_Author](BibliographyID),
+			null, --fix this for URL
+			RecordDate, 
+			PRF_PERSON.PersonID, 
+			RecordDate, 
+			PRF_PERSON.PersonID
 			From [HOSP_SQL1].[FacFac].[dbo].[vTRI_Publications] FF_PUB
 			inner join [ProfilesRNS].[Profile.Data].[Person] PRF_PERSON on PRF_PERSON.PersonID=cast(cast(FF_PUB.Expr1 as int) as varchar)
 			left outer join [ProfilesRNS].[Profile.Data].[Publication.PubMed.General] PRF_PUBS on [ProfilesRNS].dbo.RemoveSpecialChars(FF_PUB.txt2)=[ProfilesRNS].dbo.RemoveSpecialChars(PRF_PUBS.ArticleTitle)
@@ -1256,75 +1274,82 @@ BEGIN
 		insert into [ProfilesStaging].[dbo].[Load_Publications]
 		select	NEWID(), 
 					PRF_PERSON.PersonID, 
-					null, 
-					[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
-					null, 
-					case 
-						when FF_PUB.txt6='' then
-							case 
-								when FF_PUB.txt4='' then ''
-								else FF_PUB.txt4
-							end
-						else FF_PUB.txt6
-					end, --fix this - PubTitle
-					case 
-					when FF_PUB.txt3 IS null OR LTRIM(RTRIM(FF_PUB.txt3))='' OR ISNUMERIC(FF_PUB.txt3) = 1 then FF_PUB.noAuthorString	
-					else FF_PUB.txt3		
-					end,
-					null, 
-					FF_PUB.txt5, 
-					case 
-						when len(txt9) < 76 then txt9
-						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt9,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-					end, --Conference Location
-					null,
-					(case 
-						when txt13='' then
-							case 
-								when len(txt10) < 76 then txt10
-								else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt10,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-							end	
-						when len(txt13) < 76 then txt13
-						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt13,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-					end), --Place of Publication  
-					null, 
-					null, 
-					null, 
-					null, 
-					CAST(BibliographyID as varchar) + 
-					CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
-					txt11, --fix this - Publisher, 
-					null, 
-					txt7, --fix this for ConfNm
-					case 
-						when ISDATE(txt8)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --Conference Date 
-					null, 
-					null, 
-					null,
-					null, 
-					null, 
-					case 
-						when ISDATE(txt12)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt12,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt12,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --fix this for PublicationDT
-					'', --Abstract,
-					case 
-						when [ProfilesRNS].[dbo].[Publications_Author](BibliographyID) = '' then txt2
-						else [ProfilesRNS].[dbo].[Publications_Author](BibliographyID)
-					end,
-					null, --fix this for URL
-					RecordDate, 
-					PRF_PERSON.PersonID, 
-					RecordDate, 
-					PRF_PERSON.PersonID 
+				null, 
+				[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
+				null, 
+				case
+					when ltrim(rtrim(txt7))='' or txt7 is null then
+					case
+						when ltrim(rtrim(txt4))='' or txt4 is null or txt4 like '%19%' or txt4 like '%20%' then 
+						case 
+							when ltrim(rtrim(txt6))='' or txt6 is null then null
+							else ltrim(rtrim(txt6))
+						end
+						else ltrim(rtrim(txt4))
+					end
+					else ltrim(rtrim(txt7))
+				end, --fix this - PubTitle
+				case 
+				when FF_PUB.txt3 IS null OR LTRIM(RTRIM(FF_PUB.txt3))='' OR ISNUMERIC(FF_PUB.txt3) = 1 then FF_PUB.noAuthorString	
+				else FF_PUB.txt3		
+				end,
+				null, 
+				FF_PUB.txt5, 
+				case 
+					when len(txt9) < 76 then txt9
+					else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt9,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
+				end "Conference Location", --Conference Location
+				null,
+				case
+					when ltrim(rtrim(txt13))='' or txt13 is null then
+					case
+						when ltrim(rtrim(txt10))='' or txt10 is null then 
+						case 
+							when ltrim(rtrim(txt9))='' or txt9 is null then null
+							else SUBSTRING(ltrim(rtrim(txt9)),1,75)
+						end
+						else SUBSTRING(ltrim(rtrim(txt10)),1,75)
+					end
+					else SUBSTRING(ltrim(rtrim(txt13)),1,75)
+				end "Place of Publication", --Place of Publication  
+				null, 
+				null, 
+				null, 
+				null, 
+				CAST(BibliographyID as varchar) + 
+				CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
+				txt11, --fix this - Publisher, 
+				null, 
+				txt7, --fix this for ConfNm
+				case 
+					when ISDATE(txt8)=1 THEN 
+						case 
+							when cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10))
+						end
+					when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+				end, --Conference Date 
+				null, 
+				null, 
+				null,
+				null, 
+				null, 
+				case 
+					when ISDATE(txt12)=1 THEN 
+						case 
+							when cast(CAST(replace(replace(txt12,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt12,',', ' '),'  ',' ') as DATE) as varchar(10))
+						end
+					when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+				end, --fix this for PublicationDT
+				'', --Abstract,
+				case 
+					when [ProfilesRNS].[dbo].[Publications_Author](BibliographyID) = '' then txt2
+					else [ProfilesRNS].[dbo].[Publications_Author](BibliographyID)
+				end,
+				null, --fix this for URL
+				RecordDate, 
+				PRF_PERSON.PersonID, 
+				RecordDate, 
+				PRF_PERSON.PersonID 
 			From [HOSP_SQL1].[FacFac].[dbo].[vTRI_Publications] FF_PUB
 			inner join [ProfilesRNS].[Profile.Data].[Person] PRF_PERSON on PRF_PERSON.PersonID=cast(cast(FF_PUB.Expr1 as int) as varchar)
 			left outer join [ProfilesRNS].[Profile.Data].[Publication.PubMed.General] PRF_PUBS on [ProfilesRNS].dbo.RemoveSpecialChars(FF_PUB.txt2)=[ProfilesRNS].dbo.RemoveSpecialChars(PRF_PUBS.ArticleTitle)
@@ -1466,60 +1491,64 @@ BEGIN
 		insert into [ProfilesStaging].[dbo].[Load_Publications]
 		select	NEWID(), 
 					PRF_PERSON.PersonID, 
-					null, 
-					[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
-					null, 
-					null , --fix this - PubTitle
-					case 
-						when FF_PUB.txt2 IS null OR LTRIM(RTRIM(FF_PUB.txt2))='' OR ISNUMERIC(FF_PUB.txt2) = 1 then FF_PUB.noAuthorString	
-						else FF_PUB.txt2		
-					end, 
-					null, 
-					null, 
-					case 
-						when len(txt5) < 76 then txt5
-						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt5,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-					end, --Conference Location
-					null,
-					(case 
-						when len(txt6) < 76 then txt6
-						else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt6,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
-					end),  --Place of publication
-					null, 
-					null, 
-					null, 
-					(case when txt9 like 'http%'  or len(txt9) > 30 then '' else txt9 end), -- Pagination -- Page     
-					CAST(BibliographyID as varchar) + 
-					CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
-					txt7, --fix this - Publisher, 
-					null, 
-					txt3, --fix this for ConfNm
-					case 
-						when ISDATE(txt4)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt4,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt4,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --Conf Dates
-					null, 
-					null, 
-					null,
-					null, 
-					null, 
-					case 
-						when ISDATE(txt8)=1 THEN 
-							case 
-								when cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10))
-							end
-						when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
-					end, --fix this for PublicationDT
-					'', --Abstract,  
-					[ProfilesRNS].[dbo].[Publications_Author](BibliographyID),
-					null, --fix this for URL
-					RecordDate, 
-					PRF_PERSON.PersonID, 
-					RecordDate, 
-					PRF_PERSON.PersonID 
+				null, 
+				[ProfilesStaging].[Profile.Data].[get_prf_cat] (ISNULL(FF_PUB.Expr5,'')), 
+				null, 
+				[dbo].[Conference_Info] (txt6) , --fix this - PubTitle -- Conf Name for Conf Proceedings
+				case 
+					when FF_PUB.txt2 IS null OR LTRIM(RTRIM(FF_PUB.txt2))='' OR ISNUMERIC(FF_PUB.txt2) = 1 then FF_PUB.noAuthorString	
+					else FF_PUB.txt2		
+				end, 
+				null, 
+				null, 
+				case 
+					when len(txt5) < 76 then txt5
+					else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt5,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
+				end "Conference Location", --Conference Location
+				null,
+				(case 
+					when ([dbo].[Conference_Info] (txt6) is not null or ltrim(rtrim(txt6))='' or txt6 like '19%' or txt6 like '20%' or ISNUMERIC(ltrim(rtrim(txt6)))=1) then
+						case 
+							when ([dbo].[Conference_Info] (txt5) is not null or txt5 like '%19%' or txt5 like '%20%' or ISNUMERIC(ltrim(rtrim(txt5)))=1) then null
+							else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt5,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
+						end
+					else SUBSTRING(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(txt6,'  ',' '),'University of Arkansas for Medical Sciences','UAMS'),' ,',','),'Task Force','TF'),'Arkansas Childrens Hospital','ACH'),1,75)
+				end) "Place of publication", --Place of publication
+				null, 
+				null, 
+				null, 
+				(case when txt9 like 'http%'  or len(txt9) > 30 then '' else txt9 end), -- Pagination -- Page     
+				CAST(BibliographyID as varchar) + 
+				CASE WHEN txt15='' or txt15 is null then '' else ' - ' + CAST(txt15 as varchar) end, 
+				txt7, --fix this - Publisher, 
+				null, 
+				txt3, --fix this for ConfNm
+				case 
+					when ISDATE(txt4)=1 THEN 
+						case 
+							when cast(CAST(replace(replace(txt4,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt4,',', ' '),'  ',' ') as DATE) as varchar(10))
+						end
+					when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+				end, --Conf Dates
+				null, 
+				null, 
+				null,
+				null, 
+				null, 
+				case 
+					when ISDATE(txt8)=1 THEN 
+						case 
+							when cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10)) < '2050-01-01' then cast(CAST(replace(replace(txt8,',', ' '),'  ',' ') as DATE) as varchar(10))
+						end
+					when ISDATE(Fiscalyear)=1 THEN cast(CAST(Fiscalyear as DATE) as varchar(10))
+				end, --fix this for PublicationDT
+				'', --Abstract,  
+				[ProfilesRNS].[dbo].[Publications_Author](BibliographyID),
+				null, --fix this for URL
+				RecordDate, 
+				PRF_PERSON.PersonID, 
+				RecordDate, 
+				PRF_PERSON.PersonID 
 			From [HOSP_SQL1].[FacFac].[dbo].[vTRI_Publications] FF_PUB
 			inner join [ProfilesRNS].[Profile.Data].[Person] PRF_PERSON on PRF_PERSON.PersonID=cast(cast(FF_PUB.Expr1 as int) as varchar)
 			left outer join [ProfilesRNS].[Profile.Data].[Publication.PubMed.General] PRF_PUBS on [ProfilesRNS].dbo.RemoveSpecialChars(FF_PUB.txt2)=[ProfilesRNS].dbo.RemoveSpecialChars(PRF_PUBS.ArticleTitle)
@@ -1669,3 +1698,4 @@ BEGIN
 END;
 
 GO
+
