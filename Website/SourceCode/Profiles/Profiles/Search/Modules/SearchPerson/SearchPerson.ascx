@@ -91,13 +91,13 @@
     }
 
     document.onclick = check;
-    function check(e) {
+    function check(e) {                
         var target = (e && e.target) || (event && event.srcElement);
         var obj = document.querySelectorAll('[id*=divChkList]');
         var obj1 = document.querySelectorAll('[id*=ddlChkList]');
         if (target.id != "alst" && !target.id.match("chkLstItem")) {            
             if (!(target == obj || target == obj1)) {
-                obj[0].style.display = 'none';
+                //obj[0].style.display = 'none';
             }
             else if (target == obj || target == obj1) {
                 if (obj.style.display == 'block') {
@@ -108,7 +108,7 @@
                     document.querySelectorAll('[id*=ddlChkList]').blur();
                 }
             }
-        }
+        }        
     }
 </script>
 
