@@ -1,6 +1,15 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditPropertyList.ascx.cs"
     Inherits="Profiles.Edit.Modules.EditPropertyList.EditPropertyList" %>
 <asp:Literal runat="server" ID="litBackLink"></asp:Literal>
+
+<script type="text/javascript">
+    //Edit Page link hack
+    var currPath = window.location.pathname;
+    var profileLink = currPath.replace("edit", "display");
+    $("h2 :last").wrap("<a href=\'"+ profileLink + "\'></a>");
+</script>
+
+
 <br />
 <br />
 Below are the types of content that can be included on this profile. Locked items

@@ -27,8 +27,6 @@
     function dateSort (a, b) {
         var aText = $(a).text();
         var bText = $(b).text();
-        console.log(aText);
-        console.log(bText);
 
         var startDateRegEx = /Start Date:\s*(\d{4}-\d{2}-\d{2})/g;
         var matches = [];
@@ -37,9 +35,7 @@
         while (matches = startDateRegEx.exec(aText + bText)) {
             dates.push(matches[1]);
         }
-
-        console.log(dates);
-
+        
         var aDate = new Date(dates[0]);
         var bDate = new Date(dates[1]);
 
