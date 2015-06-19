@@ -161,7 +161,7 @@
             Who do I contact for more information or questions?
         </h3>
         <p>
-            For more information or questions, please contact Jiang Bian by email at JBian at UAMS dot edu.
+            For more information or questions, please contact Dwayne Dobbins by email at RDDobbins@uamsd.edu .
         </p>
     </asp:Panel>
     <asp:Panel runat="server" ID="pnlData" Visible="false">
