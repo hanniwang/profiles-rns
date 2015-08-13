@@ -15,7 +15,7 @@ body
 {
 	padding: 0px;
 	margin: 0px;
-    background: #ddd;
+    background:  #FFF; /*#ddd;*/
 
     min-height: 1000px;
 }
@@ -1063,7 +1063,7 @@ ul.ProfileNav  {
     width: auto;
     position: absolute;
     left: -5px;
-    margin: 0 0 3px 5px;
+    margin: 5px 0 3px 5px; 
     padding: 0;
     list-style: none;  
   
@@ -1132,12 +1132,15 @@ div#page-container {
 
     position: absolute;
     top: -40px;
+
 }
 
 
 .institutionHeader img
 {
-    width: 380px;
+    width: 185px;
+    height: 95px; 
+    
 }
 
 .profiles .profilesContentMain {
