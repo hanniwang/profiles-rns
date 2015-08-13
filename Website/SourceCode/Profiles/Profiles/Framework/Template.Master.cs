@@ -370,11 +370,19 @@ namespace Profiles.Framework
                     buffer = PresentationClass.Substring(0, 1).ToUpper() + PresentationClass.Substring(1, PresentationClass.Length - 1);
                 }
                 // UCSF schema.org addition to improve SEO
-                if (PresentationClass == "profile")
+                if (PresentationClass == "profile" && buffer != null && buffer.Contains(" - "))
+                {
+                    buffer = "<span itemprop=\"name\">" + buffer.Replace(" - ", "<br/>") + "</span>";
+                    litPageTitle.Text = "<h3>" + buffer + "</h3>";
+                }
+                else if (PresentationClass == "profile")
                 {
                     buffer = "<span itemprop=\"name\">" + buffer + "</span>";
+                    litPageTitle.Text = "<h2><a><img class=\"pageIcon\" src=\"" + Root.Domain + "/Framework/Images/icon_" + PresentationClass + ".gif\"/></a>" + buffer + "</h2>";
                 }
-                litPageTitle.Text = "<h2><a><img class=\"pageIcon\" src=\"" + Root.Domain + "/Framework/Images/icon_" + PresentationClass + ".gif\"/></a>" + buffer + "</h2>";
+                else { 
+                    litPageTitle.Text = "<h2><a><img class=\"pageIcon\" src=\"" + Root.Domain + "/Framework/Images/icon_" + PresentationClass + ".gif\"/></a>" + buffer + "</h2>";
+                }
             }
 
             // PageSubTitle
