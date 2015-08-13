@@ -46,17 +46,7 @@
       </tr>
     </xsl:if>
     
-    <xsl:variable name="uriDivision" select="rdf:RDF/rdf:Description[@rdf:about= /rdf:RDF[1]/rdf:Description[1]/prns:personInPrimaryPosition/@rdf:resource]/prns:positionInDivision/@rdf:resource"/>
-    <xsl:if test="rdf:RDF/rdf:Description[@rdf:about=$uriDivision]/rdfs:label !=''">
-      <tr>
-        <th>Division</th>
-        <td>
-          <span itemprop="affiliation">
-            <xsl:value-of select="rdf:RDF/rdf:Description[@rdf:about= $uriDivision]/rdfs:label"/>
-          </span>
-        </td>
-      </tr>
-    </xsl:if>   
+       
 
     <xsl:variable name="uriDepartment" select="rdf:RDF/rdf:Description[@rdf:about= /rdf:RDF[1]/rdf:Description[1]/prns:personInPrimaryPosition/@rdf:resource]/prns:positionInDepartment/@rdf:resource"/>
     <xsl:if test="rdf:RDF/rdf:Description[@rdf:about=$uriDepartment]/rdfs:label !=''">
@@ -67,6 +57,19 @@
         </td>
       </tr>
     </xsl:if>
+    
+    <xsl:variable name="uriDivision" select="rdf:RDF/rdf:Description[@rdf:about= /rdf:RDF[1]/rdf:Description[1]/prns:personInPrimaryPosition/@rdf:resource]/prns:positionInDivision/@rdf:resource"/>
+    <xsl:if test="rdf:RDF/rdf:Description[@rdf:about=$uriDivision]/rdfs:label !=''">
+      <tr>
+        <th>Division</th>
+        <td>
+          <span itemprop="affiliation">
+            <xsl:value-of select="rdf:RDF/rdf:Description[@rdf:about= $uriDivision]/rdfs:label"/>
+          </span>
+        </td>
+      </tr>
+    </xsl:if>
+    
     <xsl:if test="rdf:RDF/rdf:Description[@rdf:about= /rdf:RDF[1]/rdf:Description[1]/vivo:mailingAddress/@rdf:resource]/rdf:type/@rdf:resource !=''">
       <tr>
         <th>Address</th>
