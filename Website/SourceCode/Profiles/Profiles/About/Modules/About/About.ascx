@@ -10,7 +10,7 @@
                     <h3>
                         Introduction</h3>
                     <p>
-                        Profiles Research Networking Software UAMS Profiles RNS) is a networking tool designed to help researchers at UAMS more easily connect with each other through common interests, projects, and specialties. Profiles goes beyond a traditional directory to not only show traditional directory information, but it also illustrates how each person is connected to others in the broad research community.
+                        Profiles Research Networking Software (UAMS Profiles RNS) is a networking tool designed to help researchers at UAMS more easily connect with each other through common interests, projects, and specialties. Profiles goes beyond a traditional directory to not only show traditional directory information, but it also illustrates how each person is connected to others in the broad research community.
                     </p>
                     <p>
                         As you navigate through the website, you will see three types of pages:
@@ -23,7 +23,7 @@
                         </div>
                         <br />
                         <div style="padding-left: 15px">
-                            Included on each person’s Profile Page is a list of their Networks. Networks are formed automatically when researchers share common traits such as being in the same department, working in the same building, co-authoring the same paper, or researching the same concepts or topics. A preview of a person's passive networks is shown on the right side of his or her profile.   
+                            Included on each person's Profile Page is a list of their Networks. Networks are formed automatically when researchers share common traits such as being in the same department, working in the same building, co-authoring the same paper, or researching the same concepts or topics. A preview of a person's passive networks is shown on the right side of his or her profile.   
                         </div>
                     </p>
                     <br />
@@ -31,7 +31,7 @@
                         <asp:Image runat="server" ID="imgNetworkIcon" />
                         <u>Network Pages</u><br />
                         <div style="padding-left: 15px">
-                            Network Pages show all the people in a particular Passive or Active Network. Networks are not restricted to just people, networks can be comprised of other information from the database as well. A "concept" network is a list of all the topics a person has written about. 
+                            Network Pages show all the people in a particular Network. Networks are not restricted to just people, networks can be comprised of other information from the database as well. A "concept" network is a list of all the topics a person has written about. 
                         </div>
                         <br />
                          <div style="padding-left: 15px">
@@ -71,21 +71,21 @@
             How was my profile created?
         </h3>
         <p>
-            All profiles were created using information from the UAMS FacFacts (Faculty Facts) faculty database. More information about FactFacts can be found here: <a href="http://medicine.uams.edu/faculty/faculty-databases/facfacts/">http://medicine.uams.edu/faculty/faculty-databases/facfacts/</a>
+            All profiles were created using information from the UAMS FacFacts (Faculty Facts) faculty database, PubMed, TRACKS, and SAP. <!--More information about FactFacts can be found here: <a href="http://medicine.uams.edu/faculty/faculty-databases/facfacts/">http://medicine.uams.edu/faculty/faculty-databases/facfacts/</a>-->
         </p>
 
         <h3>
            Who is listed on UAMS Profiles RNS?
         </h3>
         <p>
-            Everyone within the FacFacts database has a profile in Profiles RNS. Additionally, manual additions of profiles can be performed through the Profiles RNS website, but that power is limited to administrative users.
+            All faculty members and post-doc researchers are listed in Profiles RNS. Additionally, manual additions of profiles can be performed through the Profiles RNS website, but that power is limited to administrative users.
         </p>
 
         <h3>
             Who has access to UAMS Profiles RNS?
         </h3>
         <p>
-            Profiles is accessible to people both inside and outside of the UAMS community. 
+            Profiles is only accessible to those with profiles (faculty and post-docs), as well as system administrators. (Note: Must be on the UAMS network to access Profiles.) 
         </p>
 
         <h3>
@@ -102,7 +102,7 @@
                 <li>If you would like to view your personal profile, click the View My Profile button found in the Menu section to the left</li>
             </ul>
          </p>         
-            <p>If you do not have a UAMS Profiles RNS account you will not be able to log into Profiles, even if you do have a UAMS ID. For assistance with this, please see Who do I contact for more information or questions?</p>
+            <p>If you do not have a UAMS Profiles RNS account you will not be able to log into Profiles, even if you do have a UAMS ID. For assistance with this, please see <a href="#contact"><i>Who do I contact for more information or questions?</i></a></p>
 
          <h3>
            How do I view my profile?
@@ -117,7 +117,6 @@
         <p>
             To edit your profile, click the Edit My Profile link in the Navigation Menu. You might be prompted to login. The Edit Menu page lists all the types of content that can be included on your profile. They are grouped into categories and listed in the same order as they appear when viewing your profile. Click any content type to view/edit the items or change the privacy settings. 
         </p>
-        <br />
         <p>
             Note: Some types of content are imported automatically from other systems, and cannot be edited through UAMS Profiles RNS and will appear with a "locked" icon. Biographical data such as affiliation, title, mailing address, and email address are all locked as they are populated from your Human Resources record and maintained separately in that system. These locked items contain more information when you click them. 
         </p>
@@ -140,7 +139,7 @@
             What are the Networks to the right side of my screen? 
         </h3>
         <p>
-            The lists to the right of your screen are your Passive Networks. These networks are populated automatically by the system and reflect people that share common traits such as research focus, article authorship, departments, etc. Most networks are populated using a persons’ publication history. The Concepts Network is organized into and derived using a series of Medical Subject Headings (MeSH) terms used by the National Library of Medicine (NLM). Terms that are present within a person’s publications will appear under their Concepts Network. If you click the link to each concept, you can learn more about what each term means (the official NLM definition) and see the history of its prevalence in the medical community. The Similar People Network is derived in much the same way and links people that have the MESH terms in common. The Co-Authors Network is simply a list of authors each person has worked with on his or her listed publications. Department lists are determined automatically through other records and consist of people in each person’s home department at UAMS.
+            The lists to the right of your screen are your Networks. These networks are populated automatically by the system and reflect people that share common traits such as research focus, article authorship, departments, etc. Most networks are populated using a person's publication history. The Concepts Network is organized into and derived using a series of Medical Subject Headings (MeSH) terms used by the National Library of Medicine (NLM). Terms that are present within a person's publications will appear under their Concepts Network. If you click the link to each concept, you can learn more about what each term means (the official NLM definition) and see the history of its prevalence in the medical community. The Similar People Network is derived in much the same way and links people that have the MESH terms in common. The Co-Authors Network is simply a list of authors each person has worked with on his or her listed publications. Department lists are determined automatically through other records and consist of people in each person's home department at UAMS.
         </p>
 
          <h3>
@@ -157,11 +156,11 @@
             This service is made possible by the Profiles Research Networking Software developed under the supervision of Griffin M Weber, MD, PhD, with support from Grant Number 1 UL1 RR025758-01 to Harvard Catalyst: The Harvard Clinical and Translational Science Center from the National Center for Research Resources and support from Harvard University and its affiliated academic healthcare centers. 
         </p>
 
-         <h3>
+         <h3 id="contact">
             Who do I contact for more information or questions?
         </h3>
         <p>
-            For more information or questions, please contact Dwayne Dobbins by email at RDDobbins@uamsd.edu .
+            For more information or questions, please contact <a href="mailto:RDDobbins@uams.edu">Dwayne Dobbins</a>.
         </p>
     </asp:Panel>
     <asp:Panel runat="server" ID="pnlData" Visible="false">
@@ -218,10 +217,10 @@
            Development
         </h3>
         <p>
-           Profiles was first envisioned and created as a CTSA funded project by Harvard Catalyst, Harvard University’s Clinical and translational Science Center. Considered ground-breaking by many in the field, Profiles has spread to other universities and colleges across the US who have developed their own form of the tool. These various institutions work together as one larger Profiles family to continue to grow and improve upon the program.
+           Profiles was first envisioned and created as a CTSA funded project by Harvard Catalyst, Harvard University's Clinical and translational Science Center. Considered ground-breaking by many in the field, Profiles has spread to other universities and colleges across the US who have developed their own form of the tool. These various institutions work together as one larger Profiles family to continue to grow and improve upon the program.
         </p>
          <p>
-           UAMS Profiles RNS has been developed and is maintained by UAMS’ Translational Research Institute and the Division of Biomedical Informatics. Specific acknowledgements are listed below.
+           UAMS Profiles RNS has been developed and is maintained by UAMS' Translational Research Institute and the Division of Biomedical Informatics. Specific acknowledgements are listed below.
         </p>
 
          <h3>
