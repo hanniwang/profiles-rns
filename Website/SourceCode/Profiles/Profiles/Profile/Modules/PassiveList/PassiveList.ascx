@@ -15,7 +15,7 @@
 
 <script type="text/javascript">
     //Hack to sort the research roles by Start-date asc
-    researchRoles =
+/*    researchRoles =
         $('div[id="http://vivoweb.org/ontology/core#hasResearcherRole"]',
             'div[id="http://profiles.catalyst.harvard.edu/ontology/prns#PropertyGroupResearch"]'
          ).children();
@@ -28,7 +28,7 @@
         var aText = $(a).text();
         var bText = $(b).text();
 
-        var startDateRegEx = /Start Date:\s*(\d{4}-\d{2}-\d{2})/g;
+        var startDateRegEx = /End Date:\s*(\d{4}-\d{2}-\d{2})/g; //Niki: changed from "Start Date" to "End Date"
         var matches = [];
         var dates = [];
 
@@ -36,13 +36,15 @@
             dates.push(matches[1]);
         }
         
-        var aDate = new Date(dates[0]);
+        var aDate_splits = dates[0].split("-");
+        var aDate = new Date(aDate_splits[0], aDate_splits[1], aDate_splits[2]);
+        //var aDate = new Date(dates[0]);
         var bDate = new Date(dates[1]);
 
         if (aDate < bDate)
-            return -1;
+            return 1; //Niki: changed from -1 to 1 for desc order
         if (aDate > bDate)
-            return 1;
+            return -1; //Niki: changed from 1 to -1 for desc order
         return 0;
     }
     
@@ -50,4 +52,5 @@
     piRoles.sort(dateSort);
     researchRoles.parent().append(researchRoles);
     piRoles.parent().append(piRoles);
+    */
 </script>
