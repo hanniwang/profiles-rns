@@ -129,7 +129,7 @@ namespace Profiles.Framework.Modules.MainMenu
                 menulist.Append("<li><a href='" + Root.Domain + "/login/default.aspx?method=logout&redirectto=" + Root.Domain + Root.AbsolutePath + "'>Logout</a></li>");
             }
 
-            menulist.Append("</ul>");
+            menulist.Append("<div id=\"preferBrowser\">Preferred browser Internet Explorer<div/></ul>");
 
             // hide active networks DIV if not logged in
             if (sm.Session().UserID > 0)
