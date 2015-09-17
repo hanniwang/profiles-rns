@@ -67,13 +67,17 @@ namespace Profiles.Edit.Modules.EditPropertyList
             foreach (XmlNode group in this.PropertyList.SelectNodes("//PropertyList/PropertyGroup"))
             {
                 singlesi = new List<SecurityItem>();
-
+              
                 foreach (XmlNode node in group.SelectNodes("Property"))
                 {
                     if (node.SelectSingleNode("@EditExisting").Value == "false"
                         && node.SelectSingleNode("@EditAddExisting").Value == "false"
                         && node.SelectSingleNode("@EditAddNew").Value == "false"
                         && node.SelectSingleNode("@EditDelete").Value == "false")
+                    {
+                        canedit = false;
+                    }
+                    else if (node.ParentNode.SelectSingleNode("@Label").Value == "Address" || node.ParentNode.SelectSingleNode("@Label").Value == "Mapping" || node.ParentNode.SelectSingleNode("@Label").Value == "Overview")
                     {
                         canedit = false;
                     }
@@ -191,11 +195,13 @@ namespace Profiles.Edit.Modules.EditPropertyList
                         break;
                 }
 
-                string editlink = "javascript:GoTo('" + Root.Domain + "/edit/default.aspx?subject=" + this.Subject.ToString() + "&predicateuri=" + hf.Value.Replace("#", "!") + "&module=DisplayItemToEdit&ObjectType=" + objecttype + "')";
+                if (si.CanEdit)
+                {
+                    string editlink = "javascript:GoTo('" + Root.Domain + "/edit/default.aspx?subject=" + this.Subject.ToString() + "&predicateuri=" + hf.Value.Replace("#", "!") + "&module=DisplayItemToEdit&ObjectType=" + objecttype + "')";
 
-
-                e.Row.Cells[0].Attributes.Add("onclick", editlink);
-                e.Row.Cells[1].Attributes.Add("onclick", editlink);
+                    e.Row.Cells[0].Attributes.Add("onclick", editlink);
+                    e.Row.Cells[1].Attributes.Add("onclick", editlink);
+                }
                 e.Row.Cells[1].CssClass = "colItemCnt";
                 e.Row.Cells[2].CssClass = "colSecurity";
 
