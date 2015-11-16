@@ -85,23 +85,33 @@
             Who has access to UAMS Profiles RNS?
         </h3>
         <p>
-            Profiles is only accessible to those with profiles (faculty and post-docs), as well as system administrators. (Note: Must be on the UAMS network to access Profiles.) 
+            Currently, Profiles is open access within the UAMS network, but not searchable. Meaning anyone who knows about the webpage can access it, provided they are logged into the UAMS network.  
         </p>
 
         <h3>
-            How do I login to UAMS Profiles RNS?
+            Do I need to login to UAMS Profiles RNS?
         </h3>
         <p>
-             UAMS Profiles RNS has been integrated into the UAMS network, so all you need to login is your UAMS ID and password. 
-
+            Most Profiles capabilities can be accessed without logging in. Login is only required if you want to edit your profile. As a reminder, though, you will need to be logged into the UAMS network for access. 
             <ul>
-                <li>Go to <a href="http://prfportal.uams.edu/">http://prfportal.uams.edu/</a></li>
-                <li>Click on the "Login to Profiles" tab in the navigation bar at the top of the screen</li>
-                <li>Login with your UAMS ID and password</li>
-                <li>Once you login it should automatically direct you back to the main UAMS Profiles RNS search page</li>
-                <li>If you would like to view your personal profile, click the View My Profile button found in the Menu section to the left</li>
+                <li>Go to <a href="http://prfportal.uams.edu/profiles">http://prfportal.uams.edu/profiles</a></li>
+                <li>This will automatically take you to the search screen where you can search for people or terms.</li>
             </ul>
-         </p>         
+        </p>
+        <h3>
+            UAMS Profiles RNS has been integrated into the UAMS network, so all you need to login is your UAMS ID and password. 
+        </h3>
+            <p>To login to Profiles RNS:
+                <ul>
+                    <!--<li>Go to <a href="http://prfportal.uams.edu/">http://prfportal.uams.edu/</a></li>-->
+                    <li>Click on the "Login to Profiles" tab in the navigation bar at the top of the screen</li>
+                    <li>Login with your UAMS ID and password</li>
+                    <li>Once you login it should automatically direct you back to the main UAMS Profiles RNS search page</li>
+                    <li>If you would like to view your personal profile, click the "View My Profile" tab in the navigation bar at the top of the screen</li>
+                    <li>If you would like to edit your personal profile, click the “edit My Profile” tab in the navigation bar at the top of the screen. This will take you to the edit page for your profile </li>
+                </ul>
+            </p>
+                  
             <p>If you do not have a UAMS Profiles RNS account you will not be able to log into Profiles, even if you do have a UAMS ID. For assistance with this, please see <a href="#contact"><i>Who do I contact for more information or questions?</i></a></p>
 
          <h3>
@@ -111,21 +121,28 @@
             To view your profile, click the View My Profile tab in the Navigation Menu at the top of the screen.  
         </p>
 
+        <h3>
+           When are profiles for new faculty/post-doc researchers added to Profiles RNS? 
+        </h3>
+        <p>
+           Profiles relies on FacFacts to populate its demographic data. Once a new faculty member/post –doc’s appointment has been entered into faculty affairs into FacFacts it will be added to Profiles RNS via its next update. Profiles RNS updates its FacFacts information monthly.  
+        </p>
+
          <h3>
             How do I edit my profile? 
         </h3>
         <p>
-            To edit your profile, click the Edit My Profile link in the Navigation Menu. You might be prompted to login. The Edit Menu page lists all the types of content that can be included on your profile. They are grouped into categories and listed in the same order as they appear when viewing your profile. Click any content type to view/edit the items or change the privacy settings. 
+            To edit your profile, click the "Edit My Profile" link in the Navigation Menu. You might be prompted to login. The Edit Menu page lists all the types of content that can be included on your profile. They are grouped into categories and listed in the same order as they appear when viewing your profile. Click any content type to view/edit the items or change the privacy settings. 
         </p>
         <p>
-            Note: Some types of content are imported automatically from other systems, and cannot be edited through UAMS Profiles RNS and will appear with a "locked" icon. Biographical data such as affiliation, title, mailing address, and email address are all locked as they are populated from your Human Resources record and maintained separately in that system. These locked items contain more information when you click them. 
+            Note: Some types of content are imported automatically from other systems, and cannot be edited through UAMS Profiles RNS and will appear with a "locked" icon. Biographical data such as affiliation, title, mailing address, and email address are all locked as they are populated from your Human Resources record and maintained separately in that system. 
         </p>
 
          <h3>
             Why are there missing or incorrect publications in my profile?
         </h3>
         <p>
-           Publications are added both automatically from PubMed and manually by faculty themselves. Unfortunately, there is no easy way to match articles in PubMed to the profiles on this website. The algorithm used to find articles from PubMed attempts to minimize the number of publications incorrectly added to a profile; however, this method results in some missing publications. Faculty with common names or whose articles were written at other institutions are most likely to have incomplete publication lists. We encourage all faculty to login to the website and add any missing publications or remove incorrect ones. 
+           Publications are added both automatically from PubMed and manually by faculty themselves. Unfortunately, there is no easy way to match articles in PubMed to the profiles on this website. The algorithm used to find articles from PubMed attempts to minimize the number of publications incorrectly added to a profile; however, this method results in some missing publications as well as the addition of publications that may not be yours. Faculty with common names or whose articles were written at other institutions are most likely to have incomplete lists or inaccurate publications listed. We encourage all faculty to login to the website and add any missing publications or remove incorrect ones. 
         </p>
 
          <h3>
@@ -160,7 +177,7 @@
             Who do I contact for more information or questions?
         </h3>
         <p>
-            For more information or questions, please contact <a href="mailto:RDDobbins@uams.edu">Dwayne Dobbins</a>.
+            For more information or questions, please contact <a href="mailto:DBMI@UAMS.EDU">DBMI</a>.
         </p>
     </asp:Panel>
     <asp:Panel runat="server" ID="pnlData" Visible="false">

@@ -130,11 +130,19 @@ namespace Profiles.Profile.Modules.PropertyList
                                         
                                         if (connection.SelectSingleNode("@ResourceURI") != null)
                                         {
-                                            itembuffer.Append("<a href='");
-                                            itembuffer.Append(connection.SelectSingleNode("@ResourceURI").Value);
-                                            itembuffer.Append("'>");
-                                            itembuffer.Append(connection.InnerText.Replace("\n", "<br/>") + "<br><br>");
-                                            itembuffer.Append("</a>");
+                                            if (propertygroup.SelectSingleNode("@Label").Value == "Affiliation")
+                                            {
+                                                itembuffer.Append(connection.InnerText.Replace("\n", "<br/>") + "<br>");
+                                            }
+                                            else { 
+                                                itembuffer.Append("<a href='");
+                                                itembuffer.Append(connection.SelectSingleNode("@ResourceURI").Value);
+                                                itembuffer.Append("'>");
+                                                /*Can add filter/replace string to display grant title only or reformat the look on profile
+                                                 * if propertyitem.SelectSingleNode("@URI").Value == "http://vivoweb.org/ontology/core#hasResearcherRole" or http://vivoweb.org/ontology/core#hasPrincipalInvestigatorRole */
+                                                itembuffer.Append(connection.InnerText.Replace("\n", "<br/>") + "<br><br>");
+                                                itembuffer.Append("</a>");
+                                            }
                                             hasitems = true;
 
                                         }

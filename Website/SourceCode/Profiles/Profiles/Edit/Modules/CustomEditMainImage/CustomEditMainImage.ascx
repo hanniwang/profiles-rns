@@ -58,7 +58,7 @@
         <div runat="server" ID="pnlUpload" visible="false">
         <br />
             Select custom photo for upload
-            <cc1:AsyncFileUpload ID="AsyncFileUpload1" runat="server" OnUploadedComplete="ProcessUpload"
+            <cc1:AsyncFileUpload ID="AsyncFileUpload1" runat="server" OnUploadedComplete="ProcessUpload" ClientIDMode="AutoID" 
                 OnClientUploadComplete="showUploadConfirmation" ThrobberID="spanUploading" />                        
             <span id="spanUploading" runat="server">Uploading...</span>
             <br />

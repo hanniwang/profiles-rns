@@ -72,9 +72,16 @@ namespace Profiles.Edit.Modules.CustomEditAuthorInAuthorship
 
             this.PropertyListXML = propdata.GetPropertyList(pagedata, base.PresentationXML, this._predicateuri, false, true, false);
 
+            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
+            //Quick fix to allow only Admin and Curators to edit Visibility privacy
+            if (securityOptions.PrivacyCode != -40 || securityOptions.PrivacyCode != -50)
+            {
+                securityOptions.FindControl("imbSecurityOptions").Visible = false;
+                securityOptions.FindControl("lbSecurityOptions").Visible = false;
+            }
+
             securityOptions.Subject = this._subject;
             securityOptions.PredicateURI = this._predicateuri;
-            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
             securityOptions.SecurityGroups = new XmlDataDocument();
             securityOptions.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
 
@@ -799,48 +806,48 @@ namespace Profiles.Edit.Modules.CustomEditAuthorInAuthorship
                     break;
                 case "Books/Monographs/Textbooks":
                     phTitle2.Visible = true;
-                    phEdition.Visible = true;
+                    phEdition.Visible = false; //Niki: remove edition
                     phPubPageNumbers.Visible = true;
-                    phPublisherInfo.Visible = true;
-                    phPublisherName.Visible = true;
-                    phPublisherNumbers.Visible = true;
-                    phAdditionalInfo.Visible = true;
-                    phAdditionalInfo2.Visible = true;
-                    lblAdditionalInfo.Text = "For technical reports, sponsor info: Sponsered by the Agency for Health Care Policy and Research<br />For monograph in series, series editor info: Stoner GD, editor. Methods and perspectives in cell biology; vol 1.";
+                    phPublisherInfo.Visible = false;//Niki: remove publisher header
+                    phPublisherName.Visible = false;//Niki: remove publisher name
+                    phPublisherNumbers.Visible = false;//Niki: remove publisher report num
+                    phAdditionalInfo.Visible = false;//Niki: remove additional info header
+                    phAdditionalInfo2.Visible = false;//Niki: remove additional info
+                    //lblAdditionalInfo.Text = "For technical reports, sponsor info: Sponsered by the Agency for Health Care Policy and Research<br />For monograph in series, series editor info: Stoner GD, editor. Methods and perspectives in cell biology; vol 1.";
 
-                    lblPubMedPublisherReport.Text = "Report Number";
-                    lblPubMedPublisherContract.Text = "Contract Number";
+                    //lblPubMedPublisherReport.Text = "Report Number";
+                    //lblPubMedPublisherContract.Text = "Contract Number";
 
                     lblTitle.Text = "Title of Book/Monograph";
                     lblTitle2.Text = "Title of Book/Monograph Series with Editor Report";
                     break;
                 case "Clinical Communications":
                     phTitle2.Visible = true;
-                    phEdition.Visible = true;
+                    phEdition.Visible = false;//Niki: remove edition
                     phPubIssue.Visible = true;
                     phPubVolume.Visible = true;
                     phPubPageNumbers.Visible = true;
-                    phPublisherInfo.Visible = true;
-                    phPublisherName.Visible = true;
-                    phAdditionalInfo.Visible = true;
-                    phAdditionalInfo2.Visible = true;
-                    lblAdditionalInfo.Text = "Include description of who commissioned, purpose, users, penetration in summaryField.";
+                    phPublisherInfo.Visible = false;//Niki: remove publisher header
+                    phPublisherName.Visible = false;//Niki: remove publisher name
+                    phAdditionalInfo.Visible = false;//Niki: remove additional info header
+                    phAdditionalInfo2.Visible = false;//Niki: remove additional info
+                    //lblAdditionalInfo.Text = "Include description of who commissioned, purpose, users, penetration in summaryField.";
 
                     lblTitle.Text = "Title of Communication";
                     lblTitle2.Text = "Title of Journal/Book";
                     break;
                 case "Educational Materials":
-                    phAdditionalInfo.Visible = true;
-                    phAdditionalInfo2.Visible = true;
-                    lblAdditionalInfo.Text = "Brief description of educational context: e.g., presented at the Annual meeting of the Association of Academic Physiatrists, Las Vegas Indicate course and institution, if applicable";
+                    phAdditionalInfo.Visible = false;//Niki: remove additional info header
+                    phAdditionalInfo2.Visible = false;//Niki: remove additional info
+                    //lblAdditionalInfo.Text = "Brief description of educational context: e.g., presented at the Annual meeting of the Association of Academic Physiatrists, Las Vegas Indicate course and institution, if applicable";
 
                     lblTitle.Text = "Title of Educational Materials";
                     break;
                 case "Non-Print Materials":
-                    phPublisherInfo.Visible = true;
-                    phPublisherName.Visible = true;
-                    phAdditionalInfo.Visible = true;
-                    phAdditionalInfo2.Visible = true;
+                    phPublisherInfo.Visible = false;//Niki: remove publisher header
+                    phPublisherName.Visible = false;//Niki: remove publisher name
+                    phAdditionalInfo.Visible = false;//Niki: remove additional info header
+                    phAdditionalInfo2.Visible = false;//Niki: remove additional info
 
                     lblTitle.Text = "Title of Non-Print Materials";
                     break;
@@ -849,15 +856,15 @@ namespace Profiles.Edit.Modules.CustomEditAuthorInAuthorship
                     phPubIssue.Visible = true;
                     phPubVolume.Visible = true;
                     phPubPageNumbers.Visible = true;
-                    phNewsSection.Visible = true;
+                    phNewsSection.Visible = false;//Niki: remove section
 
                     lblTitle.Text = "Title of Publication";
                     lblTitle2.Text = "Title of Article";
                     break;
                 case "Patents":
-                    phPublisherNumbers.Visible = true;
-                    lblPubMedPublisherReport.Text = "Sponsor/Assignee";
-                    lblPubMedPublisherContract.Text = "Patent Number";
+                    phPublisherNumbers.Visible = false;//Niki: remove publisher num
+                    //lblPubMedPublisherReport.Text = "Sponsor/Assignee";
+                    //lblPubMedPublisherContract.Text = "Patent Number";
                     lblTitle.Text = "Title of Patent";
                     break;
                 case "Proceedings of Meetings":
@@ -865,27 +872,27 @@ namespace Profiles.Edit.Modules.CustomEditAuthorInAuthorship
                     phPubIssue.Visible = true;
                     phPubVolume.Visible = true;
                     phPubPageNumbers.Visible = true;
-                    phPublisherInfo.Visible = true;
-                    phPublisherName.Visible = true;
-                    phConferenceInfo.Visible = true;
+                    phPublisherInfo.Visible = false;//Niki: remove publisher header
+                    phPublisherName.Visible = false;//Niki: remove publisher name
+                    phConferenceInfo.Visible = false;//Niki: remove conference
 
                     lblTitle.Text = "Title of Paper";
                     lblTitle2.Text = "Title of Publication";
                     break;
                 case "Reviews/Chapters/Editorials":
                     phTitle2.Visible = true;
-                    phEdition.Visible = true;
+                    phEdition.Visible = false;//Niki: remove edition
                     phPubIssue.Visible = true;
                     phPubVolume.Visible = true;
                     phPubPageNumbers.Visible = true;
-                    phPublisherInfo.Visible = true;
-                    phPublisherName.Visible = true;
+                    phPublisherInfo.Visible = false;//Niki: remove publisher header
+                    phPublisherName.Visible = false;//Niki: remove publisher name
 
                     lblTitle.Text = "Title of Reviews/Chapters/Editorials";
                     lblTitle2.Text = "Title of Publication (include editor if applicable)";
                     break;
                 case "Thesis":
-                    phNewsUniversity.Visible = true;
+                    phNewsUniversity.Visible = false;//Niki:remove University
 
                     lblTitle.Text = "Title of Thesis";
                     break;

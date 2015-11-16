@@ -36,8 +36,8 @@ namespace Profiles.Edit.Modules.SecurityOptions
         {
             if (!IsPostBack)
                 Session["pnlSecurityOptions.Visible"] = null;
-
-            DrawProfilesModule();
+            if (this.PrivacyCode == -40 || this.PrivacyCode == -50) //-40=curator, -50=admin
+                DrawProfilesModule();
         }
 
         private void DrawProfilesModule()

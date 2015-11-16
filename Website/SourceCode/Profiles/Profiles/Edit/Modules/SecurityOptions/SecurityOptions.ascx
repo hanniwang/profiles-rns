@@ -30,7 +30,7 @@
     ID="imbSecurityOptions" OnClick="imbSecurityOptions_OnClick" />&nbsp;
 <asp:LinkButton runat="server" ID="lbSecurityOptions" OnClick="imbSecurityOptions_OnClick"
     Text="Edit Visibility"></asp:LinkButton>    
-    <br />
+    <!--<br />-->
 <asp:Panel runat="server" ID="pnlSecurityOptions" CssClass="editPage" Visible="false">
 <br />
     <asp:GridView  CellSpacing="-1" runat="server" ID="grdSecurityGroups" AutoGenerateColumns="false"

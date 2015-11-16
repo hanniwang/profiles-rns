@@ -35,7 +35,7 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (IsPostBack)
             {
                 Session["pnlAddBySearch.Visible"] = null;
                 Session["pnlAddByURI.Visible"] = null;
@@ -84,13 +84,27 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
             this.PropertyLabel = PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@Label").Value;
             litBackLink.Text = "<a href='" + Root.Domain + "/edit/" + this.SubjectID.ToString() + "'>Edit Menu</a> &gt; <b>" + this.PropertyLabel + "</b>";
 
+            //Quick add for adding a note on the format of grant info when adding manually
+            if (PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/@Label").Value == "Research")
+            {
+                litGrantNote1.Text = "Please use the following format when adding the grant information: ";
+                litGrantNote2.Text = "Funding Agency: agency name - Title: grant title - Award Number: grant ID number - Total direct costs: $amount - Start Date: yyyy-mm-dd - End Date: yyyy-mm-dd";
+            }
+            
+            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
+            //Quick fix to allow only Admin and Curators to edit Visibility privacy
+            if (securityOptions.PrivacyCode != -40 || securityOptions.PrivacyCode != -50)
+            {
+                securityOptions.FindControl("imbSecurityOptions").Visible = false;
+                securityOptions.FindControl("lbSecurityOptions").Visible = false;
+            }
 
             securityOptions.Subject = this.SubjectID;
             securityOptions.PredicateURI = PredicateURI;
             this.PredicateID = data.GetStoreNode(this.PredicateURI);
-            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
             securityOptions.SecurityGroups = new XmlDataDocument();
             securityOptions.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
+            
 
             this._subject = Convert.ToInt64(Request.QueryString["subject"]);
             this._personId = data.GetPersonID(_subject);
@@ -165,7 +179,18 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
                 {
                     space += Server.HtmlDecode("&nbsp;&nbsp;&nbsp;");
                 }
-                propertylist.Add(new GenericListItem(space + property.SelectSingleNode("@Label").Value, property.SelectSingleNode("@ClassURI").Value));
+                //remove PI and Co-PI in drop down list when it's investigator, remove all other relationships besides "Advising Relationship"
+                if (this.PropertyLabel == "investigator on" || this.PropertyLabel == "advisees")
+                {
+                    if (property.SelectSingleNode("@Label").Value == "Investigator Role" || property.SelectSingleNode("@Label").Value ==  "Advising Relationship")
+                    { 
+                        propertylist.Add(new GenericListItem(space + property.SelectSingleNode("@Label").Value, property.SelectSingleNode("@ClassURI").Value));
+                    }
+                }
+                else
+                {
+                    propertylist.Add(new GenericListItem(space + property.SelectSingleNode("@Label").Value, property.SelectSingleNode("@ClassURI").Value));
+                }
                 space = string.Empty;
             }
 
@@ -512,6 +537,16 @@ namespace Profiles.Edit.Modules.EditObjectTypeProperty
                     hdf.Value = ((EntityState)e.Row.DataItem).URI;
 
                     e.Row.Cells[0].Text = "<a href='" + hdf.Value + "'>" + e.Row.Cells[0].Text + "</a>";
+
+                    //Quick fix to disable up and down buttons for Research and Bibliography categories
+                    if (this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/@Label").Value == "Research" || 
+                        this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/@Label").Value == "Bibliographic")
+                    {
+                        ImageButton ibUp = (ImageButton)e.Row.FindControl("ibUp");
+                        ImageButton ibDwn = (ImageButton)e.Row.FindControl("ibDown");
+                        ibUp.Visible = false;
+                        ibDwn.Visible = false;
+                    }
 
                     break;
 

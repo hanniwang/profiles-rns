@@ -68,10 +68,16 @@ namespace Profiles.Edit.Modules.CustomEditMailingAddress
             base.GetDataByURI();//This will reset the data to a Network.
 
 
+            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
+            //Quick fix to allow only Admin and Curators to edit Visibility privacy
+            if (securityOptions.PrivacyCode != -40 || securityOptions.PrivacyCode != -50)
+            {
+                securityOptions.FindControl("imbSecurityOptions").Visible = false;
+                securityOptions.FindControl("lbSecurityOptions").Visible = false;
+            }
 
             securityOptions.Subject = this.SubjectID;
             securityOptions.PredicateURI = predicateuri;
-            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
             securityOptions.SecurityGroups = new XmlDataDocument();
             securityOptions.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
 

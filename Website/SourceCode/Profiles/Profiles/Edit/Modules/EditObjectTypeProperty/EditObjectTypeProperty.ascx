@@ -73,7 +73,6 @@
                 <td align="left" style="padding-right: 12px">
                     <asp:Literal runat="server" ID="litBackLink"></asp:Literal>
                     <br />
-                    <br />
                 </td>
             </tr>
             <tr>
@@ -83,7 +82,7 @@
                             <security:Options runat="server" ID="securityOptions"></security:Options>
                         </div>
                     </asp:PlaceHolder>
-                    <asp:PlaceHolder ID="phAddByURL" runat="server">
+                    <!--<asp:PlaceHolder ID="phAddByURL" runat="server">
                         <div style="padding-bottom: 10px;">
                             <asp:ImageButton runat="server" ID="imgAddArror" ImageUrl="../../../Framework/Images/icon_squareArrow.gif"
                                 OnClick="btnAddByURI_OnClick" />&nbsp;
@@ -100,7 +99,7 @@
                                 CssClass="profileHypLinks">Add Item by Search</asp:LinkButton>
                             (Add existing item by searching for it.)
                         </div>
-                    </asp:PlaceHolder>
+                    </asp:PlaceHolder>-->
                     <asp:PlaceHolder ID="phAddNew" runat="server">
                         <div style="padding-bottom: 10px;">
                             <asp:ImageButton runat="server" ID="imgAddNew" ImageUrl="../../../Framework/Images/icon_squareArrow.gif"
@@ -263,6 +262,9 @@
             <div class="tabContainer" style="margin-top: 0px;">
                 <div class="searchForm">
                     <div class="searchSection">
+                        <asp:Literal runat="server" ID="litGrantNote1"></asp:Literal>
+                        <br />
+                        <asp:Literal runat="server" ID="litGrantNote2"></asp:Literal>
                         <table class="searchForm">
                             <tr>
                                 <td>

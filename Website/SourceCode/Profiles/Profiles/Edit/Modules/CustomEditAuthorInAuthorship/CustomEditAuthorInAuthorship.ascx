@@ -190,8 +190,7 @@
                                         <asp:Image ID="Image1" runat="server" ImageUrl="~/Framework/Images/icon_alert.gif" />
                                     </div>
                                     <div style="margin-left: 25px;">
-                                        Check the articles that are yours in the list below, and then click the Add Selected
-                                        link at the bottom of the page.
+                                        Check the articles that are yours in the list below, and then click "save" at the bottom of the selection field.
                                     </div>
                                 </div>
                                 <div style="padding: 10px 0px 5px 0px;">
@@ -421,7 +420,7 @@
                                             <asp:Label ID="lblAdditionalInfo" runat="server" Text="Label"></asp:Label>
                                         </div>
                                     </asp:PlaceHolder>
-                                    <div style="padding-top: 20px;">
+                                    <!--<div style="padding-top: 20px;">
                                         <b>Abstract</b> (Optional)<br />
                                         <asp:TextBox ID="txtPubMedAbstract" runat="server" TextMode="MultiLine" Rows="4"
                                             Width="550px"></asp:TextBox>
@@ -430,7 +429,7 @@
                                         <b>Website URL</b> (Optional) Clicking the citation title will take the user to
                                         this website.<br />
                                         <asp:TextBox ID="txtPubMedOptionalWebsite" runat="server" Width="550px" TextMode="MultiLine"></asp:TextBox>
-                                    </div>
+                                    </div>-->
                                     <div style="padding: 10px 0px;">
                                         <asp:LinkButton ID="btnPubMedSaveCustomAdd" runat="server" CausesValidation="False"
                                             OnClick="btnPubMedSaveCustom_OnClick" Text="Save and add another"></asp:LinkButton>

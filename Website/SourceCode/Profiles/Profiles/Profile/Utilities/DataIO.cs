@@ -275,6 +275,41 @@ namespace Profiles.Profile.Utilities
         #endregion
 
 
+        public int GetUserRole(string sessionid)
+        {
+            Int32 userRole = 0;
+            try
+            {
+                string connstr = ConfigurationManager.ConnectionStrings["ProfilesDB"].ConnectionString;
+                SqlConnection dbconnection = new SqlConnection(connstr);
+                SqlCommand dbcommand = new SqlCommand("[dbo].[GetUserID]");
+                SqlDataReader dbreader;
+                dbconnection.Open();
+                dbcommand.CommandType = CommandType.StoredProcedure;
+                dbcommand.CommandTimeout = base.GetCommandTimeout();
+                dbcommand.Parameters.Add(new SqlParameter("@sessionid", sessionid));
+                dbcommand.Connection = dbconnection;
+                dbreader = dbcommand.ExecuteReader();
+                
+                bool x = dbreader.HasRows;
+
+                if (dbreader.Read()){
+                    userRole = dbreader.GetInt32(0);
+                 }
+
+                dbconnection.Close();
+            }
+            catch (Exception ex) { 
+                //Console.WriteLine(ex.Message); 
+                Framework.Utilities.DebugLogging.Log(ex.Message + ex.StackTrace);
+                throw new Exception(ex.Message);
+            }
+
+            return (int)userRole;
+        }
+
+
+
         #region "Profile Photo"
 
         public System.IO.Stream GetUserPhotoList(Int64 NodeID, bool harvarddefault)

@@ -71,9 +71,16 @@ namespace Profiles.Edit.Modules.CustomEditMainImage
             this.PropertyListXML = propdata.GetPropertyList(this.BaseData, base.PresentationXML, PredicateURI, false, true, false);
             litBackLink.Text = "<a href='" + Root.Domain + "/edit/" + this.SubjectID.ToString() + "'>Edit Menu</a> &gt; <b>" + PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@Label").Value + "</b>";
 
+            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
+            //Quick fix to allow only Admin and Curators to edit Visibility privacy
+            if (securityOptions.PrivacyCode != -40 || securityOptions.PrivacyCode != -50)
+            {
+                securityOptions.FindControl("imbSecurityOptions").Visible = false;
+                securityOptions.FindControl("lbSecurityOptions").Visible = false;
+            }
+
             securityOptions.Subject = this.SubjectID;
             securityOptions.PredicateURI = PredicateURI;
-            securityOptions.PrivacyCode = Convert.ToInt32(this.PropertyListXML.SelectSingleNode("PropertyList/PropertyGroup/Property/@ViewSecurityGroup").Value);
             securityOptions.SecurityGroups = new XmlDataDocument();
             securityOptions.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
 
@@ -118,7 +125,7 @@ namespace Profiles.Edit.Modules.CustomEditMainImage
 
         protected void ProcessUpload(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
         {
-
+            try { 
             System.IO.Stream stream;
             Edit.Utilities.DataIO data = new Profiles.Edit.Utilities.DataIO();
             stream = AsyncFileUpload1.PostedFile.InputStream;
@@ -136,6 +143,11 @@ namespace Profiles.Edit.Modules.CustomEditMainImage
             pnlUpload.Visible = false;
             this.KillCache();
             upnlEditSection.Update();
+                }
+            catch (Exception ex) {
+                Framework.Utilities.DebugLogging.Log(ex.Message + " " + ex.StackTrace);
+                throw new Exception(ex.Message);
+            }
 
         }
 

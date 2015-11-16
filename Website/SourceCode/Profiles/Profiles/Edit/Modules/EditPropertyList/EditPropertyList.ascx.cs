@@ -61,12 +61,15 @@ namespace Profiles.Edit.Modules.EditPropertyList
             this.SecurityGroups = new XmlDocument();
             this.SecurityGroups.LoadXml(base.PresentationXML.DocumentElement.LastChild.OuterXml);
 
+            int userRole = data.GetUserRole(Request.QueryString["sessionid"]);
+
             litBackLink.Text = "<b>Edit Menu</b>";
 
-
+            string excluded = "Address, Mapping, Overview, positions";
             foreach (XmlNode group in this.PropertyList.SelectNodes("//PropertyList/PropertyGroup"))
             {
                 singlesi = new List<SecurityItem>();
+                string label = group.SelectSingleNode("@Label").Value;
               
                 foreach (XmlNode node in group.SelectNodes("Property"))
                 {
@@ -77,7 +80,11 @@ namespace Profiles.Edit.Modules.EditPropertyList
                     {
                         canedit = false;
                     }
-                    else if (node.ParentNode.SelectSingleNode("@Label").Value == "Address" || node.ParentNode.SelectSingleNode("@Label").Value == "Mapping" || node.ParentNode.SelectSingleNode("@Label").Value == "Overview")
+                    else if (userRole == -40 || userRole == -50)
+                    {
+                        canedit = true;
+                    }
+                    else if (excluded.Contains(label) || excluded.Contains(node.SelectSingleNode("@Label").Value))
                     {
                         canedit = false;
                     }
@@ -150,6 +157,12 @@ namespace Profiles.Edit.Modules.EditPropertyList
                 string objecttype = string.Empty;
 
                 items.Text = si.ItemCount.ToString();
+                
+                //Quick fix for allowing photo edit function
+                if (si.Item == "photo")
+                {
+                    si.CanEdit = true;
+                }
 
                 if (!si.CanEdit)
                 {
